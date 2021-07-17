@@ -2,4 +2,11 @@
   <string name="app_name">Gold Market</string>
   <string name="splash_logo">Splash_Logo</string>
   <string name="tagline">Awesome App for Gold Transaction</string>
+  <string name="login_text">Sign In to Continue</string>
+  <string name="login_slogan">Hello There, Welcome Back</string>
+  <string name="placeholder_username">Username</string>
+  <string name="placeholder_password">Password</string>
+  <string name="text_forget_password">Forget Password?</string>
+  <string name="text_sign_in">Sign In</string>
+  <string name="text_new_user_sign_up">Dont have an account? Sign Up</string>
 </resources>

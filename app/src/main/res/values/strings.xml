@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">gold-market</string>
+    <string name="splash_logo">Splash_Logo</string>
 </resources>

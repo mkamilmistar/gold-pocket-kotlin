@@ -1,0 +1,1 @@
+/Users/macbook/Mandiri-Academy/Kotlin/challenge/gold-market-kotlin/buildSrc/build/classes/kotlin/main/AppConfig.class:/Users/macbook/Mandiri-Academy/Kotlin/challenge/gold-market-kotlin/buildSrc/build/classes/kotlin/main/AppDependencies.class:/Users/macbook/Mandiri-Academy/Kotlin/challenge/gold-market-kotlin/buildSrc/build/classes/kotlin/main/Versions.class

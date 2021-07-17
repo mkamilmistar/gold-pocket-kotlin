@@ -13,4 +13,7 @@
   <string name="text_register_title">Sign Up</string>
   <string name="placeholder_email">Email</string>
   <string name="text_have_account_register">Already have an account? Sign In</string>
+  <string name="text_welcome">Welcome</string>
+  <string name="text_onboard_slogan">Deposit Your Gold Here!</string>
+  <string name="btn_get_started">Get Started</string>
 </resources>

@@ -101,7 +101,7 @@
       android:fontFamily="@font/nunitosans_regular"
       android:text="@string/text_new_user_sign_up"
       android:layout_gravity="center"
-      android:layout_marginTop="10dp"
+      android:layout_marginTop="30dp"
       android:clickable="true"
       android:elevation="0dp"/>
 

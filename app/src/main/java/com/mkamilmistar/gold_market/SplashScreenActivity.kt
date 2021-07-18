@@ -27,7 +27,7 @@ class SplashScreenActivity : AppCompatActivity() {
     slogan_text.startAnimation(botAnim)
 
     Handler(Looper.getMainLooper()).postDelayed({
-      val intent = Intent(this@SplashScreenActivity, LoginActivity::class.java)
+      val intent = Intent(this@SplashScreenActivity, OnBoardingActivity::class.java)
       startActivity(intent)
       finish()
     }, 3000)

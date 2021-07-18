@@ -8,11 +8,11 @@
   <string name="placeholder_password">Password</string>
   <string name="text_forget_password">Forget Password?</string>
   <string name="text_sign_in">Sign In</string>
-  <string name="text_new_user_sign_up">Dont have an account? Sign Up</string>
+  <string name="text_new_user_sign_up">Dont have an account?</string>
   <string name="text_slogan_register">Register New Account</string>
   <string name="text_register_title">Sign Up</string>
   <string name="placeholder_email">Email</string>
-  <string name="text_have_account_register">Already have an account? Sign In</string>
+  <string name="text_have_account_register">Already have an account?</string>
   <string name="text_welcome">Welcome</string>
   <string name="text_onboard_slogan">Deposit Your Gold Here!</string>
   <string name="btn_get_started">Get Started</string>

@@ -1,4 +1,4 @@
-package com.mkamilmistar.gold_market
+package com.mkamilmistar.gold_market.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import com.mkamilmistar.gold_market.R
 
 class SplashScreenActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {

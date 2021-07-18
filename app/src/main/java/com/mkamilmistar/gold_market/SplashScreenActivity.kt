@@ -7,8 +7,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_splash_screen.*
+import android.widget.ImageView
+import android.widget.TextView
 
 class SplashScreenActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,9 +22,13 @@ class SplashScreenActivity : AppCompatActivity() {
     val topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation)
     val botAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation)
 
-    splash_logo.startAnimation(topAnim)
-    logo_text.startAnimation(botAnim)
-    slogan_text.startAnimation(botAnim)
+    val splashLogo: ImageView = findViewById(R.id.splash_logo)
+    val logoText: TextView = findViewById(R.id.logo_text)
+    val sloganText: TextView = findViewById(R.id.slogan_text)
+
+    splashLogo.startAnimation(topAnim)
+    logoText.startAnimation(botAnim)
+    sloganText.startAnimation(botAnim)
 
     Handler(Looper.getMainLooper()).postDelayed({
       val intent = Intent(this@SplashScreenActivity, OnBoardingActivity::class.java)

@@ -19,8 +19,8 @@ class SplashScreenActivity : AppCompatActivity() {
       WindowManager.LayoutParams.FLAG_FULLSCREEN)
     setContentView(R.layout.activity_splash_screen)
 
-    val topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation);
-    val botAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
+    val topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation)
+    val botAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation)
 
     splash_logo.startAnimation(topAnim)
     logo_text.startAnimation(botAnim)

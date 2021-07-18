@@ -23,6 +23,7 @@ class OnBoardingActivity : AppCompatActivity() {
     btnGetStarted.setOnClickListener {
       val intent = Intent(this@OnBoardingActivity, RegisterActivity::class.java)
       startActivity(intent)
+      finish()
     }
   }
 }

@@ -15,7 +15,7 @@
    app:layout_constraintLeft_toLeftOf="parent"
    app:layout_constraintRight_toRightOf="parent"
    app:menu="@menu/menu"
-   app:itemRippleColor="@color/yellow_darker"
+   app:itemRippleColor="@color/yellow_dark"
    app:itemIconTint="@color/bottom_nav_color"
    app:itemTextColor="@color/bottom_nav_color"/>
 

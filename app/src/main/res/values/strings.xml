@@ -16,4 +16,7 @@
   <string name="text_welcome">Welcome</string>
   <string name="text_onboard_slogan">Deposit Your Gold Here!</string>
   <string name="btn_get_started">Get Started</string>
+  <string name="slogan_forget_password">Forget Password</string>
+  <string name="text_confirm">Confirm</string>
+  <string name="forget_description">Enter your e-mail so we can send you a password reset link.</string>
 </resources>

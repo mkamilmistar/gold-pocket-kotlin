@@ -15,9 +15,10 @@ class OnBoardingActivity : AppCompatActivity() {
 
     val btnGetStarted: Button = findViewById(R.id.btn_get_started)
     btnGetStarted.setOnClickListener {
-      val intent = Intent(this@OnBoardingActivity, LoginActivity::class.java)
-      startActivity(intent)
-      finish()
+      Intent(this@OnBoardingActivity, LoginActivity::class.java).apply {
+        startActivity(this)
+        finish()
+      }
     }
   }
 }

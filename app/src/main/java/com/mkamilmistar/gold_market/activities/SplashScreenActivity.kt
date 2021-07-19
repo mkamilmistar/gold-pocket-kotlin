@@ -32,9 +32,10 @@ class SplashScreenActivity : AppCompatActivity() {
     sloganText.startAnimation(botAnim)
 
     Handler(Looper.getMainLooper()).postDelayed({
-      val intent = Intent(this@SplashScreenActivity, OnBoardingActivity::class.java)
-      startActivity(intent)
-      finish()
+      Intent(this@SplashScreenActivity, OnBoardingActivity::class.java).apply {
+        startActivity(this)
+        finish()
+      }
     }, 3000)
   }
 }

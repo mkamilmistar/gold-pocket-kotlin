@@ -14,16 +14,18 @@ class RegisterActivity : AppCompatActivity() {
 
     val signIn: TextView = findViewById(R.id.text_sign_in)
     signIn.setOnClickListener {
-      val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
-      startActivity(intent)
-      finish()
+      Intent(this@RegisterActivity, LoginActivity::class.java).apply {
+        startActivity(this)
+        finish()
+      }
     }
 
     val btnSignUp: Button = findViewById(R.id.btn_register)
     btnSignUp.setOnClickListener {
-      val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-      startActivity(intent)
-      finish()
+      Intent(this@RegisterActivity, MainActivity::class.java).apply {
+        startActivity(this)
+        finish()
+      }
     }
 
     val termCondition: TextView = findViewById(R.id.term_condition)

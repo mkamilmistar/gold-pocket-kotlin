@@ -88,7 +88,7 @@
     <com.google.android.material.textfield.TextInputLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/password"
+      android:id="@+id/password_login"
       android:hint="@string/placeholder_password"
       app:passwordToggleEnabled="true"
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">

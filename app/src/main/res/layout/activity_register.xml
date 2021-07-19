@@ -49,7 +49,7 @@
     <com.google.android.material.textfield.TextInputLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/first_name"
+      android:id="@+id/first_name_register"
       android:fontFamily="@font/nunitosans_regular"
       android:hint="@string/placeholder_first_name"
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -62,7 +62,7 @@
     <com.google.android.material.textfield.TextInputLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/last_name"
+      android:id="@+id/last_name_register"
       android:fontFamily="@font/nunitosans_regular"
       android:hint="@string/placeholder_last_name"
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -75,7 +75,7 @@
     <com.google.android.material.textfield.TextInputLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/email"
+      android:id="@+id/email_register"
       android:fontFamily="@font/nunitosans_regular"
       android:hint="@string/placeholder_email"
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -88,7 +88,7 @@
     <com.google.android.material.textfield.TextInputLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/password_login"
+      android:id="@+id/password_register"
       android:hint="@string/placeholder_password"
       app:passwordToggleEnabled="true"
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -102,11 +102,12 @@
 
     <Button
       android:id="@+id/btn_register"
+      style="@style/MaterialButtonStyle"
+      android:enabled="true"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:text="@string/text_register_title"
       android:layout_marginTop="20dp"
-      android:backgroundTint="@color/yellow_dark"
       android:textColor="@color/black"
       android:fontFamily="@font/nunitosans_bold"/>
 

@@ -1,4 +1,4 @@
-package com.mkamilmistar.gold_market.fragments.bottomNavigation
+package com.mkamilmistar.gold_market.fragments.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

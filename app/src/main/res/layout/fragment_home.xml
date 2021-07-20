@@ -4,7 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  tools:context=".fragments.bottomNavigation.HomeFragment">
+  tools:context=".fragments.main.HomeFragment">
 
   <TextView
     android:id="@+id/home_text_fragment"

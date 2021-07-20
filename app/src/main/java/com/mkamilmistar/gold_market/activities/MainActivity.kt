@@ -4,12 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.fragments.bottomNavigation.HistoryFragment
-import com.mkamilmistar.gold_market.fragments.bottomNavigation.HomeFragment
-import com.mkamilmistar.gold_market.fragments.bottomNavigation.ProfileFragment
+import com.mkamilmistar.gold_market.fragments.main.HistoryFragment
+import com.mkamilmistar.gold_market.fragments.main.HomeFragment
+import com.mkamilmistar.gold_market.fragments.main.ProfileFragment
 import com.mkamilmistar.gold_market.helpers.Utils
 
 class MainActivity : AppCompatActivity() {

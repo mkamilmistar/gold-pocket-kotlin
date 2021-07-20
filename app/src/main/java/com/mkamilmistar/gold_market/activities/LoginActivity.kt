@@ -4,15 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.textfield.TextInputLayout
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.fragments.bottomNavigation.HomeFragment
 import com.mkamilmistar.gold_market.helpers.Utils
 
 class LoginActivity : AppCompatActivity() {

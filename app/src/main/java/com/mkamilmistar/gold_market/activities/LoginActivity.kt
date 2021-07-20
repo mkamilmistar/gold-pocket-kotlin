@@ -7,10 +7,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.textfield.TextInputLayout
 import com.mkamilmistar.gold_market.R
+import com.mkamilmistar.gold_market.fragments.bottomNavigation.HomeFragment
+import com.mkamilmistar.gold_market.helpers.Utils
 
 class LoginActivity : AppCompatActivity() {
 
@@ -66,9 +69,9 @@ class LoginActivity : AppCompatActivity() {
 
     btnSignIn.setOnClickListener {
       Intent(this, MainActivity::class.java).apply {
+        putExtra(Utils.EMAIL, emailField.editText?.text.toString().trim())
+        putExtra(Utils.PASSWORD, pwdField.editText?.text.toString().trim())
         startActivity(this)
-        putExtra(EMAIL, emailField.toString())
-        putExtra(PASSWORD, pwdField.toString())
         finish()
       }
     }
@@ -79,10 +82,5 @@ class LoginActivity : AppCompatActivity() {
         startActivity(this)
       }
     }
-  }
-
-  companion object {
-    const val EMAIL = "EMAIL"
-    const val PASSWORD = "PASSWORD"
   }
 }

@@ -7,23 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.helpers.Utils
+import com.mkamilmistar.gold_market.activities.MainActivity
 
-class ProfileFragment : Fragment() {
-
-  lateinit var txtView: TextView
+class SettingFragment : Fragment() {
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
     // Inflate the layout for this fragment
-    val view = inflater.inflate(R.layout.fragment_profile, container, false)
-    txtView = view.findViewById(R.id.text_profile_fragment)
-    val dataEmail = arguments?.getString(Utils.EMAIL)
-    val dataPwd = arguments?.getString(Utils.PASSWORD)
-    txtView.text = dataEmail.toString()
+    return inflater.inflate(R.layout.fragment_setting, container, false)
+  }
 
-    return view
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    val dataEmail = (activity as MainActivity).emailPass
+
+    val emailTxt = view.findViewById<TextView>(R.id.profile_email)
+    emailTxt.text = dataEmail
   }
 }

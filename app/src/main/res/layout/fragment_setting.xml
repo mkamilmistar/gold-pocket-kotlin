@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/bg_gray"
+  android:orientation="vertical"
+  tools:context=".fragments.main.SettingFragment">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_marginTop="-10dp"
+    android:background="@drawable/rounded_corners"
+    android:backgroundTint="@color/yellow"
+    android:paddingHorizontal="40dp">
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="70dp"
+      android:fontFamily="@font/nunitosans_extrabold"
+      android:gravity="center"
+      android:text="@string/menu_setting"
+      android:textAllCaps="true"
+      android:textColor="@color/black"
+      android:textSize="18sp" />
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="-90dp"
+    android:paddingHorizontal="20dp">
+
+    <com.google.android.material.card.MaterialCardView
+      android:layout_width="0dp"
+      android:layout_height="125dp"
+      android:layout_margin="10dp"
+      android:layout_weight="1"
+      app:cardCornerRadius="8dp"
+      app:cardElevation="4dp">
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp">
+
+        <ImageView
+          android:id="@+id/profile_picture"
+          android:layout_width="70dp"
+          android:layout_height="70dp"
+          android:layout_centerVertical="true"
+          android:layout_marginStart="20dp"
+          android:contentDescription="@string/text_profile_picture"
+          android:src="@drawable/profile_pic" />
+
+        <TextView
+          android:id="@+id/profile_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="20dp"
+          android:layout_marginTop="35dp"
+          android:layout_toEndOf="@id/profile_picture"
+          android:fontFamily="@font/nunitosans_extrabold"
+          android:includeFontPadding="false"
+          android:text="@string/full_name"
+          android:textColor="@color/black"
+          android:textSize="18sp" />
+
+        <TextView
+          android:id="@+id/profile_email"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/profile_name"
+          android:layout_marginStart="20dp"
+          android:layout_toEndOf="@id/profile_picture"
+          android:fontFamily="@font/nunitosans_light"
+          android:includeFontPadding="false"
+          android:text="@string/email_gmail_com"
+          android:textColor="@color/black"
+          android:textSize="14sp" />
+
+      </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="20dp">
+
+    <com.google.android.material.card.MaterialCardView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_margin="10dp"
+      android:layout_weight="1"
+      app:cardCornerRadius="8dp"
+      app:cardElevation="4dp">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:paddingHorizontal="16dp"
+          android:paddingVertical="10dp">
+
+          <TextView
+            android:id="@+id/security_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/nunitosans_extrabold"
+            android:text="@string/text_security"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+          <TextView
+            android:id="@+id/security_desc_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/nunitosans_light"
+            android:text="@string/text_password_amp_pin"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@+id/security_text"
+            app:layout_constraintTop_toBottomOf="@+id/security_text"
+            tools:ignore="SmallSp" />
+
+          <ImageView
+            android:id="@+id/arrow_right_security"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:contentDescription="@string/arrow_right"
+            android:src="@drawable/arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:paddingHorizontal="16dp"
+          android:paddingVertical="10dp">
+
+          <TextView
+            android:id="@+id/pic_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/nunitosans_extrabold"
+            android:text="@string/pic_information_text"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+          <TextView
+            android:id="@+id/pic_desc_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/nunitosans_light"
+            android:text="@string/pic_desc_text"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@+id/pic_text"
+            app:layout_constraintTop_toBottomOf="@+id/pic_text"
+            tools:ignore="SmallSp" />
+
+          <ImageView
+            android:id="@+id/arrow_right_pic"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:contentDescription="@string/arrow_right"
+            android:src="@drawable/arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:paddingHorizontal="16dp"
+          android:paddingVertical="10dp">
+
+          <TextView
+            android:id="@+id/term_conditions_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/nunitosans_extrabold"
+            android:text="@string/terms_and_conditions_text"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+          <TextView
+            android:id="@+id/term_conditions_desc_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/nunitosans_light"
+            android:text="@string/term_desc_text"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@+id/term_conditions_text"
+            app:layout_constraintTop_toBottomOf="@+id/term_conditions_text"
+            tools:ignore="SmallSp" />
+
+          <ImageView
+            android:id="@+id/arrow_right_term"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:contentDescription="@string/arrow_right"
+            android:src="@drawable/arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+      </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="20dp">
+
+    <com.google.android.material.card.MaterialCardView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_margin="10dp"
+      android:layout_weight="1"
+      app:cardCornerRadius="8dp"
+      app:cardElevation="4dp">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingHorizontal="16dp"
+          android:paddingVertical="10dp">
+
+          <TextView
+            android:id="@+id/additional_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/nunitosans_extrabold"
+            android:text="@string/additional_information_text"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+          <TextView
+            android:id="@+id/additional_desc_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/nunitosans_light"
+            android:text="@string/additional_desc_text"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@+id/additional_text"
+            app:layout_constraintTop_toBottomOf="@+id/additional_text"
+            tools:ignore="SmallSp" />
+
+          <ImageView
+            android:id="@+id/arrow_right_additional"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:contentDescription="@string/arrow_right"
+            android:src="@drawable/arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingHorizontal="16dp"
+          android:paddingVertical="10dp">
+
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunitosans_extrabold"
+            android:textSize="18sp"
+            android:textColor="#8B8B8B"
+            android:text="@string/text_register_title"/>
+
+        </LinearLayout>
+      </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+  </LinearLayout>
+</LinearLayout>

@@ -4,6 +4,7 @@
   <color name="yellow_dark">#ffd311</color>
   <color name="yellow_darker">#fcc617</color>
   <color name="main_gray">#707070</color>
+  <color name="bg_gray">#e9edf0</color>
   <color name="secondary_gray">#9C9C9C</color>
   <color name="teal_200">#FF03DAC5</color>
   <color name="teal_700">#FF018786</color>

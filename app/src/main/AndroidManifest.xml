@@ -9,7 +9,7 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/Theme.Goldmarket">
-    <activity android:name=".activities.TermAndConditionActivity"></activity>
+    <activity android:name=".activities.TermAndConditionActivity" />
     <activity android:name=".activities.ForgetPasswordActivity" />
     <activity android:name=".activities.SplashScreenActivity">
       <intent-filter>

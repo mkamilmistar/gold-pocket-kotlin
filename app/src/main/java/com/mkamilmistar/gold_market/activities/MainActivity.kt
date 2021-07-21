@@ -8,14 +8,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.fragments.main.HistoryFragment
 import com.mkamilmistar.gold_market.fragments.main.HomeFragment
-import com.mkamilmistar.gold_market.fragments.main.ProfileFragment
+import com.mkamilmistar.gold_market.fragments.main.SettingFragment
 import com.mkamilmistar.gold_market.helpers.Utils
 
 class MainActivity : AppCompatActivity() {
 
   private val homeFragment = HomeFragment()
   private val historyFragment = HistoryFragment()
-  private val profileFragment = ProfileFragment()
+  private val profileFragment = SettingFragment()
   lateinit var emailPass: String
   lateinit var pwdPass: String
 
@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     replaceFragment(homeFragment)
+
+    emailPass = intent.getStringExtra(Utils.EMAIL).toString()
+    pwdPass = intent.getStringExtra(Utils.PASSWORD).toString()
+    Log.d("EMAIL", emailPass)
 
     val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation)
     bottomNav.setOnItemSelectedListener{
@@ -36,16 +40,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun replaceFragment(fragment: Fragment) {
-    emailPass = intent.getStringExtra(Utils.EMAIL).toString()
-    pwdPass = intent.getStringExtra(Utils.PASSWORD).toString()
-    Log.d("EMAIL", emailPass)
     val fragmentTransaction = supportFragmentManager.beginTransaction()
-
-    val data = Bundle()
-    data.putString("EMAIL", this.emailPass)
-    data.putString("PASSWORD", this.pwdPass)
-
-    fragment.arguments = data
 
     fragmentTransaction.replace(R.id.fragment_container, fragment)
     fragmentTransaction.commit()

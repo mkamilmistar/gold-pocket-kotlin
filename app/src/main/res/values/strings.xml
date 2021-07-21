@@ -47,4 +47,8 @@
   <string name="total_pocket">Your Total Pockets : 1</string>
   <string name="pocket_text">Gold\'s Pocket</string>
     <string name="product_transaction_title">Product Transaction</string>
+  <string name="history_image">History Image</string>
+  <string name="product_name_text">Product Name</string>
+  <string name="price_product_history">Rp. 250.000</string>
+  <string name="date_product_text">21 March 2021</string>
 </resources>

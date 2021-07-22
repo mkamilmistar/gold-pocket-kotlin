@@ -307,7 +307,7 @@
             android:fontFamily="@font/nunitosans_extrabold"
             android:textSize="18sp"
             android:textColor="#8B8B8B"
-            android:text="@string/text_register_title"/>
+            android:text="@string/logout_text"/>
 
         </LinearLayout>
       </LinearLayout>

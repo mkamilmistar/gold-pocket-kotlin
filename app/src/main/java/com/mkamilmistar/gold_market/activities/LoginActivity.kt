@@ -14,7 +14,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.helpers.Utils
 
-class LoginActivity : AppCompatActivity(), TextWatcher {
+class LoginActivity : AppCompatActivity() {
 
   private val emailData = MutableLiveData<String>()
   private val passwordData = MutableLiveData<String>()
@@ -81,17 +81,5 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
         startActivity(this)
       }
     }
-  }
-
-  override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-    TODO("Not yet implemented")
-  }
-
-  override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-    TODO("Not yet implemented")
-  }
-
-  override fun afterTextChanged(s: Editable?) {
-    TODO("Not yet implemented")
   }
 }

@@ -40,6 +40,7 @@ dependencies {
   implementation(AppDependencies.appCompat)
   implementation(AppDependencies.material)
   implementation(AppDependencies.constraintLayout)
+  implementation(AppDependencies.androidFragment)
   testImplementation(AppDependencies.junit)
   androidTestImplementation(AppDependencies.extJunit)
   androidTestImplementation(AppDependencies.espressoCore)

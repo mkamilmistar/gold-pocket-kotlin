@@ -3,6 +3,8 @@ package com.mkamilmistar.gold_market.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
@@ -12,7 +14,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.helpers.Utils
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), TextWatcher {
 
   private val emailData = MutableLiveData<String>()
   private val passwordData = MutableLiveData<String>()
@@ -79,5 +81,17 @@ class LoginActivity : AppCompatActivity() {
         startActivity(this)
       }
     }
+  }
+
+  override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun afterTextChanged(s: Editable?) {
+    TODO("Not yet implemented")
   }
 }

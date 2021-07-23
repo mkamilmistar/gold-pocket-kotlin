@@ -2,8 +2,9 @@ package com.mkamilmistar.gold_market.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.fragments.main.HistoryFragment
@@ -26,7 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     emailPass = intent.getStringExtra(Utils.EMAIL).toString()
     pwdPass = intent.getStringExtra(Utils.PASSWORD).toString()
-    Log.d("EMAIL", emailPass)
 
     val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation)
     bottomNav.setOnItemSelectedListener{
@@ -41,8 +41,17 @@ class MainActivity : AppCompatActivity() {
 
   private fun replaceFragment(fragment: Fragment) {
     val fragmentTransaction = supportFragmentManager.beginTransaction()
+    when(fragment) {
+      is SettingFragment -> {
+        fragmentTransaction.replace(R.id.fragment_container, fragment)
+        fragment.setFragmentResult(Utils.EMAIL, bundleOf("EMAIL" to emailPass))
+        fragmentTransaction.commit()
+      }
+      else -> {
+        fragmentTransaction.replace(R.id.fragment_container, fragment)
+        fragmentTransaction.commit()
+      }
+    }
 
-    fragmentTransaction.replace(R.id.fragment_container, fragment)
-    fragmentTransaction.commit()
   }
 }

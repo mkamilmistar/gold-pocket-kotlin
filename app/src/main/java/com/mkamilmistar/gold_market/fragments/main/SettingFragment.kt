@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.setFragmentResultListener
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.activities.MainActivity
+import com.mkamilmistar.gold_market.helpers.Utils
 
 class SettingFragment : Fragment() {
 
@@ -21,9 +23,11 @@ class SettingFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val dataEmail = (activity as MainActivity).emailPass
 
-    val emailTxt = view.findViewById<TextView>(R.id.profile_email)
-    emailTxt.text = dataEmail
+    setFragmentResultListener(Utils.EMAIL) { key, result ->
+      val dataEmail = result.getString("EMAIL")
+      val emailTxt = view.findViewById<TextView>(R.id.profile_email)
+      emailTxt.text = dataEmail
+    }
   }
 }

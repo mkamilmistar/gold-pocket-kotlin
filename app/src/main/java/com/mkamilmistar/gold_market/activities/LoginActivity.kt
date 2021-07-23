@@ -6,57 +6,36 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.helpers.Utils
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), TextWatcher {
 
-  private val emailData = MutableLiveData<String>()
-  private val passwordData = MutableLiveData<String>()
-  private val isValidData = MediatorLiveData<Boolean>().apply {
-    this.value = false
-
-    addSource(emailData) { email ->
-      val password = passwordData.value
-      this.value = validateForm(email, password)
-    }
-
-    addSource(passwordData) { password ->
-      val email = emailData.value
-      this.value = validateForm(email, password)
-    }
-  }
-
-  private fun validateForm(email: String?, password: String?): Boolean {
-    val isValidEmail = email != null && email.isNotBlank() && email.contains("@")
-    val isValidPassword = password != null && password.isNotBlank() && password.length >= 6
-    return isValidEmail && isValidPassword
-  }
+  private lateinit var emailLogin: TextInputEditText
+  private lateinit var passwordLogin: TextInputEditText
+  private lateinit var btnSignIn: Button
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_login)
 
-    val emailField = findViewById<TextInputLayout>(R.id.email_login)
-    val pwdField = findViewById<TextInputLayout>(R.id.password_login)
-    val btnSignIn: Button = findViewById(R.id.btn_sign_in)
 
-    emailField.editText?.doOnTextChanged { text, _, _, _ ->
-      emailData.value = text?.toString()
-    }
+    btnSignIn = findViewById(R.id.btn_sign_in)
+    emailLogin = findViewById(R.id.loginEmail)
+    passwordLogin = findViewById(R.id.loginPassword)
 
-    pwdField.editText?.doOnTextChanged { text, _, _, _ ->
-      passwordData.value = text?.toString()
-    }
+    btnSignIn.isEnabled = false
 
-    isValidData.observe(this) { isValid ->
-        btnSignIn.isEnabled = isValid
-    }
+    emailLogin.addTextChangedListener(this)
+    passwordLogin.addTextChangedListener(this)
 
     val signUpActivity: TextView = findViewById(R.id.text_sign_up)
     signUpActivity.setOnClickListener {
@@ -68,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
 
     btnSignIn.setOnClickListener {
       Intent(this, MainActivity::class.java).apply {
-        putExtra(Utils.EMAIL, emailField.editText?.text.toString().trim())
-        putExtra(Utils.PASSWORD, pwdField.editText?.text.toString().trim())
+        putExtra(Utils.EMAIL, emailLogin.text.toString())
+        putExtra(Utils.PASSWORD, passwordLogin.text.toString())
         startActivity(this)
         finish()
       }
@@ -81,5 +60,20 @@ class LoginActivity : AppCompatActivity() {
         startActivity(this)
       }
     }
+  }
+
+  override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+  }
+
+  override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    btnSignIn.isEnabled =
+      (emailLogin.text.toString().isNotEmpty() &&
+        emailLogin.text.toString().contains("@") &&
+        passwordLogin.text.toString().isNotEmpty() &&
+        passwordLogin.text.toString().length >= 6
+        )
+  }
+
+  override fun afterTextChanged(s: Editable?) {
   }
 }

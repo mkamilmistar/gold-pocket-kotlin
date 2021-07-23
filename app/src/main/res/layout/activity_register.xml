@@ -55,6 +55,7 @@
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
       <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/firstNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -68,6 +69,7 @@
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
       <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/lastNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -81,6 +83,7 @@
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
       <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/emailRegisterText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -94,6 +97,7 @@
       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
       <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/pwdRegisterText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/nunitosans_regular"

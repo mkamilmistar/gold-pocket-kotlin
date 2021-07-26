@@ -6,14 +6,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.mkamilmistar.gold_market.MainActivity
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.helpers.Utils
 

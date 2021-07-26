@@ -1,4 +1,4 @@
-package com.mkamilmistar.gold_market.activities
+package com.mkamilmistar.gold_market
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,7 +6,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.fragments.main.HistoryFragment
 import com.mkamilmistar.gold_market.fragments.main.HomeFragment
 import com.mkamilmistar.gold_market.fragments.main.SettingFragment

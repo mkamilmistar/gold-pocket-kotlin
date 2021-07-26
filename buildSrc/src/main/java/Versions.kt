@@ -8,5 +8,6 @@ object Versions {
   const val ext_junit_version = "1.1.3"
   const val espresso_version = "3.4.0"
   const val fragment_version = "1.4.0-alpha04"
-
+  const val navigation_fragment_version = "2.4.0-alpha05"
+  const val navigation_android_version = "2.4.0-alpha05"
 }

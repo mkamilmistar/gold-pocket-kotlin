@@ -41,6 +41,8 @@ dependencies {
   implementation(AppDependencies.material)
   implementation(AppDependencies.constraintLayout)
   implementation(AppDependencies.androidFragment)
+  implementation(AppDependencies.navigationFragment)
+  implementation(AppDependencies.navigationAndroid)
   testImplementation(AppDependencies.junit)
   androidTestImplementation(AppDependencies.extJunit)
   androidTestImplementation(AppDependencies.espressoCore)

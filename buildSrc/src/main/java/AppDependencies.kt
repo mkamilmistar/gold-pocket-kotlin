@@ -8,4 +8,6 @@ object AppDependencies {
   const val junit = "junit:junit:${Versions.junit_version}"
   const val extJunit = "androidx.test.ext:junit:${Versions.ext_junit_version}"
   const val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espresso_version}"
+  const val navigationFragment = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation_fragment_version}"
+  const val navigationAndroid = "androidx.navigation:navigation-ui-ktx:${Versions.navigation_android_version}"
 }

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.activities.MainActivity
 import com.mkamilmistar.gold_market.helpers.Utils
 
 class SettingFragment : Fragment() {

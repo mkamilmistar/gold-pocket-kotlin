@@ -7,11 +7,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.mkamilmistar.gold_market.MainActivity
 import com.mkamilmistar.gold_market.R
 
 class RegisterActivity : AppCompatActivity(), TextWatcher {

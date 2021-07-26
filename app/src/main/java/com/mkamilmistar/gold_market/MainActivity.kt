@@ -4,11 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.mkamilmistar.gold_market.databinding.ActivityMainBinding
 
@@ -25,11 +22,11 @@ class MainActivity : AppCompatActivity() {
     navHostFragment =
       supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
     navController = navHostFragment.findNavController()
-    visibilityNavElements(navController)
+    visibilityBotNavBar(navController)
     binding.bottomNavigation.setupWithNavController(navController)
   }
 
-  private fun visibilityNavElements(navController: NavController) {
+  private fun visibilityBotNavBar(navController: NavController) {
     navController.addOnDestinationChangedListener { _, destination, _ ->
       binding.apply {
         when (destination.id) {

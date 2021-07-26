@@ -23,7 +23,6 @@ class SplashScreenFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    (activity as MainActivity).hideBottomNav()
     Handler(Looper.getMainLooper()).postDelayed({
       findNavController().navigate(R.id.action_splashScreenFragment_to_onBoardingFragment)
     }, 3000)

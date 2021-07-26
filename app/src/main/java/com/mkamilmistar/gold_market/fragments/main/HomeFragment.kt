@@ -1,6 +1,7 @@
 package com.mkamilmistar.gold_market.fragments.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,16 @@ class HomeFragment : Fragment() {
 
   private lateinit var binding: FragmentHomeBinding
 
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    Log.d("HomeFragment", "onCreate")
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    Log.d("HomeFragment", "onDestroy")
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
@@ -24,9 +35,6 @@ class HomeFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    binding.apply {
-      (activity as MainActivity).showBottomNav()
-    }
   }
 
 }

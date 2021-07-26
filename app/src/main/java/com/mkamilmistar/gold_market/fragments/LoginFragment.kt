@@ -31,7 +31,6 @@ class LoginFragment : Fragment(), TextWatcher {
     super.onViewCreated(view, savedInstanceState)
     binding.apply {
 //      btnSignIn.isEnabled = false
-      (activity as MainActivity).hideBottomNav()
       val email = loginEmail.text
       val bundle = bundleOf(Utils.EMAIL to email)
       btnSignIn.setOnClickListener {

@@ -1,6 +1,7 @@
 package com.mkamilmistar.gold_market.fragments.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,16 @@ class SettingFragment : Fragment() {
 
   private lateinit var binding: FragmentSettingBinding
 
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    Log.d("SettingsFragment", "onCreate")
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    Log.d("SettingsFragment", "onDestroy")
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
@@ -29,7 +40,6 @@ class SettingFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding.apply {
-      (activity as MainActivity).showBottomNav()
       logoutSettings.setOnClickListener {
         Navigation.findNavController(view)
           .navigate(R.id.action_settingFragment_to_loginFragment)

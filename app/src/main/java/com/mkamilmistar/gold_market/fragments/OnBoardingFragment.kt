@@ -25,7 +25,6 @@ class OnBoardingFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding.apply {
-      (activity as MainActivity).hideBottomNav()
       btnGetStarted.setOnClickListener {
         Navigation.findNavController(view)
           .navigate(R.id.action_onBoardingFragment_to_loginFragment)

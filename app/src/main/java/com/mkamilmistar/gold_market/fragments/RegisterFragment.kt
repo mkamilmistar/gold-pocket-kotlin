@@ -28,7 +28,6 @@ class RegisterFragment : Fragment(), TextWatcher {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding.apply {
-      (activity as MainActivity).hideBottomNav()
       btnRegister.setOnClickListener {
         Navigation.findNavController(view)
           .navigate(R.id.action_registerFragment_to_homeFragment)

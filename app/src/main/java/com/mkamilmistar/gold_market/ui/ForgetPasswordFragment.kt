@@ -1,4 +1,4 @@
-package com.mkamilmistar.gold_market.fragments
+package com.mkamilmistar.gold_market.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

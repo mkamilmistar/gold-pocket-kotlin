@@ -6,7 +6,7 @@
   android:layout_height="match_parent"
   android:background="@color/bg_gray"
   android:orientation="vertical"
-  tools:context=".fragments.main.HistoryFragment">
+  tools:context=".ui.history.HistoryFragment">
 
   <LinearLayout
     android:layout_width="match_parent"

@@ -4,17 +4,18 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".ui.TermAndConditionFragment">
+  tools:context=".ui.pocket.PocketFragment">
 
   <TextView
-    android:id="@+id/textView"
+    android:id="@+id/textPocket"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/text_terms_amp_conditions"
+    android:text="Pocket Screen"
+    android:fontFamily="@font/nunitosans_extrabold"
     android:textSize="28sp"
-    android:fontFamily="@font/nunitosans_blackitalic"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

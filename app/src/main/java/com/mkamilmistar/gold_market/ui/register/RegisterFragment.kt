@@ -1,4 +1,4 @@
-package com.mkamilmistar.gold_market.fragments
+package com.mkamilmistar.gold_market.ui.register
 
 import android.os.Bundle
 import android.text.Editable
@@ -7,11 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.navigation.Navigation
-import com.mkamilmistar.gold_market.MainActivity
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
 import com.mkamilmistar.gold_market.databinding.FragmentRegisterBinding
+import com.mkamilmistar.gold_market.helpers.Utils
 
 class RegisterFragment : Fragment(), TextWatcher {
 
@@ -28,10 +28,19 @@ class RegisterFragment : Fragment(), TextWatcher {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding.apply {
+      btnRegister.isEnabled = false
+      firstNameText.addTextChangedListener(this@RegisterFragment)
+      lastNameText.addTextChangedListener(this@RegisterFragment)
+      emailRegisterText.addTextChangedListener(this@RegisterFragment)
+      pwdRegisterText.addTextChangedListener(this@RegisterFragment)
+
+      val email = emailRegisterText.text
+      val bundle = bundleOf(Utils.EMAIL to email)
       btnRegister.setOnClickListener {
         Navigation.findNavController(view)
-          .navigate(R.id.action_registerFragment_to_homeFragment)
+          .navigate(R.id.action_registerFragment_to_homeFragment, bundle)
       }
+
       termCondition.setOnClickListener {
         Navigation.findNavController(view)
           .navigate(R.id.action_registerFragment_to_termAndConditionFragment)

@@ -30,13 +30,10 @@ class MainActivity : AppCompatActivity() {
     navController.addOnDestinationChangedListener { _, destination, _ ->
       binding.apply {
         when (destination.id) {
-          R.id.splashScreenFragment,
-          R.id.forgetPasswordFragment,
-          R.id.termAndConditionFragment,
-          R.id.onBoardingFragment,
-          R.id.loginFragment,
-          R.id.registerFragment -> bottomNavigation.visibility = View.GONE
-          else -> bottomNavigation.visibility = View.VISIBLE
+          R.id.homeFragment,
+          R.id.historyFragment,
+          R.id.settingFragment -> bottomNavigation.visibility = View.VISIBLE
+          else -> bottomNavigation.visibility = View.GONE
         }
       }
     }

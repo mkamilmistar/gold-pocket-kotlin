@@ -1,4 +1,4 @@
-package com.mkamilmistar.gold_market.fragments
+package com.mkamilmistar.gold_market.ui.login
 
 import android.os.Bundle
 import android.text.Editable
@@ -9,10 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.navigation.Navigation
-import com.mkamilmistar.gold_market.MainActivity
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
-import com.mkamilmistar.gold_market.databinding.FragmentOnBoardingBinding
 import com.mkamilmistar.gold_market.helpers.Utils
 
 class LoginFragment : Fragment(), TextWatcher {
@@ -30,16 +28,23 @@ class LoginFragment : Fragment(), TextWatcher {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding.apply {
-//      btnSignIn.isEnabled = false
-      val email = loginEmail.text
-      val bundle = bundleOf(Utils.EMAIL to email)
+      btnSignIn.isEnabled = false
+      loginEmail.addTextChangedListener(this@LoginFragment)
+      loginPassword.addTextChangedListener(this@LoginFragment)
+
       btnSignIn.setOnClickListener {
         Navigation.findNavController(view)
-          .navigate(R.id.action_loginFragment_to_homeFragment, bundle)
+          .navigate(R.id.action_loginFragment_to_homeFragment)
       }
+
       btnForget.setOnClickListener {
         Navigation.findNavController(view)
           .navigate(R.id.action_loginFragment_to_forgetPasswordFragment)
+      }
+
+      textSignUp.setOnClickListener {
+        Navigation.findNavController(view)
+          .navigate(R.id.action_loginFragment_to_registerFragment)
       }
     }
   }

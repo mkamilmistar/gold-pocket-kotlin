@@ -1,4 +1,4 @@
-package com.mkamilmistar.gold_market.fragments.main
+package com.mkamilmistar.gold_market.ui.settings
 
 import android.os.Bundle
 import android.util.Log
@@ -6,35 +6,40 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.mkamilmistar.gold_market.MainActivity
+import androidx.navigation.Navigation
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.databinding.FragmentHistoryBinding
-import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
+import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
+import com.mkamilmistar.gold_market.helpers.Utils
 
-class HistoryFragment : Fragment() {
+class SettingFragment : Fragment() {
 
-  private lateinit var binding: FragmentHistoryBinding
+  private lateinit var binding: FragmentSettingBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Log.d("HistoryFragment", "onCreate")
+    Log.d("SettingsFragment", "onCreate")
   }
 
   override fun onDestroy() {
     super.onDestroy()
-    Log.d("HistoryFragment", "onDestroy")
+    Log.d("SettingsFragment", "onDestroy")
   }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    binding = FragmentHistoryBinding.inflate(inflater, container, false)
+    binding = FragmentSettingBinding.inflate(inflater, container, false)
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    binding.apply {
+      logoutSettings.setOnClickListener {
+        Navigation.findNavController(view)
+          .navigate(R.id.action_settingFragment_to_loginFragment)
+      }
+    }
   }
-
 }

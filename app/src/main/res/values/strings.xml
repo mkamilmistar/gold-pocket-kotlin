@@ -52,4 +52,10 @@
     <string name="price_product_history">Rp. 250.000</string>
     <string name="date_product_text">21 March 2021</string>
     <string name="logout_text">Logout</string>
+    <string name="menu_pocket">Pocket</string>
+  <string name="pocket_name">Pocket Name</string>
+  <string name="pocket_price">Rp. 500.000</string>
+  <string name="edit_pocket">Edit Pocket</string>
+  <string name="delete_pocket">Delete Pocket</string>
+  <string name="pocketQty">10 gr</string>
 </resources>

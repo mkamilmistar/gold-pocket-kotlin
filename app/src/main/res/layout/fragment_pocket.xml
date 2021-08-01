@@ -4,18 +4,57 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@color/bg_gray"
   tools:context=".ui.pocket.PocketFragment">
 
-  <TextView
-    android:id="@+id/textPocket"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Pocket Screen"
-    android:fontFamily="@font/nunitosans_extrabold"
-    android:textSize="28sp"
+  <LinearLayout
+    android:id="@+id/header_pocket"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:translationY="-10dp"
+    android:background="@drawable/rounded_corners"
+    android:backgroundTint="@color/yellow"
+    android:paddingHorizontal="40dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="70dp"
+      android:fontFamily="@font/nunitosans_extrabold"
+      android:gravity="center"
+      android:text="@string/menu_pocket"
+      android:textAllCaps="true"
+      android:textColor="@color/black"
+      android:textSize="18sp" />
+  </LinearLayout>
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recycleViewPocket"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:translationY="-60dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toBottomOf="@+id/header_pocket" />
+
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/floatingActionButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end|bottom"
+    android:layout_marginEnd="28dp"
+    android:layout_marginBottom="28dp"
+    android:background="@color/yellow"
+    android:backgroundTint="@color/yellow"
+    android:clickable="true"
+    android:contentDescription="@string/create_pocket_btn"
+    android:src="@drawable/ic_add"
+    app:borderWidth="0dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

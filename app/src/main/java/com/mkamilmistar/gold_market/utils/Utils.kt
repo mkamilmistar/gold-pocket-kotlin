@@ -12,3 +12,10 @@ val AppCompatActivity.baseApp: BaseApplication
   get() = (application as BaseApplication)
 
 class BusinessException(message:String): Exception(message)
+
+fun getRandomString(length: Int) : String {
+  val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+  return (1..length)
+    .map { allowedChars.random() }
+    .joinToString("")
+}

@@ -36,6 +36,12 @@ class PocketViewModel(private val repository: PocketRepository): ViewModel() {
 
   fun deletePocket(position: Int) {
     repository.deletePocket(position)
+    updateData()
+  }
+
+  fun addPocket(pocket: Pocket) {
+    repository.addPocket(pocket)
+    updateData()
   }
 
 }

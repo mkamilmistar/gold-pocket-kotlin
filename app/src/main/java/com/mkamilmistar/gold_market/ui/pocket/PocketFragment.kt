@@ -1,11 +1,13 @@
 package com.mkamilmistar.gold_market.ui.pocket
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -21,6 +23,8 @@ import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.ui.history.HistoryAdapter
 import com.mkamilmistar.gold_market.ui.history.HistoryViewModel
+import com.mkamilmistar.gold_market.utils.getRandomString
+import kotlin.random.Random
 
 class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
 
@@ -51,6 +55,22 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
         layoutManager = LinearLayoutManager(context)
         adapter = pocketAdapter
       }
+
+      fabAddPocket.setOnClickListener {
+        val inputEditTextField = EditText(requireActivity())
+        val dialog = AlertDialog.Builder(requireContext())
+          .setTitle("Create New Pocket")
+          .setMessage("Input Pocket Name")
+          .setView(inputEditTextField)
+          .setPositiveButton("Create Pocket") { _, _ ->
+            val editTextInput = inputEditTextField.text.toString()
+            val newPocket = Pocket(getRandomString(5), editTextInput, 0)
+            viewModel.addPocket(newPocket)
+          }
+          .setNegativeButton("Cancel", null)
+          .create()
+        dialog.show()
+      }
     }
   }
 
@@ -78,7 +98,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   override fun deleteItem(position: Int) {
-    Toast.makeText(context, viewModel.getPocket(position).id, Toast.LENGTH_SHORT).show()
+    viewModel.deletePocket(position)
   }
 
   override fun editItem(position: Int) {

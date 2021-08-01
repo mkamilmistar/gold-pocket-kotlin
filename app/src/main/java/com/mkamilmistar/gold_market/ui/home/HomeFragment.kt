@@ -43,9 +43,14 @@ class HomeFragment : Fragment() {
     val passEmail = arguments?.getString("EMAIL")
     val passPwd = arguments?.getString("PASSWORD")
     subscribe()
-    viewModel.start(passEmail.toString(), passPwd.toString())
+    viewModel.start("@", "123123")
     binding.apply {
       btnCreatePocket.setOnClickListener {
+        Navigation.findNavController(view)
+          .navigate(R.id.action_homeFragment_to_pocketFragment)
+      }
+
+      btnChangePocket.setOnClickListener {
         Navigation.findNavController(view)
           .navigate(R.id.action_homeFragment_to_pocketFragment)
       }
@@ -54,7 +59,6 @@ class HomeFragment : Fragment() {
 
   @SuppressLint("SetTextI18n")
   private fun subscribe() {
-
     binding.apply {
       val customerObserver: Observer<EventResult> = Observer<EventResult> { event ->
         when (event) {

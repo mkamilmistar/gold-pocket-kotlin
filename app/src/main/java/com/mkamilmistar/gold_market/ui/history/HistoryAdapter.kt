@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mkamilmistar.gold_market.data.model.ProductHistory
+import com.mkamilmistar.gold_market.data.model.Purchase
 import com.mkamilmistar.gold_market.databinding.HistoryListItemBinding
 
 class HistoryAdapter(private val onClickItemListener: OnClickItemListener) :
   RecyclerView.Adapter<HistoryAdapter.TodoViewHolder>(){
 
-  var histories: MutableList<ProductHistory> = mutableListOf()
+  var histories: MutableList<Purchase> = mutableListOf()
   class TodoViewHolder(val binding: HistoryListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
@@ -23,8 +23,8 @@ class HistoryAdapter(private val onClickItemListener: OnClickItemListener) :
     with(holder.binding) {
       with(histories[position]) {
         productNameText.text = this.id
-        priceProductText.text = this.priceSell.toString()
-        historyDateText.text = this.historyDate
+        priceProductText.text = this.price.toString()
+        historyDateText.text = this.purchaseDate
 
         cardItemHistory.setOnClickListener {
           onClickItemListener.onClickItem(position)
@@ -34,7 +34,7 @@ class HistoryAdapter(private val onClickItemListener: OnClickItemListener) :
   }
 
   @SuppressLint("NotifyDataSetChanged")
-  fun updateData(histories: List<ProductHistory>) {
+  fun updateData(histories: List<Purchase>) {
     this.histories.clear()
     this.histories.addAll(histories)
     notifyDataSetChanged()

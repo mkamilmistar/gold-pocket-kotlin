@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mkamilmistar.gold_market.data.model.ProductHistory
+import com.mkamilmistar.gold_market.data.model.Purchase
 import com.mkamilmistar.gold_market.databinding.FragmentHistoryBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
@@ -57,7 +58,7 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
           is EventResult.Loading -> Log.d("HistoryFragment", "Loading...")
           is EventResult.Success -> {
             Log.d("HistoryFragment", "Success...")
-            historyAdapter.updateData(event.data as List<ProductHistory>)
+            historyAdapter.updateData(event.data as List<Purchase>)
           }
           is EventResult.Failed -> Log.d("HistoryFragment", "FAILED")
           else -> {

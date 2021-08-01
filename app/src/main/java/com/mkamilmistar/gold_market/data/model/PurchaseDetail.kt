@@ -1,4 +1,7 @@
 package com.mkamilmistar.gold_market.data.model
 
-class PurchaseDetail {
+data class PurchaseDetail(
+  val id: String, val price: Number,
+  val qtyInGram: Double
+) {
 }

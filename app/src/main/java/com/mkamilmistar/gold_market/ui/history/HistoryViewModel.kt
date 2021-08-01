@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mkamilmistar.gold_market.data.model.ProductHistory
+import com.mkamilmistar.gold_market.data.model.Purchase
 import com.mkamilmistar.gold_market.data.repository.ProductHistoryRepository
+import com.mkamilmistar.gold_market.data.repository.PurchaseRepository
 import com.mkamilmistar.gold_market.helpers.EventResult
 import java.lang.Exception
 
-class HistoryViewModel(private val repository: ProductHistoryRepository): ViewModel() {
+class HistoryViewModel(private val repository: PurchaseRepository): ViewModel() {
   private var _historyLiveData = MutableLiveData<EventResult>(EventResult.Idle)
   val historyLiveData: LiveData<EventResult>
     get() = _historyLiveData
@@ -17,19 +19,19 @@ class HistoryViewModel(private val repository: ProductHistoryRepository): ViewMo
     updateData()
   }
 
-  private fun getHistoryRepository() = repository.findAllProductHistory()
+  private fun getHistoryRepository() = repository.findAllPurchase()
 
   private fun updateData() {
     _historyLiveData.value = EventResult.Loading
     try {
-      val history: List<ProductHistory> = getHistoryRepository()
+      val history: List<Purchase> = getHistoryRepository()
       _historyLiveData.value = EventResult.Success(history)
     } catch (e: Exception) {
       _historyLiveData.value = EventResult.Failed("Oops something wrong")
     }
   }
 
-  fun getHistory(position: Int): ProductHistory {
-    return repository.findProductHistory(position)
+  fun getHistory(position: Int): Purchase {
+    return repository.findPurchase(position)
   }
 }

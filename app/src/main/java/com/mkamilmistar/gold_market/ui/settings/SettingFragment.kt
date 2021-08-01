@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
-import com.mkamilmistar.gold_market.helpers.Utils
 
 class SettingFragment : Fragment() {
 

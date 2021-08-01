@@ -12,7 +12,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.databinding.FragmentRegisterBinding
-import com.mkamilmistar.gold_market.helpers.Utils
+import com.mkamilmistar.gold_market.utils.Utils
 
 class RegisterFragment : Fragment(), TextWatcher {
 

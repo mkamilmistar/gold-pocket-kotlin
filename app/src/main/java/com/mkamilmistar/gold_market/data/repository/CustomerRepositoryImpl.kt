@@ -18,4 +18,6 @@ class CustomerRepositoryImpl : CustomerRepository {
   companion object {
     var customerDB = Customer("", "Melia", "Suspariana", "melia@gmail.com", "melia123")
   }
+  val customerDBImport
+    get() = customerDB
 }

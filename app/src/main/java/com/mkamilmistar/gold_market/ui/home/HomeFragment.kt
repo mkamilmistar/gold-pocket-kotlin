@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.model.Customer
+import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
@@ -43,7 +44,8 @@ class HomeFragment : Fragment() {
     val passEmail = arguments?.getString("EMAIL")
     val passPwd = arguments?.getString("PASSWORD")
     subscribe()
-    viewModel.start("melia@gmail.com", "melia123")
+    val dummyUser = CustomerRepositoryImpl().customerDBImport
+    viewModel.start(dummyUser.email, dummyUser.password)
     binding.apply {
       btnCreatePocket.setOnClickListener {
         Navigation.findNavController(view)

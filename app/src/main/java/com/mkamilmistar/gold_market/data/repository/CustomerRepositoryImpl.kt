@@ -16,6 +16,6 @@ class CustomerRepositoryImpl : CustomerRepository {
   }
 
   companion object {
-    var customerDB = Customer("", "Melia", "Suspariana", "@", "123123")
+    var customerDB = Customer("", "Melia", "Suspariana", "melia@gmail.com", "melia123")
   }
 }

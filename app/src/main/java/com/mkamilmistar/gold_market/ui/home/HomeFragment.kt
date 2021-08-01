@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
     val passEmail = arguments?.getString("EMAIL")
     val passPwd = arguments?.getString("PASSWORD")
     subscribe()
-    viewModel.start("@", "123123")
+    viewModel.start("melia@gmail.com", "melia123")
     binding.apply {
       btnCreatePocket.setOnClickListener {
         Navigation.findNavController(view)

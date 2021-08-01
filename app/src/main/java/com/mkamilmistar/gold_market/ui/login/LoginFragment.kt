@@ -7,11 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
+import com.mkamilmistar.gold_market.data.model.Customer
 import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
-import com.mkamilmistar.gold_market.helpers.Utils
 
 class LoginFragment : Fragment(), TextWatcher {
 
@@ -33,8 +34,10 @@ class LoginFragment : Fragment(), TextWatcher {
       loginPassword.addTextChangedListener(this@LoginFragment)
 
       btnSignIn.setOnClickListener {
-        Navigation.findNavController(view)
-          .navigate(R.id.action_loginFragment_to_homeFragment)
+        findNavController().navigate(
+          R.id.homeFragment, null,
+          NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
+        )
       }
 
       btnForget.setOnClickListener {

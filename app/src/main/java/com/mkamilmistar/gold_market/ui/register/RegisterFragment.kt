@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.databinding.FragmentRegisterBinding
@@ -37,13 +38,15 @@ class RegisterFragment : Fragment(), TextWatcher {
       val email = emailRegisterText.text
       val bundle = bundleOf(Utils.EMAIL to email)
       btnRegister.setOnClickListener {
-        Navigation.findNavController(view)
-          .navigate(R.id.action_registerFragment_to_homeFragment, bundle)
+        Navigation.findNavController(view).navigate(
+          R.id.homeFragment, bundle,
+          NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
+        )
       }
 
       termCondition.setOnClickListener {
         Navigation.findNavController(view)
-          .navigate(R.id.action_registerFragment_to_termAndConditionFragment)
+//          .navigate(R.id.action_registerFragment_to_termAndConditionFragment)
       }
     }
   }

@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.databinding.FragmentOnBoardingBinding
 
@@ -31,8 +31,7 @@ class OnBoardingFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     binding.apply {
       btnGetStarted.setOnClickListener {
-        Navigation.findNavController(view)
-          .navigate(R.id.action_onBoardingFragment_to_loginFragment)
+        findNavController().navigate(R.id.action_onBoardingFragment_to_loginFragment)
       }
     }
   }

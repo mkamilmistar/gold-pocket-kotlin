@@ -4,6 +4,7 @@ import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.ProductHistoryRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.ProductRepositoryImpl
+import com.mkamilmistar.gold_market.ui.history.HistoryViewModel
 import com.mkamilmistar.gold_market.ui.home.HomeViewModel
 import com.mkamilmistar.gold_market.ui.login.LoginViewModel
 import com.mkamilmistar.gold_market.ui.pocket.PocketViewModel
@@ -21,4 +22,5 @@ class DependencyContainer {
   val loginViewModel = LoginViewModel(customerRepository)
   val registerViewModel = RegisterViewModel(customerRepository)
   val pocketViewModel = PocketViewModel(pocketRepository)
+  val historyViewModel = HistoryViewModel(productHistoryRepository)
 }

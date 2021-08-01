@@ -1,7 +1,6 @@
 package com.mkamilmistar.gold_market.data.repository
 
 import com.mkamilmistar.gold_market.data.model.Customer
-import com.mkamilmistar.gold_market.data.model.Pocket
 
 class CustomerRepositoryImpl : CustomerRepository {
   override fun getCustomer(email: String, password: String): Customer {

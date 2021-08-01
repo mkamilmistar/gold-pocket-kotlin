@@ -1,7 +1,5 @@
 package com.mkamilmistar.gold_market.ui.home
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,14 +21,14 @@ class HomeViewModel(private val repository: CustomerRepository) : ViewModel() {
   }
 
   fun start() {
-    updateInfo()
+    updateData()
   }
 
   private fun getCustomerFromRepository(email: String, pwd: String): Customer {
     return repository.getCustomer(email, pwd)
   }
 
-  private fun updateInfo() {
+  private fun updateData() {
     _customerLiveData.value = EventResult.Loading
     try {
       val customer: Customer = getCustomerFromRepository(email, pwd)

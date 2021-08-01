@@ -22,9 +22,9 @@ class ProductHistoryRepositoryImpl : ProductHistoryRepository {
   companion object {
     val productHistoryDB: MutableList<ProductHistory> =
       mutableListOf(
-        ProductHistory("History-1", "", 100000, 120000),
-        ProductHistory("History-2", "", 120000, 130000),
-        ProductHistory("History-3", "", 110000, 130000)
+        ProductHistory("History-1", "12 March 2021", 100000, 120000),
+        ProductHistory("History-2", "14 March 2021", 120000, 130000),
+        ProductHistory("History-3", "30 March 2021", 110000, 130000)
       )
   }
 }

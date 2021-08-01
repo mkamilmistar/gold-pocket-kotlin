@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -39,8 +40,10 @@ class HomeFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    val passEmail = arguments?.getString("EMAIL")
+    val passPwd = arguments?.getString("PASSWORD")
     subscribe()
-    viewModel.start()
+    viewModel.start(passEmail.toString(), passPwd.toString())
     binding.apply {
       btnCreatePocket.setOnClickListener {
         Navigation.findNavController(view)
@@ -51,11 +54,7 @@ class HomeFragment : Fragment() {
 
   @SuppressLint("SetTextI18n")
   private fun subscribe() {
-    val passEmail = arguments?.getString("EMAIL")
-    val passPwd = arguments?.getString("PASSWORD")
-    if (passEmail != null && passPwd != null) {
-      viewModel.constructor(passEmail, passPwd)
-    }
+
     binding.apply {
       val customerObserver: Observer<EventResult> = Observer<EventResult> { event ->
         when (event) {
@@ -65,7 +64,10 @@ class HomeFragment : Fragment() {
             val customer = event.data as Customer
             greetingHomeText.text = "Hi, ${customer.firstName}"
           }
-          is EventResult.Failed -> Log.d("HomeFragment", "FAILED")
+          is EventResult.Failed -> {
+            val message = "Failed to get data"
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+          }
           else -> {
           }
         }

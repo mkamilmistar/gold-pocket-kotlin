@@ -10,3 +10,5 @@ object Utils {
 
 val AppCompatActivity.baseApp: BaseApplication
   get() = (application as BaseApplication)
+
+class BusinessException(message:String): Exception(message)

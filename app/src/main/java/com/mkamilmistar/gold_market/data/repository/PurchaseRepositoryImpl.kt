@@ -11,8 +11,8 @@ class PurchaseRepositoryImpl: PurchaseRepository {
     return purchaseDB[position]
   }
 
-  override fun addPurchase(pocket: Purchase) {
-    purchaseDB.add(pocket)
+  override fun addPurchase(purchase: Purchase) {
+    purchaseDB.add(purchase)
   }
 
   override fun deletePurchase(position: Int) {

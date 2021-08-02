@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -23,7 +24,33 @@ class MainActivity : AppCompatActivity() {
       supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
     navController = navHostFragment.findNavController()
     visibilityBotNavBar(navController)
-    binding.bottomNavigation.setupWithNavController(navController)
+    binding.apply {
+      bottomNavigation.setOnItemSelectedListener {
+        when (it.itemId) {
+          R.id.homeFragment -> {
+            navController.navigate(
+              R.id.homeFragment, null,
+              NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
+            ); true
+          }
+          R.id.historyFragment -> {
+            navController.navigate(
+              R.id.historyFragment, null,
+              NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
+            ); true
+          }
+          R.id.settingFragment -> {
+            navController.navigate(
+              R.id.settingFragment, null,
+              NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
+            ); true
+          }
+          else -> {
+            false
+          }
+        }
+      }
+    }
   }
 
   private fun visibilityBotNavBar(navController: NavController) {

@@ -19,12 +19,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.model.Customer
 import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
-import com.mkamilmistar.gold_market.ui.home.HomeViewModel
-import com.mkamilmistar.gold_market.utils.Utils
 
 class LoginFragment : Fragment(), TextWatcher {
 

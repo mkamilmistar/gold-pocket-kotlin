@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
 
@@ -36,8 +38,10 @@ class SettingFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     binding.apply {
       logoutSettings.setOnClickListener {
-        Navigation.findNavController(view)
-          .navigate(R.id.action_settingFragment_to_loginFragment)
+        findNavController().navigate(
+          R.id.loginFragment, null,
+          NavOptions.Builder().setPopUpTo(R.id.settingFragment, true).build()
+        )
       }
     }
   }

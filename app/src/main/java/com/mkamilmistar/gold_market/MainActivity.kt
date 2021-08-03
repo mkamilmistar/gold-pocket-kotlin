@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import com.mkamilmistar.gold_market.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

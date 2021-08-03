@@ -23,7 +23,7 @@ class PocketViewModel(private val repository: PocketRepository): ViewModel() {
   private fun updateData() {
     _pocketLiveData.value = EventResult.Loading
     try {
-      val history: List<Pocket> = getPocketRepository()
+      val history: List<Pocket> = getPocketRepository().reversed()
       _pocketLiveData.value = EventResult.Success(history)
     } catch (e: Exception) {
       _pocketLiveData.value = EventResult.Failed("Oops something wrong")

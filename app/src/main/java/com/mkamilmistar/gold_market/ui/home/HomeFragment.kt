@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.model.Customer
+import com.mkamilmistar.gold_market.data.model.Purchase
 import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
@@ -55,6 +56,18 @@ class HomeFragment : Fragment() {
       btnChangePocket.setOnClickListener {
         Navigation.findNavController(view)
           .navigate(R.id.action_homeFragment_to_pocketFragment)
+      }
+
+      btnBuyProduct.setOnClickListener {
+        val purchaseBuy =
+          Purchase("PURCHASE-BUY", "21 Juli 2021", 0, 120000, 1.0)
+        viewModel.purchaseProduct(purchaseBuy)
+      }
+
+      btnSellProduct.setOnClickListener {
+        val purchaseSell =
+          Purchase("PURCHASE-SELL", "21 Juli 2021", 1, 140000, 1.0)
+        viewModel.purchaseProduct(purchaseSell)
       }
     }
   }

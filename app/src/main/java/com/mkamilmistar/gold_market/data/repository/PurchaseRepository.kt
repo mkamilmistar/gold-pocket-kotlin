@@ -5,6 +5,6 @@ import com.mkamilmistar.gold_market.data.model.Purchase
 interface PurchaseRepository {
   fun findAllPurchase(): List<Purchase>
   fun findPurchase(position: Int): Purchase
-  fun addPurchase(pocket: Purchase)
+  fun addPurchase(purchase: Purchase)
   fun deletePurchase(position: Int)
 }

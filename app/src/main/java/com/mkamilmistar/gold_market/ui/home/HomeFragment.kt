@@ -1,6 +1,9 @@
 package com.mkamilmistar.gold_market.ui.home
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -58,16 +61,17 @@ class HomeFragment : Fragment() {
           .navigate(R.id.action_homeFragment_to_pocketFragment)
       }
 
+      val purchaseBuy =
+        Purchase("PURCHASE-BUY", "21 Juli 2021", 0, 120000, 1.0)
+      val purchaseSell =
+        Purchase("PURCHASE-SELL", "21 Juli 2021", 1, 140000, 1.0)
+
       btnBuyProduct.setOnClickListener {
-        val purchaseBuy =
-          Purchase("PURCHASE-BUY", "21 Juli 2021", 0, 120000, 1.0)
-        viewModel.purchaseProduct(purchaseBuy)
+        showDialog("Are sure one to buy this product?", "Click OK to Continue", purchaseBuy)
       }
 
       btnSellProduct.setOnClickListener {
-        val purchaseSell =
-          Purchase("PURCHASE-SELL", "21 Juli 2021", 1, 140000, 1.0)
-        viewModel.purchaseProduct(purchaseSell)
+        showDialog("Are sure one to sell this product?", "Click OK to Continue", purchaseSell)
       }
     }
   }
@@ -95,4 +99,23 @@ class HomeFragment : Fragment() {
     }
   }
 
+  private fun showDialog(title: String, message: String, purchase: Purchase) {
+    lateinit var dialog: AlertDialog
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle(title)
+    builder.setMessage(message)
+    val dialogClickListener = DialogInterface.OnClickListener { _, which ->
+      when (which) {
+        DialogInterface.BUTTON_POSITIVE -> {
+          viewModel.purchaseProduct(purchase)
+        }
+        DialogInterface.BUTTON_NEUTRAL -> {
+        }
+      }
+    }
+    builder.setPositiveButton("YES", dialogClickListener)
+    builder.setNeutralButton("CANCEL", dialogClickListener)
+    dialog = builder.create()
+    dialog.show()
+  }
 }

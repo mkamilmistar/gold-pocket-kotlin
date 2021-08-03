@@ -1,6 +1,7 @@
 package com.mkamilmistar.gold_market.ui.pocket
 
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -98,10 +99,30 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   override fun deleteItem(position: Int) {
-    viewModel.deletePocket(position)
+    showDialog("Are you sure want to delete this pocket?", "Click OK to Continue", position)
   }
 
   override fun editItem(position: Int) {
     Toast.makeText(context, viewModel.getPocket(position).id, Toast.LENGTH_SHORT).show()
+  }
+
+  private fun showDialog(title: String, message: String, position: Int) {
+    lateinit var dialog: AlertDialog
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle(title)
+    builder.setMessage(message)
+    val dialogClickListener = DialogInterface.OnClickListener { _, which ->
+      when (which) {
+        DialogInterface.BUTTON_POSITIVE -> {
+          viewModel.deletePocket(position)
+        }
+        DialogInterface.BUTTON_NEUTRAL -> {
+        }
+      }
+    }
+    builder.setPositiveButton("YES", dialogClickListener)
+    builder.setNeutralButton("CANCEL", dialogClickListener)
+    dialog = builder.create()
+    dialog.show()
   }
 }

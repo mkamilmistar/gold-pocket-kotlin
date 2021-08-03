@@ -18,10 +18,6 @@ class HomeViewModel(
   val customerLiveData: LiveData<EventResult>
     get() = _customerLiveData
 
-  private var _purchaseLiveData = MutableLiveData<EventResult>(EventResult.Idle)
-  val purchaseLiveData: LiveData<EventResult>
-    get() = _purchaseLiveData
-
   fun start(email: String, pwd: String) {
     updateDataCustomer(email, pwd)
   }

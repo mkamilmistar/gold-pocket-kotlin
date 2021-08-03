@@ -24,7 +24,7 @@ class HistoryViewModel(private val repository: PurchaseRepository): ViewModel() 
   private fun updateData() {
     _historyLiveData.value = EventResult.Loading
     try {
-      val history: List<Purchase> = getHistoryRepository().reversed()
+      val history: List<Purchase> = getHistoryRepository()
       _historyLiveData.value = EventResult.Success(history)
     } catch (e: Exception) {
       _historyLiveData.value = EventResult.Failed("Oops something wrong")

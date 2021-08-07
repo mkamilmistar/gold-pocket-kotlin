@@ -6,4 +6,7 @@
   <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
     <item name="backgroundTint">@color/color_states_button</item>
   </style>
+  <style name="progressBarYellow" parent="@style/Theme.AppCompat">
+    <item name="colorAccent">@color/yellow_dark</item>
+  </style>
 </resources>

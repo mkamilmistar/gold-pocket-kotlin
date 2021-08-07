@@ -67,6 +67,10 @@ class RegisterFragment : Fragment(), TextWatcher {
         Navigation.findNavController(view)
           .navigate(R.id.action_registerFragment_to_termAndConditionFragment)
       }
+
+      textSignIn.setOnClickListener {
+        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+      }
     }
   }
 
@@ -78,16 +82,18 @@ class RegisterFragment : Fragment(), TextWatcher {
   }
 
   private fun subscribe() {
+    hideProgressBar()
     binding.apply {
       val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
         when (event) {
-          is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
+          is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             navigateToHome()
-            Log.d("LoginFragment", "Success...")
+            hideProgressBar()
           }
           is EventResult.Failed -> {
             val message = event.errorMessage.toString()
+            hideProgressBar()
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
           }
           else -> {
@@ -112,9 +118,16 @@ class RegisterFragment : Fragment(), TextWatcher {
           pwdRegisterText.text.toString().length >= 6
           )
     }
-
   }
 
   override fun afterTextChanged(s: Editable?) {
+  }
+
+  private fun hideProgressBar() {
+    binding.progressBarRegister.visibility = View.GONE
+  }
+
+  private fun showProgressBar() {
+    binding.progressBarRegister.visibility = View.VISIBLE
   }
 }

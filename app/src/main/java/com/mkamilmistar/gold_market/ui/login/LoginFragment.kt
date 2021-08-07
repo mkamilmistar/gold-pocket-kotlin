@@ -78,18 +78,20 @@ class LoginFragment : Fragment(), TextWatcher {
 
   @SuppressLint("SetTextI18n")
   private fun subscribe() {
+    hideProgressBar()
     binding.apply {
       val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
         when (event) {
-          is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
+          is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             val email = loginEmail.text.toString()
             val password = loginPassword.text.toString()
             navToHome(email, password)
-            Log.d("LoginFragment", "Success...")
+            hideProgressBar()
           }
           is EventResult.Failed -> {
             val message = event.errorMessage.toString()
+            hideProgressBar()
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
           }
           else -> {
@@ -115,5 +117,13 @@ class LoginFragment : Fragment(), TextWatcher {
   }
 
   override fun afterTextChanged(s: Editable?) {
+  }
+
+  private fun hideProgressBar() {
+    binding.progressBarLogin.visibility = View.GONE
+  }
+
+  private fun showProgressBar() {
+    binding.progressBarLogin.visibility = View.VISIBLE
   }
 }

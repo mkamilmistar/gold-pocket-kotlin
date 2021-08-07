@@ -42,6 +42,7 @@ class LoginFragment : Fragment(), TextWatcher {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
     return binding.apply {
       lifecycleOwner = this@LoginFragment
+      fragment = this@LoginFragment
       viewmodel = loginViewModel
     }.root
   }
@@ -53,12 +54,6 @@ class LoginFragment : Fragment(), TextWatcher {
       btnSignIn.isEnabled = false
       loginEmail.addTextChangedListener(this@LoginFragment)
       loginPassword.addTextChangedListener(this@LoginFragment)
-
-      btnSignIn.setOnClickListener {
-        val email = loginEmail.text.toString()
-        val password = loginPassword.text.toString()
-        loginViewModel.login(email, password)
-      }
 
       btnForget.setOnClickListener {
         Navigation.findNavController(view)
@@ -78,6 +73,14 @@ class LoginFragment : Fragment(), TextWatcher {
       R.id.homeFragment, bundle,
       NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
     )
+  }
+
+  fun login() {
+    binding.apply {
+      val email = loginEmail.text.toString()
+      val password = loginPassword.text.toString()
+      loginViewModel.login(email, password)
+    }
   }
 
   @SuppressLint("SetTextI18n")

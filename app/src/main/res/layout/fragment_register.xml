@@ -5,6 +5,9 @@
 
   <data>
     <variable
+      name="fragment"
+      type="com.mkamilmistar.gold_market.ui.register.RegisterFragment" />
+    <variable
       name="viewmodel"
       type="com.mkamilmistar.gold_market.ui.register.RegisterViewModel" />
   </data>
@@ -137,6 +140,7 @@
         android:enabled="true"
         android:fontFamily="@font/nunitosans_bold"
         android:text="@string/text_register_title"
+        android:onClick="@{() -> fragment.register()}"
         android:textColor="@color/black" />
 
       <LinearLayout

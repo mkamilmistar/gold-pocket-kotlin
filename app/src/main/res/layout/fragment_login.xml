@@ -4,8 +4,10 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <data>
-    <variable
-      name="viewmodel"
+    <variable name="fragment"
+      type="com.mkamilmistar.gold_market.ui.login.LoginFragment" />
+
+    <variable name="viewmodel"
       type="com.mkamilmistar.gold_market.ui.login.LoginViewModel" />
   </data>
 
@@ -121,6 +123,7 @@
         android:enabled="true"
         android:fontFamily="@font/nunitosans_bold"
         android:text="@string/text_sign_in"
+        android:onClick="@{() -> fragment.login()}"
         android:textColor="@color/black" />
 
       <LinearLayout

@@ -40,6 +40,7 @@ class RegisterFragment : Fragment(), TextWatcher {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
     return binding.apply {
       lifecycleOwner = this@RegisterFragment
+      fragment = this@RegisterFragment
       viewmodel = registerViewModel
     }.root
   }
@@ -54,15 +55,6 @@ class RegisterFragment : Fragment(), TextWatcher {
       emailRegisterText.addTextChangedListener(this@RegisterFragment)
       pwdRegisterText.addTextChangedListener(this@RegisterFragment)
 
-      btnRegister.setOnClickListener {
-        val firstName = firstNameText.text.toString()
-        val lastName = lastNameText.text.toString()
-        val email = emailRegisterText.text.toString()
-        val pwd = pwdRegisterText.text.toString()
-        val newCustomer = Customer(getRandomString(5), firstName, lastName, email, pwd)
-        registerViewModel.register(newCustomer)
-      }
-
       termCondition.setOnClickListener {
         Navigation.findNavController(view)
           .navigate(R.id.action_registerFragment_to_termAndConditionFragment)
@@ -71,6 +63,17 @@ class RegisterFragment : Fragment(), TextWatcher {
       textSignIn.setOnClickListener {
         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
       }
+    }
+  }
+
+  fun register() {
+    binding.apply {
+      val firstName = firstNameText.text.toString()
+      val lastName = lastNameText.text.toString()
+      val email = emailRegisterText.text.toString()
+      val pwd = pwdRegisterText.text.toString()
+      val newCustomer = Customer(getRandomString(5), firstName, lastName, email, pwd)
+      registerViewModel.register(newCustomer)
     }
   }
 

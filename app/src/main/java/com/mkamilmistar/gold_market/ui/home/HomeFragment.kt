@@ -18,12 +18,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.model.Customer
+import com.mkamilmistar.gold_market.data.model.Pocket
+import com.mkamilmistar.gold_market.data.model.ProductHistory
 import com.mkamilmistar.gold_market.data.model.Purchase
 import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
+import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
+import com.mkamilmistar.gold_market.data.repository.ProductHistoryRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.gold_market.utils.currencyFormatter
+import com.mkamilmistar.gold_market.utils.formatDate
+import java.time.LocalDateTime
 
 class HomeFragment : Fragment() {
 
@@ -34,6 +41,9 @@ class HomeFragment : Fragment() {
     }
   }
   private val viewModel: HomeViewModel by viewModels { factory }
+  private lateinit var prodHist: List<ProductHistory>
+  private lateinit var purchaseBuy: Purchase
+  private lateinit var purchaseSell: Purchase
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +59,7 @@ class HomeFragment : Fragment() {
     val passPwd = arguments?.getString("PASSWORD")
     subscribe()
     val dummyUser = CustomerRepositoryImpl().customerDBImport
-    viewModel.start(dummyUser.email, dummyUser.password)
+    viewModel.start(dummyUser.email, dummyUser.password, 0)
     binding.apply {
       btnCreatePocket.setOnClickListener {
         Navigation.findNavController(view)
@@ -60,11 +70,6 @@ class HomeFragment : Fragment() {
         Navigation.findNavController(view)
           .navigate(R.id.action_homeFragment_to_pocketFragment)
       }
-
-      val purchaseBuy =
-        Purchase("PURCHASE-BUY", "21 Juli 2021", 0, 120000, 1.0)
-      val purchaseSell =
-        Purchase("PURCHASE-SELL", "21 Juli 2021", 1, 140000, 1.0)
 
       btnBuyProduct.setOnClickListener {
         showDialog("Are sure want to buy this product?", "Click OK to Continue", purchaseBuy)
@@ -83,7 +88,7 @@ class HomeFragment : Fragment() {
         when (event) {
           is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
           is EventResult.Success -> {
-            Log.d("HomeFragment", "Success...")
+            Log.d("HomeFragment", "Success Get Customer...")
             val customer = event.data
             greetingHomeText.text = "Hi, ${customer.firstName}"
           }
@@ -95,7 +100,55 @@ class HomeFragment : Fragment() {
           }
         }
       }
+      val pocketObserver: Observer<EventResult<Pocket>> = Observer { event ->
+        when (event) {
+          is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
+          is EventResult.Success -> {
+            Log.d("HomeFragment", "Success Get Pocket...")
+            val pocket = event.data
+            val totalAmount = (pocket.pocketQty.toDouble() * prodHist.last().priceSell.toDouble())
+
+            pocketNameText.text = pocket.pocketName
+            totalGramText.text = "${pocket.pocketQty} /gr"
+            totalPriceText.text = currencyFormatter(totalAmount)
+            val pockets = PocketRepositoryImpl().pocketDBImport
+            totalPocketsText.text = "Your total pockets: ${pockets.size}"
+          }
+          is EventResult.Failed -> {
+            val message = "Failed to get data"
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+          }
+          else -> {
+          }
+        }
+      }
+      val productHistoryObserver: Observer<EventResult<List<ProductHistory>>> = Observer { event ->
+        when (event) {
+          is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
+          is EventResult.Success -> {
+            Log.d("HomeFragment", "Success Get Product History...")
+            val productHistory = event.data
+            prodHist = productHistory
+            priceBuyAmount.text = currencyFormatter(productHistory.last().priceBuy)
+            priceSellAmount.text = currencyFormatter(productHistory.last().priceSell)
+
+            purchaseBuy =
+              Purchase("PURCHASE-BUY", formatDate(LocalDateTime.now().toString()), 0, prodHist.last().priceBuy, 1.0)
+            purchaseSell =
+              Purchase("PURCHASE-SELL", formatDate(LocalDateTime.now().toString()), 1, prodHist.last().priceSell, 1.0)
+
+          }
+          is EventResult.Failed -> {
+            val message = "Failed to get data"
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+          }
+          else -> {
+          }
+        }
+      }
       viewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
+      viewModel.productHistoryLiveData.observe(viewLifecycleOwner, productHistoryObserver)
+      viewModel.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
     }
   }
 

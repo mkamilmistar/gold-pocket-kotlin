@@ -21,10 +21,12 @@ class PocketRepositoryImpl: PocketRepository {
 
   companion object {
     val pocketDB: MutableList<Pocket> = mutableListOf(
-      Pocket("pocket-1", "Gold Pocket", 0),
+      Pocket("pocket-1", "Gold Pocket", 10.0),
       Pocket("pocket-2", "Platinum Pocket", 0),
       Pocket("pocket-3", "Silver Pocket", 0),
     )
   }
+  val pocketDBImport
+    get() = pocketDB
 
 }

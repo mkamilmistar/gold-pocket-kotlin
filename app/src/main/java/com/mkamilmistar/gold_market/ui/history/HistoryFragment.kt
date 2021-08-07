@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mkamilmistar.gold_market.data.model.ProductHistory
 import com.mkamilmistar.gold_market.data.model.Purchase
 import com.mkamilmistar.gold_market.databinding.FragmentHistoryBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer

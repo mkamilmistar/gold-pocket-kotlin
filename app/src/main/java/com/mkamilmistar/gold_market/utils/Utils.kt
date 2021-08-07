@@ -1,11 +1,15 @@
 package com.mkamilmistar.gold_market.utils
 
 import android.R
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.mkamilmistar.gold_market.BaseApplication
 import java.text.NumberFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 object Utils {
   const val EMAIL = "EMAIL"
@@ -30,6 +34,21 @@ fun currencyFormatter(currency: Number): String {
   format.currency = Currency.getInstance("IDR")
 
   return format.format(currency)
+}
+
+@SuppressLint("SimpleDateFormat")
+fun formatDate(date: String) : String {
+  var formattedDate = ""
+  val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+  sdf.timeZone = TimeZone.getTimeZone("UTC")
+
+  try {
+      val parseDate = sdf.parse(date)
+      formattedDate = SimpleDateFormat("dd MMMM yyyy").format(parseDate)
+  } catch (e: ParseException) {
+    e.printStackTrace()
+  }
+  return formattedDate
 }
 
 

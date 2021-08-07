@@ -27,4 +27,7 @@ class ProductHistoryRepositoryImpl : ProductHistoryRepository {
         ProductHistory("History-3", "30 March 2021", 110000, 130000)
       )
   }
+
+  val productDBImport
+    get() = productHistoryDB.last()
 }

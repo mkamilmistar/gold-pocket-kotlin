@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mkamilmistar.gold_market.data.model.Purchase
 import com.mkamilmistar.gold_market.databinding.HistoryListItemBinding
-import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.currencyFormatter
 
 class HistoryAdapter(private val onClickItemListener: OnClickItemListener) :

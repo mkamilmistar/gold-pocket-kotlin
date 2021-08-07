@@ -6,32 +6,37 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
+import com.mkamilmistar.gold_market.di.DependencyContainer
+import com.mkamilmistar.gold_market.ui.register.RegisterViewModel
 
 class SettingFragment : Fragment() {
 
   private lateinit var binding: FragmentSettingBinding
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    Log.d("SettingsFragment", "onCreate")
+  private val factory = object : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+      return DependencyContainer().settingsViewModel as T
+    }
   }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    Log.d("SettingsFragment", "onDestroy")
-  }
+  private val settingsViewModel: SettingsViewModel by viewModels { factory }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    binding = FragmentSettingBinding.inflate(inflater, container, false)
-    return binding.root
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false)
+    return binding.apply {
+      lifecycleOwner = this@SettingFragment
+      viewmodel = settingsViewModel
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

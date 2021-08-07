@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.model.Purchase
 import com.mkamilmistar.gold_market.databinding.FragmentHistoryBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
@@ -27,20 +29,23 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
       return DependencyContainer().historyViewModel as T
     }
   }
-  private val viewModel: HistoryViewModel by viewModels { factory }
+  private val historyViewModel: HistoryViewModel by viewModels { factory }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    binding = FragmentHistoryBinding.inflate(inflater, container, false)
-    return binding.root
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
+    return binding.apply {
+      lifecycleOwner = this@HistoryFragment
+      viewmodel = historyViewModel
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     subscribe()
-    viewModel.start()
+    historyViewModel.start()
     binding.apply {
       recycleViewHistory.apply {
         layoutManager = LinearLayoutManager(context)
@@ -64,11 +69,11 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
           }
         }
       }
-      viewModel.historyLiveData.observe(viewLifecycleOwner, historyObserver)
+      historyViewModel.historyLiveData.observe(viewLifecycleOwner, historyObserver)
     }
   }
 
   override fun onClickItem(position: Int) {
-    Toast.makeText(context, viewModel.getHistory(position).id, Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, historyViewModel.getHistory(position).id, Toast.LENGTH_SHORT).show()
   }
 }

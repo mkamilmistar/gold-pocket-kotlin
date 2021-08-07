@@ -1,194 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="#fff"
-  android:clickable="true"
-  android:focusable="true"
-  android:focusableInTouchMode="true"
-  android:orientation="vertical"
-  android:padding="20dp"
-  tools:context=".ui.register.RegisterFragment">
+  xmlns:tools="http://schemas.android.com/tools">
 
-  <ImageView
-    android:id="@+id/logo_image"
-    android:layout_width="150dp"
-    android:layout_height="150dp"
-    android:layout_gravity="center"
-    android:layout_marginTop="4dp"
-    android:contentDescription="@string/splash_logo"
-    android:src="@drawable/logo_icon"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.498"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-
-  <TextView
-    android:id="@+id/logo_name"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:fontFamily="@font/dancing_bold"
-    android:text="@string/text_slogan_register"
-    android:textAlignment="center"
-    android:textSize="40sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.494"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/logo_image" />
-
-  <TextView
-    android:id="@+id/slogan_login"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_marginTop="12dp"
-    android:fontFamily="@font/nunitosans_semibold"
-    android:text="@string/text_register_title"
-    android:textSize="18sp"
-    app:layout_constraintEnd_toEndOf="@+id/logo_name"
-    app:layout_constraintHorizontal_bias="0.496"
-    app:layout_constraintStart_toStartOf="@+id/logo_name"
-    app:layout_constraintTop_toBottomOf="@+id/logo_name" />
-
-  <LinearLayout
+  <data>
+    <variable
+      name="viewmodel"
+      type="com.mkamilmistar.gold_market.ui.register.RegisterViewModel" />
+  </data>
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/slogan_login"
-    app:layout_constraintVertical_bias="0.296">
+    android:padding="20dp"
+    tools:context=".ui.register.RegisterFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/first_name_register"
-      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:fontFamily="@font/nunitosans_regular"
-      android:hint="@string/placeholder_first_name">
-
-      <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/firstNameText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/last_name_register"
-      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:fontFamily="@font/nunitosans_regular"
-      android:hint="@string/placeholder_last_name">
-
-      <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/lastNameText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/email_register"
-      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:fontFamily="@font/nunitosans_regular"
-      android:hint="@string/placeholder_email">
-
-      <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/emailRegisterText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/password_register"
-      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:hint="@string/placeholder_password"
-      app:passwordToggleEnabled="true">
-
-      <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/pwdRegisterText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/nunitosans_regular"
-        android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-      android:id="@+id/btn_register"
-      style="@style/MaterialButtonStyle"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="20dp"
-      android:enabled="true"
-      android:fontFamily="@font/nunitosans_bold"
-      android:text="@string/text_register_title"
-      android:textColor="@color/black" />
-
-    <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+    <ImageView
+      android:id="@+id/logo_image"
+      android:layout_width="150dp"
+      android:layout_height="150dp"
       android:layout_gravity="center"
-      android:layout_marginTop="8dp"
-      android:orientation="horizontal">
-
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="#00000000"
-        android:clickable="true"
-        android:elevation="0dp"
-        android:fontFamily="@font/nunitosans_regular"
-        android:text="@string/text_have_account_register"
-        android:textColor="@color/black" />
-
-      <TextView
-        android:id="@+id/text_sign_in"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="4dp"
-        android:background="#00000000"
-        android:clickable="true"
-        android:elevation="0dp"
-        android:fontFamily="@font/nunitosans_bold"
-        android:text="@string/text_sign_in"
-        android:textColor="@color/yellow_darker" />
-    </LinearLayout>
+      android:layout_marginTop="4dp"
+      android:contentDescription="@string/splash_logo"
+      android:src="@drawable/logo_icon"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-      android:id="@+id/term_condition"
+      android:id="@+id/logo_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
-      android:layout_marginTop="8dp"
-      android:background="#00000000"
-      android:clickable="true"
-      android:contextClickable="true"
-      android:elevation="0dp"
-      android:fontFamily="@font/nunitosans_bold"
-      android:text="@string/text_terms_amp_conditions"
-      android:textColor="@color/yellow_darker" />
+      android:fontFamily="@font/dancing_bold"
+      android:text="@string/text_slogan_register"
+      android:textAlignment="center"
+      android:textSize="40sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.494"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/logo_image" />
 
-  </LinearLayout>
+    <TextView
+      android:id="@+id/slogan_login"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_marginTop="12dp"
+      android:fontFamily="@font/nunitosans_semibold"
+      android:text="@string/text_register_title"
+      android:textSize="18sp"
+      app:layout_constraintEnd_toEndOf="@+id/logo_name"
+      app:layout_constraintHorizontal_bias="0.496"
+      app:layout_constraintStart_toStartOf="@+id/logo_name"
+      app:layout_constraintTop_toBottomOf="@+id/logo_name" />
 
-  <ProgressBar
-    android:id="@+id/progressBarRegister"
-    style="?android:attr/progressBarStyle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:theme="@style/progressBarYellow"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/slogan_login"
+      app:layout_constraintVertical_bias="0.296">
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/first_name_register"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunitosans_regular"
+        android:hint="@string/placeholder_first_name">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/firstNameText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/last_name_register"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunitosans_regular"
+        android:hint="@string/placeholder_last_name">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/lastNameText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_register"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunitosans_regular"
+        android:hint="@string/placeholder_email">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/emailRegisterText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_register"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/placeholder_password"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/pwdRegisterText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:fontFamily="@font/nunitosans_regular"
+          android:inputType="textPassword" />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <Button
+        android:id="@+id/btn_register"
+        style="@style/MaterialButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:enabled="true"
+        android:fontFamily="@font/nunitosans_bold"
+        android:text="@string/text_register_title"
+        android:textColor="@color/black" />
+
+      <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:background="#00000000"
+          android:clickable="true"
+          android:elevation="0dp"
+          android:fontFamily="@font/nunitosans_regular"
+          android:text="@string/text_have_account_register"
+          android:textColor="@color/black" />
+
+        <TextView
+          android:id="@+id/text_sign_in"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginStart="4dp"
+          android:background="#00000000"
+          android:clickable="true"
+          android:elevation="0dp"
+          android:fontFamily="@font/nunitosans_bold"
+          android:text="@string/text_sign_in"
+          android:textColor="@color/yellow_darker" />
+      </LinearLayout>
+
+      <TextView
+        android:id="@+id/term_condition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:background="#00000000"
+        android:clickable="true"
+        android:contextClickable="true"
+        android:elevation="0dp"
+        android:fontFamily="@font/nunitosans_bold"
+        android:text="@string/text_terms_amp_conditions"
+        android:textColor="@color/yellow_darker" />
+
+    </LinearLayout>
+
+    <ProgressBar
+      android:id="@+id/progressBarRegister"
+      style="?android:attr/progressBarStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:theme="@style/progressBarYellow"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

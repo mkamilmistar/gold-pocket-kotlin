@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -23,6 +23,7 @@ import com.mkamilmistar.gold_market.data.model.Customer
 import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
+import com.mkamilmistar.gold_market.ui.pocket.PocketViewModel
 
 class LoginFragment : Fragment(), TextWatcher {
 
@@ -32,14 +33,17 @@ class LoginFragment : Fragment(), TextWatcher {
       return DependencyContainer().loginViewModel as T
     }
   }
-  private val viewModel: LoginViewModel by viewModels { factory }
+  private val loginViewModel: LoginViewModel by viewModels { factory }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    binding = FragmentLoginBinding.inflate(inflater, container, false)
-    return binding.root
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
+    return binding.apply {
+      lifecycleOwner = this@LoginFragment
+      viewmodel = loginViewModel
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,7 +57,7 @@ class LoginFragment : Fragment(), TextWatcher {
       btnSignIn.setOnClickListener {
         val email = loginEmail.text.toString()
         val password = loginPassword.text.toString()
-        viewModel.login(email, password)
+        loginViewModel.login(email, password)
       }
 
       btnForget.setOnClickListener {
@@ -98,7 +102,7 @@ class LoginFragment : Fragment(), TextWatcher {
           }
         }
       }
-      viewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
+      loginViewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
     }
   }
 

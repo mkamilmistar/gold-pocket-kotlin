@@ -1,41 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/bg_gray"
-  android:orientation="vertical"
-  tools:context=".ui.history.HistoryFragment">
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+    <variable
+      name="viewmodel"
+      type="com.mkamilmistar.gold_market.ui.history.HistoryViewModel" />
+  </data>
 
   <LinearLayout
-    android:id="@+id/header_history"
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:layout_marginTop="-10dp"
-    android:background="@drawable/rounded_corners"
-    android:backgroundTint="@color/yellow"
-    android:paddingHorizontal="40dp">
-
-    <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="70dp"
-      android:fontFamily="@font/nunitosans_extrabold"
-      android:gravity="center"
-      android:text="@string/menu_history"
-      android:textAllCaps="true"
-      android:textColor="@color/black"
-      android:textSize="18sp" />
-  </LinearLayout>
-
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recycleViewHistory"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="-60dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/header_history"/>
+    android:background="@color/bg_gray"
+    android:orientation="vertical"
+    tools:context=".ui.history.HistoryFragment">
 
-</LinearLayout>
+    <LinearLayout
+      android:id="@+id/header_history"
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      android:layout_marginTop="-10dp"
+      android:background="@drawable/rounded_corners"
+      android:backgroundTint="@color/yellow"
+      android:paddingHorizontal="40dp">
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:fontFamily="@font/nunitosans_extrabold"
+        android:gravity="center"
+        android:text="@string/menu_history"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recycleViewHistory"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="-60dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/header_history"/>
+
+  </LinearLayout>
+
+</layout>
+

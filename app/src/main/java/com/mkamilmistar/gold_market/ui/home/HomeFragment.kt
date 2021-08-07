@@ -2,7 +2,6 @@ package com.mkamilmistar.gold_market.ui.home
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -23,11 +23,9 @@ import com.mkamilmistar.gold_market.data.model.ProductHistory
 import com.mkamilmistar.gold_market.data.model.Purchase
 import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
-import com.mkamilmistar.gold_market.data.repository.ProductHistoryRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
-import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.currencyFormatter
 import com.mkamilmistar.gold_market.utils.formatDate
 import java.time.LocalDateTime
@@ -40,7 +38,7 @@ class HomeFragment : Fragment() {
       return DependencyContainer().homeViewModel as T
     }
   }
-  private val viewModel: HomeViewModel by viewModels { factory }
+  private val homeViewModel: HomeViewModel by viewModels { factory }
   private lateinit var prodHist: List<ProductHistory>
   private lateinit var purchaseBuy: Purchase
   private lateinit var purchaseSell: Purchase
@@ -49,8 +47,11 @@ class HomeFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    binding = FragmentHomeBinding.inflate(inflater, container, false)
-    return binding.root
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+    return binding.apply {
+      lifecycleOwner = this@HomeFragment
+      viewmodel = homeViewModel
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ class HomeFragment : Fragment() {
     val passPwd = arguments?.getString("PASSWORD")
     subscribe()
     val dummyUser = CustomerRepositoryImpl().customerDBImport
-    viewModel.start(dummyUser.email, dummyUser.password, 0)
+    homeViewModel.start(dummyUser.email, dummyUser.password, 0)
     binding.apply {
       btnCreatePocket.setOnClickListener {
         Navigation.findNavController(view)
@@ -146,9 +147,9 @@ class HomeFragment : Fragment() {
           }
         }
       }
-      viewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
-      viewModel.productHistoryLiveData.observe(viewLifecycleOwner, productHistoryObserver)
-      viewModel.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
+      homeViewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
+      homeViewModel.productHistoryLiveData.observe(viewLifecycleOwner, productHistoryObserver)
+      homeViewModel.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
     }
   }
 
@@ -160,7 +161,7 @@ class HomeFragment : Fragment() {
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> {
-          viewModel.purchaseProduct(purchase)
+          homeViewModel.purchaseProduct(purchase)
         }
         DialogInterface.BUTTON_NEUTRAL -> {
         }

@@ -3,13 +3,12 @@ package com.mkamilmistar.gold_market.ui.register
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -22,8 +21,6 @@ import com.mkamilmistar.gold_market.data.model.Customer
 import com.mkamilmistar.gold_market.databinding.FragmentRegisterBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
-import com.mkamilmistar.gold_market.ui.login.LoginViewModel
-import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.getRandomString
 
 class RegisterFragment : Fragment(), TextWatcher {
@@ -34,14 +31,17 @@ class RegisterFragment : Fragment(), TextWatcher {
       return DependencyContainer().registerViewModel as T
     }
   }
-  private val viewModel: RegisterViewModel by viewModels { factory }
+  private val registerViewModel: RegisterViewModel by viewModels { factory }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    binding = FragmentRegisterBinding.inflate(inflater, container, false)
-    return binding.root
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
+    return binding.apply {
+      lifecycleOwner = this@RegisterFragment
+      viewmodel = registerViewModel
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,7 +60,7 @@ class RegisterFragment : Fragment(), TextWatcher {
         val email = emailRegisterText.text.toString()
         val pwd = pwdRegisterText.text.toString()
         val newCustomer = Customer(getRandomString(5), firstName, lastName, email, pwd)
-        viewModel.register(newCustomer)
+        registerViewModel.register(newCustomer)
       }
 
       termCondition.setOnClickListener {
@@ -100,7 +100,7 @@ class RegisterFragment : Fragment(), TextWatcher {
           }
         }
       }
-      viewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
+      registerViewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
     }
   }
 

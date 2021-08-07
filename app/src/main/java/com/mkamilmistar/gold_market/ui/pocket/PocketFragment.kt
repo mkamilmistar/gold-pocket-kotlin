@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -17,15 +18,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.model.Pocket
-import com.mkamilmistar.gold_market.data.model.Purchase
 import com.mkamilmistar.gold_market.databinding.FragmentPocketBinding
-import com.mkamilmistar.gold_market.databinding.FragmentRegisterBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
-import com.mkamilmistar.gold_market.ui.history.HistoryAdapter
-import com.mkamilmistar.gold_market.ui.history.HistoryViewModel
 import com.mkamilmistar.gold_market.utils.getRandomString
-import kotlin.random.Random
 
 class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
 
@@ -37,20 +33,23 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
       return DependencyContainer().pocketViewModel as T
     }
   }
-  private val viewModel: PocketViewModel by viewModels { factory }
+  private val pocketViewModel: PocketViewModel by viewModels { factory }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    binding = FragmentPocketBinding.inflate(inflater, container, false)
-    return binding.root
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pocket, container, false)
+    return binding.apply {
+      lifecycleOwner = this@PocketFragment
+      viewmodel = pocketViewModel
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     subscribe()
-    viewModel.start()
+    pocketViewModel.start()
     binding.apply {
       recycleViewPocket.apply {
         layoutManager = LinearLayoutManager(context)
@@ -66,7 +65,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
           .setPositiveButton("Create Pocket") { _, _ ->
             val editTextInput = inputEditTextField.text.toString()
             val newPocket = Pocket(getRandomString(5), editTextInput, 0)
-            viewModel.addPocket(newPocket)
+            pocketViewModel.addPocket(newPocket)
           }
           .setNegativeButton("Cancel", null)
           .create()
@@ -90,12 +89,12 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
           }
         }
       }
-      viewModel.pocketLiveData.observe(viewLifecycleOwner, historyObserver)
+      pocketViewModel.pocketLiveData.observe(viewLifecycleOwner, historyObserver)
     }
   }
 
   override fun onClickItem(position: Int) {
-    Toast.makeText(context, viewModel.getPocket(position).id, Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, pocketViewModel.getPocket(position).id, Toast.LENGTH_SHORT).show()
   }
 
   override fun deleteItem(position: Int) {
@@ -103,7 +102,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   override fun editItem(position: Int) {
-    Toast.makeText(context, viewModel.getPocket(position).id, Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, pocketViewModel.getPocket(position).id, Toast.LENGTH_SHORT).show()
   }
 
   private fun showDialog(title: String, message: String, position: Int) {
@@ -114,7 +113,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> {
-          viewModel.deletePocket(position)
+          pocketViewModel.deletePocket(position)
         }
         DialogInterface.BUTTON_NEUTRAL -> {
         }

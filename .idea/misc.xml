@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.19722222222222222" />
         <entry key="app/src/main/res/layout/fragment_pocket.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.2947916666666667" />
+        <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.2814814814814815" />
         <entry key="app/src/main/res/layout/history_list_item.xml" value="0.2947916666666667" />
         <entry key="app/src/main/res/layout/pocket_list_item.xml" value="0.2947916666666667" />
       </map>

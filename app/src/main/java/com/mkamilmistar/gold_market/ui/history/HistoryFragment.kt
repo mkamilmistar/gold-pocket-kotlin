@@ -53,12 +53,12 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
   private fun subscribe() {
     binding.apply {
       historyAdapter = HistoryAdapter(this@HistoryFragment)
-      val historyObserver: Observer<EventResult> = Observer<EventResult> { event ->
+      val historyObserver: Observer<EventResult<List<Purchase>>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> Log.d("HistoryFragment", "Loading...")
           is EventResult.Success -> {
             Log.d("HistoryFragment", "Success...")
-            historyAdapter.updateData(event.data as List<Purchase>)
+            historyAdapter.updateData(event.data)
           }
           is EventResult.Failed -> Log.d("HistoryFragment", "FAILED")
           else -> {

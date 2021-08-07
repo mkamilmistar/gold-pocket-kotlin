@@ -53,7 +53,7 @@ class RegisterFragment : Fragment(), TextWatcher {
       lastNameText.addTextChangedListener(this@RegisterFragment)
       emailRegisterText.addTextChangedListener(this@RegisterFragment)
       pwdRegisterText.addTextChangedListener(this@RegisterFragment)
-      
+
       btnRegister.setOnClickListener {
         val firstName = firstNameText.text.toString()
         val lastName = lastNameText.text.toString()
@@ -79,7 +79,7 @@ class RegisterFragment : Fragment(), TextWatcher {
 
   private fun subscribe() {
     binding.apply {
-      val customerObserver: Observer<EventResult> = Observer<EventResult> { event ->
+      val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
           is EventResult.Success -> {

@@ -19,6 +19,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
+import com.mkamilmistar.gold_market.data.model.Customer
 import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
@@ -78,7 +79,7 @@ class LoginFragment : Fragment(), TextWatcher {
   @SuppressLint("SetTextI18n")
   private fun subscribe() {
     binding.apply {
-      val customerObserver: Observer<EventResult> = Observer<EventResult> { event ->
+      val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
           is EventResult.Success -> {

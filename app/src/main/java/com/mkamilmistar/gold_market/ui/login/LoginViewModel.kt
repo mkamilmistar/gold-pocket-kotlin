@@ -11,8 +11,8 @@ import com.mkamilmistar.gold_market.helpers.EventResult
 import java.lang.Exception
 
 class LoginViewModel(private val repository: CustomerRepository) : ViewModel() {
-  private var _customerLiveData = MutableLiveData<EventResult>(EventResult.Idle)
-  val customerLiveData: LiveData<EventResult>
+  private var _customerLiveData = MutableLiveData<EventResult<Customer>>(EventResult.Idle)
+  val customerLiveData: LiveData<EventResult<Customer>>
     get() = _customerLiveData
 
   private fun getCustomerFromRepository(email: String, pwd: String): Customer {

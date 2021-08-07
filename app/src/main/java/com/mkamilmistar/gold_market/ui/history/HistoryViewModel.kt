@@ -11,8 +11,8 @@ import com.mkamilmistar.gold_market.helpers.EventResult
 import java.lang.Exception
 
 class HistoryViewModel(private val repository: PurchaseRepository): ViewModel() {
-  private var _historyLiveData = MutableLiveData<EventResult>(EventResult.Idle)
-  val historyLiveData: LiveData<EventResult>
+  private var _historyLiveData = MutableLiveData<EventResult<List<Purchase>>>(EventResult.Idle)
+  val historyLiveData: LiveData<EventResult<List<Purchase>>>
     get() = _historyLiveData
 
   fun start() {

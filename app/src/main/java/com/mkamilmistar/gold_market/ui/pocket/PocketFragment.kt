@@ -78,12 +78,12 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   private fun subscribe() {
     binding.apply {
       pocketAdapter = PocketAdapter(this@PocketFragment)
-      val historyObserver: Observer<EventResult> = Observer<EventResult> { event ->
+      val historyObserver: Observer<EventResult<List<Pocket>>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> Log.d("PocketFragment", "Loading...")
           is EventResult.Success -> {
             Log.d("PocketFragment", "Success...")
-            pocketAdapter.updateData(event.data as List<Pocket>)
+            pocketAdapter.updateData(event.data)
           }
           is EventResult.Failed -> Log.d("HistoryFragment", "FAILED")
           else -> {

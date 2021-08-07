@@ -67,11 +67,11 @@ class HomeFragment : Fragment() {
         Purchase("PURCHASE-SELL", "21 Juli 2021", 1, 140000, 1.0)
 
       btnBuyProduct.setOnClickListener {
-        showDialog("Are sure one to buy this product?", "Click OK to Continue", purchaseBuy)
+        showDialog("Are sure want to buy this product?", "Click OK to Continue", purchaseBuy)
       }
 
       btnSellProduct.setOnClickListener {
-        showDialog("Are sure one to sell this product?", "Click OK to Continue", purchaseSell)
+        showDialog("Are sure want to sell this product?", "Click OK to Continue", purchaseSell)
       }
     }
   }
@@ -79,12 +79,12 @@ class HomeFragment : Fragment() {
   @SuppressLint("SetTextI18n")
   private fun subscribe() {
     binding.apply {
-      val customerObserver: Observer<EventResult> = Observer<EventResult> { event ->
+      val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
           is EventResult.Success -> {
             Log.d("HomeFragment", "Success...")
-            val customer = event.data as Customer
+            val customer = event.data
             greetingHomeText.text = "Hi, ${customer.firstName}"
           }
           is EventResult.Failed -> {

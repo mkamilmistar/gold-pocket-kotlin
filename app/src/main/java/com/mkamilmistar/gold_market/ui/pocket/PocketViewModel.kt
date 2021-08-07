@@ -10,8 +10,8 @@ import com.mkamilmistar.gold_market.helpers.EventResult
 import java.lang.Exception
 
 class PocketViewModel(private val repository: PocketRepository): ViewModel() {
-  private var _pocketLiveData = MutableLiveData<EventResult>(EventResult.Idle)
-  val pocketLiveData: LiveData<EventResult>
+  private var _pocketLiveData = MutableLiveData<EventResult<List<Pocket>>>(EventResult.Idle)
+  val pocketLiveData: LiveData<EventResult<List<Pocket>>>
     get() = _pocketLiveData
 
   fun start() {

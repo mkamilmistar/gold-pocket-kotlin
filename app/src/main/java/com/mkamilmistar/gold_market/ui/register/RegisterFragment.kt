@@ -22,6 +22,7 @@ import com.mkamilmistar.gold_market.databinding.FragmentRegisterBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.utils.getRandomString
+import java.util.*
 
 class RegisterFragment : Fragment(), TextWatcher {
 
@@ -72,7 +73,7 @@ class RegisterFragment : Fragment(), TextWatcher {
       val lastName = lastNameText.text.toString()
       val email = emailRegisterText.text.toString()
       val pwd = pwdRegisterText.text.toString()
-      val newCustomer = Customer(getRandomString(5), firstName, lastName, email, pwd)
+      val newCustomer = Customer(UUID.randomUUID().toString(), firstName, lastName, email, pwd)
       registerViewModel.register(newCustomer)
     }
   }

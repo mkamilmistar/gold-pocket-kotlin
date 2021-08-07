@@ -5,6 +5,9 @@
 
   <data>
     <variable
+      name="fragment"
+      type="com.mkamilmistar.gold_market.ui.home.HomeFragment" />
+    <variable
       name="viewmodel"
       type="com.mkamilmistar.gold_market.ui.home.HomeViewModel" />
   </data>
@@ -140,6 +143,7 @@
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/nunitosans_bold"
         android:text="@string/create_pocket_btn"
+        android:onClick="@{() -> fragment.createPocketHandle()}"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:icon="@drawable/ic_add"
@@ -155,6 +159,7 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="20dp"
         android:layout_weight="1"
+        android:onClick="@{() -> fragment.changePocketHandle()}"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/nunitosans_bold"
         android:text="@string/change_pocket_btn"
@@ -264,6 +269,7 @@
               app:icon="@drawable/ic_add_shopping_cart"
               app:iconGravity="top"
               app:iconTint="@color/black"
+              android:onClick="@{() -> fragment.buyProductHandle()}"
               app:layout_constraintEnd_toStartOf="@+id/btn_sell_product"
               app:layout_constraintHorizontal_bias="0.5"
               app:layout_constraintHorizontal_chainStyle="spread"
@@ -285,6 +291,7 @@
               app:icon="@drawable/ic_remove_shopping_cart"
               app:iconGravity="top"
               app:iconTint="@color/black"
+              android:onClick="@{() -> fragment.sellProductHandle()}"
               app:layout_constraintEnd_toEndOf="parent"
               app:layout_constraintHorizontal_bias="0.5"
               app:layout_constraintStart_toEndOf="@+id/btn_buy_product"

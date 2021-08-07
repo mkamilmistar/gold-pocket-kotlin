@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.model.Customer
 import com.mkamilmistar.gold_market.data.model.Pocket
@@ -51,6 +52,7 @@ class HomeFragment : Fragment() {
     return binding.apply {
       lifecycleOwner = this@HomeFragment
       viewmodel = homeViewModel
+      fragment = this@HomeFragment
     }.root
   }
 
@@ -62,24 +64,25 @@ class HomeFragment : Fragment() {
     val dummyUser = CustomerRepositoryImpl().customerDBImport
     homeViewModel.start(dummyUser.email, dummyUser.password, 0)
     binding.apply {
-      btnCreatePocket.setOnClickListener {
-        Navigation.findNavController(view)
-          .navigate(R.id.action_homeFragment_to_pocketFragment)
-      }
-
-      btnChangePocket.setOnClickListener {
-        Navigation.findNavController(view)
-          .navigate(R.id.action_homeFragment_to_pocketFragment)
-      }
-
-      btnBuyProduct.setOnClickListener {
-        showDialog("Are sure want to buy this product?", "Click OK to Continue", purchaseBuy)
-      }
-
-      btnSellProduct.setOnClickListener {
-        showDialog("Are sure want to sell this product?", "Click OK to Continue", purchaseSell)
-      }
     }
+  }
+
+  fun createPocketHandle() {
+    findNavController()
+      .navigate(R.id.action_homeFragment_to_pocketFragment)
+  }
+
+  fun changePocketHandle() {
+    findNavController()
+      .navigate(R.id.action_homeFragment_to_pocketFragment)
+  }
+
+  fun buyProductHandle() {
+    showDialog("Are sure want to buy this product?", "Click OK to Continue", purchaseBuy)
+  }
+
+  fun sellProductHandle() {
+    showDialog("Are sure want to sell this product?", "Click OK to Continue", purchaseSell)
   }
 
   @SuppressLint("SetTextI18n")

@@ -5,6 +5,9 @@
 
   <data>
     <variable
+      name="fragment"
+      type="com.mkamilmistar.gold_market.ui.settings.SettingFragment" />
+    <variable
       name="viewmodel"
       type="com.mkamilmistar.gold_market.ui.settings.SettingsViewModel" />
   </data>
@@ -74,7 +77,8 @@
             android:layout_toEndOf="@id/profile_picture"
             android:fontFamily="@font/nunitosans_extrabold"
             android:includeFontPadding="false"
-            android:text="@string/full_name"
+            tools:text="Name"
+            android:text="@{fragment.dummyUser.firstName + ` ` + fragment.dummyUser.lastName}"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
@@ -87,9 +91,10 @@
             android:layout_toEndOf="@id/profile_picture"
             android:fontFamily="@font/nunitosans_light"
             android:includeFontPadding="false"
-            android:text="@string/email_gmail_com"
+            android:text="@{fragment.dummyUser.email}"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="email@gmail.com" />
 
         </RelativeLayout>
 

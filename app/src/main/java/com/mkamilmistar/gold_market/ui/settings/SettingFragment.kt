@@ -14,6 +14,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
+import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.ui.register.RegisterViewModel
@@ -27,6 +28,7 @@ class SettingFragment : Fragment() {
     }
   }
   private val settingsViewModel: SettingsViewModel by viewModels { factory }
+  val dummyUser = CustomerRepositoryImpl().customerDBImport
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +38,7 @@ class SettingFragment : Fragment() {
     return binding.apply {
       lifecycleOwner = this@SettingFragment
       viewmodel = settingsViewModel
+      fragment = this@SettingFragment
     }.root
   }
 

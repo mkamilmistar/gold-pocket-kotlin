@@ -153,6 +153,7 @@
           android:background="#00000000"
           android:clickable="true"
           android:elevation="0dp"
+          android:onClick="@{() -> fragment.textSignUp()}"
           android:fontFamily="@font/nunitosans_bold"
           android:text="@string/text_register_title"
           android:textColor="@color/yellow_darker" />

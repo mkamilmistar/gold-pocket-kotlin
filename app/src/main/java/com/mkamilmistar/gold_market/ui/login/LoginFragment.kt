@@ -60,10 +60,6 @@ class LoginFragment : Fragment(), TextWatcher {
           .navigate(R.id.action_loginFragment_to_forgetPasswordFragment)
       }
 
-      textSignUp.setOnClickListener {
-        Navigation.findNavController(view)
-          .navigate(R.id.action_loginFragment_to_registerFragment)
-      }
     }
   }
 
@@ -73,6 +69,11 @@ class LoginFragment : Fragment(), TextWatcher {
       R.id.homeFragment, bundle,
       NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
     )
+  }
+
+  fun textSignUp() {
+    findNavController()
+      .navigate(R.id.action_loginFragment_to_registerFragment)
   }
 
   fun login() {

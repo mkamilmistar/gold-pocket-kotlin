@@ -84,10 +84,11 @@ class HomeFragment : Fragment() {
 
   @SuppressLint("SetTextI18n")
   private fun subscribe() {
+    hideProgressBar()
     binding.apply {
       val pocketObserver: Observer<EventResult<Pocket>> = Observer { event ->
         when (event) {
-          is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
+          is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             Log.d("HomeFragment", "Success Get Pocket...")
             val pocket = event.data
@@ -98,9 +99,11 @@ class HomeFragment : Fragment() {
             totalPriceText.text = Utils.currencyFormatter(totalAmount)
             val pockets = PocketRepositoryImpl().pocketDBImport
             totalPocketsText.text = "Your total pockets: ${pockets.size}"
+            hideProgressBar()
           }
           is EventResult.Failed -> {
             val message = "Failed to get data"
+            hideProgressBar()
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
           }
           else -> {
@@ -109,7 +112,7 @@ class HomeFragment : Fragment() {
       }
       val productObserver: Observer<EventResult<Product>> = Observer { event ->
         when (event) {
-          is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
+          is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             Log.d("HomeFragment", "Success Get Product...")
             val productData = event.data
@@ -122,9 +125,11 @@ class HomeFragment : Fragment() {
             purchaseSell =
               Purchase("PURCHASE-SELL", formatDate(LocalDateTime.now().toString()), 1, product.productPriceSell, 1.0)
 
+            hideProgressBar()
           }
           is EventResult.Failed -> {
             val message = "Failed to get data"
+            hideProgressBar()
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
           }
           else -> {
@@ -154,5 +159,13 @@ class HomeFragment : Fragment() {
     builder.setNeutralButton("CANCEL", dialogClickListener)
     dialog = builder.create()
     dialog.show()
+  }
+
+  private fun hideProgressBar() {
+    binding.progressBarHome.visibility = View.GONE
+  }
+
+  private fun showProgressBar() {
+    binding.progressBarHome.visibility = View.VISIBLE
   }
 }

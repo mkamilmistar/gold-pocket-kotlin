@@ -24,10 +24,10 @@
       android:id="@+id/linearLayout"
       android:layout_width="match_parent"
       android:layout_height="200dp"
-      android:translationY="-10dp"
       android:background="@drawable/rounded_corners"
       android:backgroundTint="@color/yellow"
       android:paddingHorizontal="20dp"
+      android:translationY="-10dp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent">
@@ -327,6 +327,16 @@
         </com.google.android.material.card.MaterialCardView>
       </LinearLayout>
     </LinearLayout>
+
+    <ProgressBar
+      android:id="@+id/progressBarHome"
+      android:theme="@style/progressBarYellow"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

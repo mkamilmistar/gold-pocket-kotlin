@@ -63,8 +63,8 @@ class LoginFragment : Fragment(), TextWatcher {
     }
   }
 
-  private fun navToHome(email: String, pwd: String) {
-    val bundle = bundleOf("EMAIL" to email, "PASSWORD" to pwd)
+  private fun navToHome(customer: Customer) {
+    val bundle = bundleOf("CUSTOMER" to customer)
     findNavController().navigate(
       R.id.homeFragment, bundle,
       NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
@@ -92,9 +92,8 @@ class LoginFragment : Fragment(), TextWatcher {
         when (event) {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
-            val email = loginEmail.text.toString()
-            val password = loginPassword.text.toString()
-            navToHome(email, password)
+            val customer: Customer = event.data
+            navToHome(customer)
             hideProgressBar()
           }
           is EventResult.Failed -> {

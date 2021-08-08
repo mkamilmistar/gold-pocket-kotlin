@@ -15,14 +15,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.model.Customer
 import com.mkamilmistar.gold_market.data.model.Pocket
 import com.mkamilmistar.gold_market.data.model.ProductHistory
 import com.mkamilmistar.gold_market.data.model.Purchase
-import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
@@ -43,6 +41,7 @@ class HomeFragment : Fragment() {
   private lateinit var prodHist: List<ProductHistory>
   private lateinit var purchaseBuy: Purchase
   private lateinit var purchaseSell: Purchase
+  private lateinit var passCustomer: Customer
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -56,14 +55,14 @@ class HomeFragment : Fragment() {
     }.root
   }
 
+  @SuppressLint("SetTextI18n")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val passEmail = arguments?.getString("EMAIL")
-    val passPwd = arguments?.getString("PASSWORD")
     subscribe()
-    val dummyUser = CustomerRepositoryImpl().customerDBImport
-    homeViewModel.start(dummyUser.email, dummyUser.password, 0)
+    homeViewModel.start(0)
     binding.apply {
+      passCustomer  = arguments?.getSerializable("CUSTOMER") as Customer
+      greetingHomeText.text = "Hi ${passCustomer.firstName + " " + passCustomer.lastName}"
     }
   }
 
@@ -88,22 +87,6 @@ class HomeFragment : Fragment() {
   @SuppressLint("SetTextI18n")
   private fun subscribe() {
     binding.apply {
-      val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
-          is EventResult.Success -> {
-            Log.d("HomeFragment", "Success Get Customer...")
-            val customer = event.data
-            greetingHomeText.text = "Hi, ${customer.firstName}"
-          }
-          is EventResult.Failed -> {
-            val message = "Failed to get data"
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-          }
-          else -> {
-          }
-        }
-      }
       val pocketObserver: Observer<EventResult<Pocket>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
@@ -150,7 +133,6 @@ class HomeFragment : Fragment() {
           }
         }
       }
-      homeViewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
       homeViewModel.productHistoryLiveData.observe(viewLifecycleOwner, productHistoryObserver)
       homeViewModel.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
     }

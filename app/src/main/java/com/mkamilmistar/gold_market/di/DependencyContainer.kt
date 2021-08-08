@@ -15,7 +15,7 @@ class DependencyContainer {
   private val productHistoryRepository = ProductHistoryRepositoryImpl()
   private val purchaseRepository = PurchaseRepositoryImpl()
 
-  val homeViewModel = HomeViewModel(customerRepository, purchaseRepository, pocketRepository, productHistoryRepository)
+  val homeViewModel = HomeViewModel(purchaseRepository, pocketRepository, productHistoryRepository)
   val settingsViewModel = SettingsViewModel(customerRepository)
   val loginViewModel = LoginViewModel(customerRepository)
   val registerViewModel = RegisterViewModel(customerRepository)

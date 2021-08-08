@@ -15,15 +15,10 @@ import com.mkamilmistar.gold_market.helpers.EventResult
 import java.lang.Exception
 
 class HomeViewModel(
-  private val customerRepository: CustomerRepository,
   private val purchaseRepository: PurchaseRepository,
   private val pocketRepository: PocketRepository,
   private val productHistoryRepository: ProductHistoryRepository
 ) : ViewModel() {
-  private var _customerLiveData = MutableLiveData<EventResult<Customer>>(EventResult.Idle)
-  val customerLiveData: LiveData<EventResult<Customer>>
-    get() = _customerLiveData
-
   private var _pocketLiveData = MutableLiveData<EventResult<Pocket>>(EventResult.Idle)
   val pocketLiveData: LiveData<EventResult<Pocket>>
     get() = _pocketLiveData
@@ -32,24 +27,9 @@ class HomeViewModel(
   val productHistoryLiveData: LiveData<EventResult<List<ProductHistory>>>
     get() = _productHistoryLiveData
 
-  fun start(email: String, pwd: String, pocketPosition: Int) {
-    updateDataCustomer(email, pwd)
+  fun start(pocketPosition: Int) {
     updateProductHistory()
     updatePocketActive(pocketPosition)
-  }
-
-  private fun getCustomerFromRepository(email: String, pwd: String): Customer {
-    return customerRepository.getCustomer(email, pwd)
-  }
-
-  private fun updateDataCustomer(email: String, pwd: String) {
-    _customerLiveData.value = EventResult.Loading
-    try {
-      val customer: Customer = getCustomerFromRepository(email, pwd)
-      _customerLiveData.value = EventResult.Success(customer)
-    } catch (e: Exception) {
-      _customerLiveData.value = e.localizedMessage?.toString()?.let { EventResult.Failed(it) }
-    }
   }
 
   private fun updatePocketActive(pocketPosition: Int) {

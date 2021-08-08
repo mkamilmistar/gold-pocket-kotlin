@@ -1,5 +1,7 @@
 package com.mkamilmistar.gold_market.ui.pocket
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,12 +24,14 @@ class PocketViewModel(private val repository: PocketRepository): ViewModel() {
 
   private fun updateData() {
     _pocketLiveData.value = EventResult.Loading
-    try {
-      val history: List<Pocket> = getPocketRepository()
-      _pocketLiveData.value = EventResult.Success(history)
-    } catch (e: Exception) {
-      _pocketLiveData.value = EventResult.Failed("Oops something wrong")
-    }
+    Handler(Looper.getMainLooper()).postDelayed({
+      try {
+        val history: List<Pocket> = getPocketRepository()
+        _pocketLiveData.value = EventResult.Success(history)
+      } catch (e: Exception) {
+        _pocketLiveData.value = EventResult.Failed("Oops something wrong")
+      }
+    }, 3000)
   }
 
   fun getPocket(position: Int): Pocket {

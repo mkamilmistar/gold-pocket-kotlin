@@ -9,7 +9,7 @@
       type="com.mkamilmistar.gold_market.ui.history.HistoryViewModel" />
   </data>
 
-  <LinearLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_gray"
@@ -19,11 +19,14 @@
     <LinearLayout
       android:id="@+id/header_history"
       android:layout_width="match_parent"
-      android:layout_height="200dp"
-      android:layout_marginTop="-10dp"
+      android:layout_height="150dp"
       android:background="@drawable/rounded_corners"
       android:backgroundTint="@color/yellow"
-      android:paddingHorizontal="40dp">
+      android:paddingHorizontal="40dp"
+      android:translationY="-10dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
 
       <TextView
         android:layout_width="match_parent"
@@ -40,13 +43,14 @@
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recycleViewHistory"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_marginTop="-60dp"
+      android:layout_height="0dp"
+      android:translationY="-10dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/header_history"/>
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/header_history" />
 
-  </LinearLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
 

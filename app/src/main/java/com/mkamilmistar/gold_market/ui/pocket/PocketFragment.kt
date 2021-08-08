@@ -75,16 +75,20 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   private fun subscribe() {
+    hideProgressBar()
     binding.apply {
       pocketAdapter = PocketAdapter(this@PocketFragment)
       val historyObserver: Observer<EventResult<List<Pocket>>> = Observer { event ->
         when (event) {
-          is EventResult.Loading -> Log.d("PocketFragment", "Loading...")
+          is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
-            Log.d("PocketFragment", "Success...")
             pocketAdapter.updateData(event.data)
+            hideProgressBar()
           }
-          is EventResult.Failed -> Log.d("HistoryFragment", "FAILED")
+          is EventResult.Failed -> {
+            hideProgressBar()
+            Toast.makeText(context, event.errorMessage.toString(), Toast.LENGTH_SHORT).show()
+          }
           else -> {
           }
         }
@@ -123,5 +127,13 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     builder.setNeutralButton("CANCEL", dialogClickListener)
     dialog = builder.create()
     dialog.show()
+  }
+
+  private fun hideProgressBar() {
+    binding.progressBarPocket.visibility = View.GONE
+  }
+
+  private fun showProgressBar() {
+    binding.progressBarPocket.visibility = View.VISIBLE
   }
 }

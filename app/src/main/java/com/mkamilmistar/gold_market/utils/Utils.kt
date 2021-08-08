@@ -14,6 +14,16 @@ import java.util.*
 object Utils {
   const val EMAIL = "EMAIL"
   const val PASSWORD = "PASSWORD"
+
+  @JvmStatic
+  fun currencyFormatter(currency: Number): String {
+    val format: NumberFormat = NumberFormat.getCurrencyInstance()
+    format.maximumFractionDigits = 0
+    format.currency = Currency.getInstance("IDR")
+
+    return format.format(currency)
+  }
+
 }
 
 val AppCompatActivity.baseApp: BaseApplication
@@ -26,14 +36,6 @@ fun getRandomString(length: Int) : String {
   return (1..length)
     .map { allowedChars.random() }
     .joinToString("")
-}
-
-fun currencyFormatter(currency: Number): String {
-  val format: NumberFormat = NumberFormat.getCurrencyInstance()
-  format.maximumFractionDigits = 0
-  format.currency = Currency.getInstance("IDR")
-
-  return format.format(currency)
 }
 
 @SuppressLint("SimpleDateFormat")

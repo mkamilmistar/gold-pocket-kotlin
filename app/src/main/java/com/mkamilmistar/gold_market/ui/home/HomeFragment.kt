@@ -17,15 +17,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.model.Customer
-import com.mkamilmistar.gold_market.data.model.Pocket
-import com.mkamilmistar.gold_market.data.model.ProductHistory
-import com.mkamilmistar.gold_market.data.model.Purchase
+import com.mkamilmistar.gold_market.data.model.*
+import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
-import com.mkamilmistar.gold_market.utils.currencyFormatter
+import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.formatDate
 import java.time.LocalDateTime
 
@@ -38,10 +36,10 @@ class HomeFragment : Fragment() {
     }
   }
   private val homeViewModel: HomeViewModel by viewModels { factory }
-  private lateinit var prodHist: List<ProductHistory>
-  private lateinit var purchaseBuy: Purchase
-  private lateinit var purchaseSell: Purchase
-  private lateinit var passCustomer: Customer
+  lateinit var product: Product
+  lateinit var purchaseBuy: Purchase
+  lateinit var purchaseSell: Purchase
+  lateinit var passCustomer: Customer
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -59,10 +57,10 @@ class HomeFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     subscribe()
-    homeViewModel.start(0)
+    homeViewModel.start(0, 0)
     binding.apply {
-      passCustomer  = arguments?.getSerializable("CUSTOMER") as Customer
-      greetingHomeText.text = "Hi ${passCustomer.firstName + " " + passCustomer.lastName}"
+//      passCustomer  = arguments?.getSerializable("CUSTOMER") as Customer
+      passCustomer  = CustomerRepositoryImpl().customerDBImport
     }
   }
 
@@ -93,11 +91,11 @@ class HomeFragment : Fragment() {
           is EventResult.Success -> {
             Log.d("HomeFragment", "Success Get Pocket...")
             val pocket = event.data
-            val totalAmount = (pocket.pocketQty.toDouble() * prodHist.last().priceSell.toDouble())
+            val totalAmount = (pocket.pocketQty.toDouble() * product.productPriceSell.toDouble())
 
             pocketNameText.text = pocket.pocketName
             totalGramText.text = "${pocket.pocketQty} /gr"
-            totalPriceText.text = currencyFormatter(totalAmount)
+            totalPriceText.text = Utils.currencyFormatter(totalAmount)
             val pockets = PocketRepositoryImpl().pocketDBImport
             totalPocketsText.text = "Your total pockets: ${pockets.size}"
           }
@@ -109,20 +107,20 @@ class HomeFragment : Fragment() {
           }
         }
       }
-      val productHistoryObserver: Observer<EventResult<List<ProductHistory>>> = Observer { event ->
+      val productObserver: Observer<EventResult<Product>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> Log.d("HomeFragment", "Loading...")
           is EventResult.Success -> {
-            Log.d("HomeFragment", "Success Get Product History...")
-            val productHistory = event.data
-            prodHist = productHistory
-            priceBuyAmount.text = currencyFormatter(productHistory.last().priceBuy)
-            priceSellAmount.text = currencyFormatter(productHistory.last().priceSell)
+            Log.d("HomeFragment", "Success Get Product...")
+            val productData = event.data
+            product = productData
+            priceBuyAmount.text = Utils.currencyFormatter(product.productPriceBuy)
+            priceSellAmount.text = Utils.currencyFormatter(product.productPriceSell)
 
             purchaseBuy =
-              Purchase("PURCHASE-BUY", formatDate(LocalDateTime.now().toString()), 0, prodHist.last().priceBuy, 1.0)
+              Purchase("PURCHASE-BUY", formatDate(LocalDateTime.now().toString()), 0, product.productPriceBuy, 1.0)
             purchaseSell =
-              Purchase("PURCHASE-SELL", formatDate(LocalDateTime.now().toString()), 1, prodHist.last().priceSell, 1.0)
+              Purchase("PURCHASE-SELL", formatDate(LocalDateTime.now().toString()), 1, product.productPriceSell, 1.0)
 
           }
           is EventResult.Failed -> {
@@ -133,7 +131,7 @@ class HomeFragment : Fragment() {
           }
         }
       }
-      homeViewModel.productHistoryLiveData.observe(viewLifecycleOwner, productHistoryObserver)
+      homeViewModel.productLiveData.observe(viewLifecycleOwner, productObserver)
       homeViewModel.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
     }
   }

@@ -4,6 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <data>
+    <import type="com.mkamilmistar.gold_market.utils.Utils"/>
     <variable
       name="fragment"
       type="com.mkamilmistar.gold_market.ui.home.HomeFragment" />
@@ -34,7 +35,8 @@
         android:layout_marginTop="40dp"
         android:fontFamily="@font/dancing_bold"
         android:gravity="start"
-        android:text="@string/greeting_text_home"
+        tools:text="Hi, Name"
+        android:text="@{`Hi, ` + fragment.passCustomer.firstName + ` ` + fragment.passCustomer.lastName}"
         android:textColor="@color/black"
         android:textSize="32sp" />
 
@@ -224,7 +226,8 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:fontFamily="@font/nunitosans_bold"
-              android:text="Rp. 900.000"
+              tools:text="Rp. 900.000"
+              android:text="@{Utils.currencyFormatter(fragment.product.productPriceBuy)}"
               android:textColor="@color/black"
               android:textSize="16sp"
               app:layout_constraintEnd_toEndOf="@+id/price_buy_title"

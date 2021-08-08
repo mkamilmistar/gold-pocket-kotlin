@@ -3,32 +3,26 @@ package com.mkamilmistar.gold_market.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mkamilmistar.gold_market.data.model.Customer
-import com.mkamilmistar.gold_market.data.model.Pocket
-import com.mkamilmistar.gold_market.data.model.ProductHistory
-import com.mkamilmistar.gold_market.data.model.Purchase
-import com.mkamilmistar.gold_market.data.repository.CustomerRepository
-import com.mkamilmistar.gold_market.data.repository.PocketRepository
-import com.mkamilmistar.gold_market.data.repository.ProductHistoryRepository
-import com.mkamilmistar.gold_market.data.repository.PurchaseRepository
+import com.mkamilmistar.gold_market.data.model.*
+import com.mkamilmistar.gold_market.data.repository.*
 import com.mkamilmistar.gold_market.helpers.EventResult
 import java.lang.Exception
 
 class HomeViewModel(
   private val purchaseRepository: PurchaseRepository,
   private val pocketRepository: PocketRepository,
-  private val productHistoryRepository: ProductHistoryRepository
+  private val productRepository: ProductRepositoryImpl
 ) : ViewModel() {
   private var _pocketLiveData = MutableLiveData<EventResult<Pocket>>(EventResult.Idle)
   val pocketLiveData: LiveData<EventResult<Pocket>>
     get() = _pocketLiveData
 
-  private var _productHistoryLiveData = MutableLiveData<EventResult<List<ProductHistory>>>(EventResult.Idle)
-  val productHistoryLiveData: LiveData<EventResult<List<ProductHistory>>>
-    get() = _productHistoryLiveData
+  private var _productLiveData = MutableLiveData<EventResult<Product>>(EventResult.Idle)
+  val productLiveData: LiveData<EventResult<Product>>
+    get() = _productLiveData
 
-  fun start(pocketPosition: Int) {
-    updateProductHistory()
+  fun start(productPosition: Int, pocketPosition: Int) {
+    updateProductHistory(productPosition)
     updatePocketActive(pocketPosition)
   }
 
@@ -42,13 +36,13 @@ class HomeViewModel(
     }
   }
 
-  private fun updateProductHistory() {
+  private fun updateProductHistory(productPosition: Int) {
     _pocketLiveData.value = EventResult.Loading
     try {
-      val productHistories: List<ProductHistory> = productHistoryRepository.findAllProductHistory()
-      _productHistoryLiveData.value = EventResult.Success(productHistories)
+      val productHistories: Product = productRepository.findProduct(productPosition)
+      _productLiveData.value = EventResult.Success(productHistories)
     } catch (e: Exception) {
-      _productHistoryLiveData.value = e.localizedMessage?.toString()?.let { EventResult.Failed(it) }
+      _productLiveData.value = e.localizedMessage?.toString()?.let { EventResult.Failed(it) }
     }
   }
 

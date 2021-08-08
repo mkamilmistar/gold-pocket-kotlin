@@ -23,9 +23,9 @@ class HistoryAdapter(private val onClickItemListener: OnClickItemListener) :
   override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
     with(holder.binding) {
       with(histories[position]) {
-        productNameText.text = this.id
-        priceProductText.text = Utils.currencyFormatter(this.price)
-        historyDateText.text = this.purchaseDate
+        productNameItem = this.id
+        productPriceItem = Utils.currencyFormatter(this.price)
+        productDateItem = this.purchaseDate
 
         cardItemHistory.setOnClickListener {
           onClickItemListener.onClickItem(position)

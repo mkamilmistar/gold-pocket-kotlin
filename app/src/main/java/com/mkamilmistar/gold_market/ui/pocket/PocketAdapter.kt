@@ -25,8 +25,8 @@ class PocketAdapter(private val onClickItemListener: OnClickItemListener) :
   override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
     with(holder.binding) {
       with(pockets[position]) {
-        pocketNameText.text = pocketName
-        pocketQtyText.text = "$pocketQty /gr"
+        pocketNameItem = pocketName
+        pocketQtyItem = "$pocketQty /gr"
 
         cardItemPocket.setOnClickListener {
           onClickItemListener.onClickItem(position)

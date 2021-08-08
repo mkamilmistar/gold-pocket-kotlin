@@ -5,6 +5,9 @@
 
   <data>
     <variable
+      name="adapter"
+      type="com.mkamilmistar.gold_market.ui.history.HistoryAdapter" />
+    <variable
       name="viewmodel"
       type="com.mkamilmistar.gold_market.ui.history.HistoryViewModel" />
   </data>

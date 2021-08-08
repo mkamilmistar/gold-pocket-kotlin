@@ -10,9 +10,6 @@
       name="productDateItem"
       type="String" />
     <variable
-      name="productPriceItem"
-      type="String" />
-    <variable
       name="viewmodel"
       type="com.mkamilmistar.gold_market.ui.history.HistoryViewModel" />
   </data>
@@ -81,10 +78,10 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginEnd="16dp"
-          android:fontFamily="@font/nunitosans_semibold"
-          android:text="@{productPriceItem}"
+          android:fontFamily="@font/nunitosans_bold"
+          android:text="@string/price_product_history"
           android:textColor="@color/black"
-          android:textSize="12sp"
+          android:textSize="14sp"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintTop_toTopOf="parent" />

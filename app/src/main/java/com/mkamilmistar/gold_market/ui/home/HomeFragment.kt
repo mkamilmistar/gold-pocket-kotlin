@@ -94,8 +94,8 @@ class HomeFragment : Fragment() {
             val pocket = event.data
             val totalAmount = (pocket.pocketQty.toDouble() * product.productPriceSell.toDouble())
 
-            pocketNameText.text = pocket.pocketName
-            totalGramText.text = "${pocket.pocketQty} /gr"
+//            pocketNameText.text = pocket.pocketName
+//            totalGramText.text = "${pocket.pocketQty} /gr"
             totalPriceText.text = Utils.currencyFormatter(totalAmount)
             val pockets = PocketRepositoryImpl().pocketDBImport
             totalPocketsText.text = "Your total pockets: ${pockets.size}"

@@ -5,4 +5,5 @@ sealed class EventResult<out T> {
   object Loading : EventResult<Nothing>()
   data class Success<T>(val data: T) : EventResult<T>()
   data class Failed(val errorMessage: Any?) : EventResult<Nothing>()
+  fun toData(): T? = if(this is Success) this.data else null
 }

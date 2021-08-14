@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "784af66f9a51cb92e972d50cfea35680",
+    "identityHash": "be738e5b75aae21e0fd02c211cab5051",
     "entities": [
       {
         "tableName": "m_customers",
@@ -80,7 +80,7 @@
       },
       {
         "tableName": "m_pockets",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pocket_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `pocket_name` TEXT NOT NULL, `pocket_qty` INTEGER NOT NULL, `customer_pocket_id` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pocket_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `qty` INTEGER NOT NULL, `customer_pocket_id` INTEGER NOT NULL, `product_pocket_id` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "pocketId",
@@ -90,19 +90,25 @@
           },
           {
             "fieldPath": "pocketName",
-            "columnName": "pocket_name",
+            "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "pocketQty",
-            "columnName": "pocket_qty",
+            "columnName": "qty",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "customerPocketId",
             "columnName": "customer_pocket_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productPocketId",
+            "columnName": "product_pocket_id",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -118,7 +124,7 @@
       },
       {
         "tableName": "m_purchases",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`purchase_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `purchase_date` TEXT NOT NULL, `purchase_type` INTEGER NOT NULL, `price` INTEGER NOT NULL, `qty_in_gram` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`purchase_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `purchase_date` TEXT NOT NULL, `type` INTEGER NOT NULL, `price` INTEGER NOT NULL, `qty_in_gram` REAL NOT NULL, `customer_purchase_id` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "purchaseId",
@@ -134,7 +140,7 @@
           },
           {
             "fieldPath": "purchaseType",
-            "columnName": "purchase_type",
+            "columnName": "type",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -149,6 +155,12 @@
             "columnName": "qty_in_gram",
             "affinity": "REAL",
             "notNull": true
+          },
+          {
+            "fieldPath": "customerPurchaseId",
+            "columnName": "customer_purchase_id",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -159,12 +171,74 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "m_products",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`product_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `price_buy` INTEGER NOT NULL, `price_cell` INTEGER NOT NULL, `image` TEXT NOT NULL, `status` INTEGER NOT NULL, `created_date` TEXT NOT NULL, `updated_date` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productName",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productPriceBuy",
+            "columnName": "price_buy",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productPriceSell",
+            "columnName": "price_cell",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productImage",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productStatus",
+            "columnName": "status",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdDate",
+            "columnName": "created_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedDate",
+            "columnName": "updated_date",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "product_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '784af66f9a51cb92e972d50cfea35680')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'be738e5b75aae21e0fd02c211cab5051')"
     ]
   }
 }

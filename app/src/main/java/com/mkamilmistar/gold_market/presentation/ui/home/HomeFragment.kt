@@ -11,22 +11,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.*
-import com.mkamilmistar.gold_market.data.model.entity.Customer
 import com.mkamilmistar.gold_market.data.model.entity.Pocket
 import com.mkamilmistar.gold_market.data.model.entity.Product
 import com.mkamilmistar.gold_market.data.model.entity.Purchase
-import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
+import com.mkamilmistar.gold_market.data.repository.ProductRepositoryImpl
+import com.mkamilmistar.gold_market.data.repository.PurchaseRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
-import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.formatDate
@@ -35,26 +32,36 @@ import java.time.LocalDateTime
 class HomeFragment : Fragment() {
 
   private lateinit var binding: FragmentHomeBinding
-  private val factory = object : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-      return DependencyContainer().homeViewModel as T
-    }
-  }
-  private val homeViewModel: HomeViewModel by viewModels { factory }
-  lateinit var product: Product
-  lateinit var purchaseBuy: Purchase
-  lateinit var purchaseSell: Purchase
+  private lateinit var homeViewModel: HomeViewModel
+  var product: Product =  Product(
+    productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
+    productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
+  )
+  private var purchaseBuy: Purchase = Purchase(1, formatDate(LocalDateTime.now().toString()), 0, 0, 1.0, 1)
+
+  private var purchaseSell: Purchase = Purchase(2, formatDate(LocalDateTime.now().toString()), 1, 0, 1.0, 1)
+
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
+    initViewModel()
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
     return binding.apply {
       lifecycleOwner = this@HomeFragment
       viewmodel = homeViewModel
       fragment = this@HomeFragment
     }.root
+  }
+
+  private fun initViewModel() {
+    val db = AppDatabase.getDatabase(requireContext())
+    val transactionRepo = PurchaseRepositoryImpl(db)
+    val pocketRepo = PocketRepositoryImpl(db)
+    val productRepository = ProductRepositoryImpl(db)
+    homeViewModel = ViewModelProvider(this, HomeViewModelFactory(transactionRepo, pocketRepo, productRepository)).get(
+      HomeViewModel::class.java)
   }
 
   @SuppressLint("SetTextI18n")
@@ -120,14 +127,17 @@ class HomeFragment : Fragment() {
           is EventResult.Success -> {
             Log.d("HomeFragment", "Success Get Product...")
             val productData = event.data
-            product = productData
+            product = Product(
+              productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
+              productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
+            )
             priceBuyAmount.text = Utils.currencyFormatter(product.productPriceBuy)
             priceSellAmount.text = Utils.currencyFormatter(product.productPriceSell)
 
             purchaseBuy =
-              Purchase(1, formatDate(LocalDateTime.now().toString()), 0, 0, 1.0)
+              Purchase(1, formatDate(LocalDateTime.now().toString()), 0, 0, 1.0, 1)
             purchaseSell =
-              Purchase(2, formatDate(LocalDateTime.now().toString()), 1, 0, 1.0)
+              Purchase(2, formatDate(LocalDateTime.now().toString()), 1, 0, 1.0, 1)
 
             hideProgressBar()
           }

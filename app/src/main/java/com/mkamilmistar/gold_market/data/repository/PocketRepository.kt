@@ -7,5 +7,5 @@ interface PocketRepository {
   fun findPocketById(pocketId: Int): Pocket
 //  fun findPocket(position: Int): Pocket
   fun addPocket(pocket: Pocket)
-  fun deletePocket(pocket: Pocket)
+  fun deletePocket(pocketId: Int)
 }

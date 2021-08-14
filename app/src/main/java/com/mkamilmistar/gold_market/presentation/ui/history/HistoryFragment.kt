@@ -6,46 +6,49 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mkamilmistar.gold_market.R
+import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.entity.Purchase
+import com.mkamilmistar.gold_market.data.repository.PurchaseRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHistoryBinding
-import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
+import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModel
+import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModelFactory
 
 class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
 
   private lateinit var binding: FragmentHistoryBinding
   private lateinit var historyAdapter: HistoryAdapter
 
-  private val factory = object : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-      return DependencyContainer().historyViewModel as T
-    }
-  }
-  private val historyViewModel: HistoryViewModel by viewModels { factory }
+  private lateinit var purchaseViewModel: PurchaseViewModel
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
+    initViewModel()
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
     return binding.apply {
       lifecycleOwner = this@HistoryFragment
-      viewmodel = historyViewModel
+      viewmodel = purchaseViewModel
     }.root
+  }
+
+  private fun initViewModel() {
+    val db = AppDatabase.getDatabase(requireContext())
+    val repo = PurchaseRepositoryImpl(db)
+    purchaseViewModel = ViewModelProvider(this, PurchaseViewModelFactory(repo)).get(
+      PurchaseViewModel::class.java)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     subscribe()
-    historyViewModel.start()
+    purchaseViewModel.start()
     binding.apply {
       recycleViewHistory.apply {
         layoutManager = LinearLayoutManager(context)
@@ -69,11 +72,11 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
           }
         }
       }
-      historyViewModel.historyLiveData.observe(viewLifecycleOwner, historyObserver)
+//      transactionViewModel.historyLiveData.observe(viewLifecycleOwner, historyObserver)
     }
   }
 
   override fun onClickItem(position: Int) {
-    Toast.makeText(context, historyViewModel.getHistory(position).purchaseId, Toast.LENGTH_SHORT).show()
+//    Toast.makeText(context, transactionViewModel.getHistory(position).purchaseId, Toast.LENGTH_SHORT).show()
   }
 }

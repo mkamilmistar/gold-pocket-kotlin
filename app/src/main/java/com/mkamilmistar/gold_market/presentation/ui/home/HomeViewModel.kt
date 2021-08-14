@@ -32,7 +32,7 @@ class HomeViewModel(
     _pocketLiveData.value = EventResult.Loading
     try {
 //      val pocketById: Pocket = pocketRepository.findPocket(pocketPosition)
-      _pocketLiveData.value = EventResult.Success(Pocket(1,"",0,1))
+      _pocketLiveData.value = EventResult.Success(Pocket(1,"",0,1, 1))
     } catch (e: Exception) {
       _pocketLiveData.value = e.localizedMessage?.toString()?.let { EventResult.Failed(it) }
     }
@@ -41,8 +41,8 @@ class HomeViewModel(
   private fun updateProductHistory(productPosition: Int) {
     _pocketLiveData.value = EventResult.Loading
     try {
-      val productHistories: Product = productRepository.findProduct(productPosition)
-      _productLiveData.value = EventResult.Success(productHistories)
+//      val productHistories: Product = productRepository.findProduct(productPosition)
+//      _productLiveData.value = EventResult.Success(productHistories)
     } catch (e: Exception) {
       _productLiveData.value = e.localizedMessage?.toString()?.let { EventResult.Failed(it) }
     }

@@ -15,7 +15,7 @@ class PocketTemp: PocketRepository {
     TODO("Not yet implemented")
   }
 
-  override fun deletePocket(pocket: Pocket) {
+  override fun deletePocket(pocketId: Int) {
     TODO("Not yet implemented")
   }
 }

@@ -69,7 +69,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
           .setView(inputEditTextField)
           .setPositiveButton("Create Pocket") { _, _ ->
             val editTextInput = inputEditTextField.text.toString()
-            val newPocket = Pocket(pocketName = editTextInput, pocketQty = 0, customerPocketId = 1)
+            val newPocket = Pocket(pocketName = editTextInput, pocketQty = 0, customerPocketId = 1, productPocketId = 1)
             pocketViewModel.createPocket(newPocket)
           }
           .setNegativeButton("Cancel", null)
@@ -123,7 +123,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> {
-//          pocketViewModel.deletePocket(position)
+          pocketViewModel.deletePocket(position)
         }
         DialogInterface.BUTTON_NEUTRAL -> {
         }

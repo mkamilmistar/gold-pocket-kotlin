@@ -2,6 +2,7 @@ package com.mkamilmistar.gold_market.data.model.entity
 
 import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -11,12 +12,15 @@ data class Pocket(
   @ColumnInfo(name = "pocket_id")
   val pocketId: Int = 0,
 
-  @ColumnInfo(name = "pocket_name")
+  @ColumnInfo(name = "name")
   val pocketName: String,
 
-  @ColumnInfo(name = "pocket_qty")
+  @ColumnInfo(name = "qty")
   @Nullable val pocketQty: Int,
 
   @ColumnInfo(name = "customer_pocket_id")
-  val customerPocketId: Int
+  val customerPocketId: Int,
+
+  @ColumnInfo(name = "product_pocket_id")
+  val productPocketId: Int
 )

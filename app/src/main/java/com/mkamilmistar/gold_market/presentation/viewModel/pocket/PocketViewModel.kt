@@ -28,6 +28,8 @@ class PocketViewModel(
     updateData(customerId)
   }
 
+  private lateinit var pocketCustomer: CustomerWithPockets;
+
   private fun getPocketRepository(customerId: Int) = customerRepository.customerPockets(customerId)
 
   private fun updateData(customerId: Int) {
@@ -35,7 +37,7 @@ class PocketViewModel(
     Handler(Looper.getMainLooper()).postDelayed({
       viewModelScope.launch(Dispatchers.IO) {
         try {
-          val pocketCustomer: CustomerWithPockets = getPocketRepository(customerId)
+          pocketCustomer = getPocketRepository(customerId)
           _pocketCustomerLiveData.postValue(EventResult.Success(pocketCustomer))
         } catch (e: Exception) {
           _pocketCustomerLiveData.postValue(
@@ -54,17 +56,18 @@ class PocketViewModel(
     updateData(1)
   }
 
-  fun deletePocket(pocket: Pocket) {
+  fun deletePocket(position: Int) {
     Handler(Looper.getMainLooper()).postDelayed({
       viewModelScope.launch(Dispatchers.IO) {
-        pocketRepository.deletePocket(pocket)
+        val delPocket = pocketCustomer.pockets[position]
+        pocketRepository.deletePocket(delPocket.pocketId)
       }
     }, 1000)
     updateData(1)
   }
 
   fun getPocketById(position: Int): Pocket {
-      return pocketRepository.findPocketById(position)
+      return pocketCustomer.pockets[position]
   }
 
 }

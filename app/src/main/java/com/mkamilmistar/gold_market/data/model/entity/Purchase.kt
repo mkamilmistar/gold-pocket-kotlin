@@ -14,12 +14,15 @@ data class Purchase(
   @ColumnInfo(name = "purchase_date")
   val purchaseDate: String,
 
-  @ColumnInfo(name = "purchase_type")
+  @ColumnInfo(name = "type")
   val purchaseType: Int,
 
   @ColumnInfo(name = "price")
   val price: Int = 0,
 
   @ColumnInfo(name = "qty_in_gram")
-  val qtyInGram: Double
+  val qtyInGram: Double,
+
+  @ColumnInfo(name = "customer_purchase_id")
+  val customerPurchaseId: Int
 )

@@ -20,16 +20,16 @@ class PocketRepositoryImpl(private val db: AppDatabase): PocketRepository {
     db.pocketDao().insert(pocket)
   }
 
-  override fun deletePocket(pocket: Pocket) {
-    db.pocketDao().delete(pocket)
-
+  override fun deletePocket(pocketId: Int) {
+//    db.pocketDao().delete(pocket)
+    db.pocketDao().deleteById(pocketId)
   }
 
   companion object {
     val pocketDB: MutableList<Pocket> = mutableListOf(
-      Pocket(1, "Gold Pocket", 10, 1),
-      Pocket(2, "Platinum Pocket", 0, 1),
-      Pocket(3, "Silver Pocket", 0, 1),
+      Pocket(1, "Gold Pocket", 10, 1, 1),
+      Pocket(2, "Platinum Pocket", 0, 1, 1),
+      Pocket(3, "Silver Pocket", 0, 1, 1),
     )
   }
   val pocketDBImport

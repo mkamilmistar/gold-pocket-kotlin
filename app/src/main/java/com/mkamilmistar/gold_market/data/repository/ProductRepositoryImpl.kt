@@ -1,6 +1,6 @@
 package com.mkamilmistar.gold_market.data.repository
 
-import com.mkamilmistar.gold_market.data.model.Product
+import com.mkamilmistar.gold_market.data.model.entity.Product
 
 class ProductRepositoryImpl: ProductRepository {
   override fun findAllProduct(): List<Product> {

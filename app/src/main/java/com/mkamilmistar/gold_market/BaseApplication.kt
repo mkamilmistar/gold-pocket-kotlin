@@ -11,7 +11,7 @@ class BaseApplication: Application() {
   fun getLoginViewModel() = container.loginViewModel
   fun getRegisterViewModel() = container.registerViewModel
   fun getHomeViewModel() = container.homeViewModel
-  fun getPocketViewModel() = container.pocketViewModel
+//  fun getPocketViewModel() = container.pocketViewModel
   fun getSettingsViewModel() = container.settingsViewModel
   fun getHistoryViewModel() = container
 }

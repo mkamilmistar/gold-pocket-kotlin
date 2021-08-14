@@ -1,29 +1,35 @@
 package com.mkamilmistar.gold_market.data.repository
 
-import com.mkamilmistar.gold_market.data.model.Pocket
+import com.mkamilmistar.gold_market.data.db.AppDatabase
+import com.mkamilmistar.gold_market.data.model.entity.Pocket
 
-class PocketRepositoryImpl: PocketRepository {
+class PocketRepositoryImpl(private val db: AppDatabase): PocketRepository {
   override fun findAllPocket(): List<Pocket> {
     return pocketDB
   }
 
-  override fun findPocket(position: Int): Pocket {
-    return pocketDB[position]
+  override fun findPocketById(pocketId: Int): Pocket {
+   return db.pocketDao().getPocketById(pocketId)
   }
+
+//  override fun findPocket(position: Int): Pocket {
+//    return pocketDB[position]
+//  }
 
   override fun addPocket(pocket: Pocket) {
-    pocketDB.add(pocket)
+    db.pocketDao().insert(pocket)
   }
 
-  override fun deletePocket(position: Int) {
-    pocketDB.removeAt(position)
+  override fun deletePocket(pocket: Pocket) {
+    db.pocketDao().delete(pocket)
+
   }
 
   companion object {
     val pocketDB: MutableList<Pocket> = mutableListOf(
-      Pocket("pocket-1", "Gold Pocket", 10.0),
-      Pocket("pocket-2", "Platinum Pocket", 0),
-      Pocket("pocket-3", "Silver Pocket", 0),
+      Pocket(1, "Gold Pocket", 10, 1),
+      Pocket(2, "Platinum Pocket", 0, 1),
+      Pocket(3, "Silver Pocket", 0, 1),
     )
   }
   val pocketDBImport

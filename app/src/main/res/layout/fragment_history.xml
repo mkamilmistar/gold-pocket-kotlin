@@ -6,10 +6,10 @@
   <data>
     <variable
       name="adapter"
-      type="com.mkamilmistar.gold_market.ui.history.HistoryAdapter" />
+      type="com.mkamilmistar.gold_market.presentation.ui.history.HistoryAdapter" />
     <variable
       name="viewmodel"
-      type="com.mkamilmistar.gold_market.ui.history.HistoryViewModel" />
+      type="com.mkamilmistar.gold_market.presentation.ui.history.HistoryViewModel" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +17,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_gray"
     android:orientation="vertical"
-    tools:context=".ui.history.HistoryFragment">
+    tools:context=".presentation.ui.history.HistoryFragment">
 
     <LinearLayout
       android:id="@+id/header_history"

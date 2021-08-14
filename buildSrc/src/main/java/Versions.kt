@@ -10,4 +10,8 @@ object Versions {
   const val fragment_version = "1.4.0-alpha04"
   const val navigation_fragment_version = "2.4.0-alpha05"
   const val navigation_android_version = "2.4.0-alpha05"
+  const val coroutines_version = "1.5.0"
+  const val livecycleViewModel_version = "2.3.0"
+  const val room_version = "2.2.6"
+  const val roomCompiler_version = "2.2.6"
 }

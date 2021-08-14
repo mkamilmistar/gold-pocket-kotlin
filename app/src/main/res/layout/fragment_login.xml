@@ -5,10 +5,10 @@
 
   <data>
     <variable name="fragment"
-      type="com.mkamilmistar.gold_market.ui.login.LoginFragment" />
+      type="com.mkamilmistar.gold_market.presentation.ui.login.LoginFragment" />
 
     <variable name="viewmodel"
-      type="com.mkamilmistar.gold_market.ui.login.LoginViewModel" />
+      type="com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModel" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".ui.login.LoginFragment">
+    tools:context=".presentation.ui.login.LoginFragment">
 
     <ImageView
       android:id="@+id/logo_image"

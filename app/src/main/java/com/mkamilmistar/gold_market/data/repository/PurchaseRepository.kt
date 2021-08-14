@@ -1,6 +1,6 @@
 package com.mkamilmistar.gold_market.data.repository
 
-import com.mkamilmistar.gold_market.data.model.Purchase
+import com.mkamilmistar.gold_market.data.model.entity.Purchase
 
 interface PurchaseRepository {
   fun findAllPurchase(): List<Purchase>

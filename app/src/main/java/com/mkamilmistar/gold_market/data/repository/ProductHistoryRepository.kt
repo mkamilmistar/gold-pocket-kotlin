@@ -1,6 +1,6 @@
 package com.mkamilmistar.gold_market.data.repository
 
-import com.mkamilmistar.gold_market.data.model.ProductHistory
+import com.mkamilmistar.gold_market.data.model.entity.ProductHistory
 
 
 interface ProductHistoryRepository {

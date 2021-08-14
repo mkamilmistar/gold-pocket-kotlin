@@ -13,7 +13,7 @@
       type="String" />
     <variable
       name="viewmodel"
-      type="com.mkamilmistar.gold_market.ui.pocket.PocketAdapter" />
+      type="com.mkamilmistar.gold_market.presentation.ui.pocket.PocketAdapter" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout

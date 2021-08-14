@@ -9,13 +9,22 @@ android {
   buildToolsVersion = AppConfig.buildToolsVersion
 
   defaultConfig {
-    applicationId = "com.mkamilmistar.gold_market"
+    applicationId("com.mkamilmistar.gold_market")
     minSdkVersion(26)
     targetSdkVersion(30)
     versionCode(1)
-    versionName = "1.0"
-
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    versionName("1.0")
+    kapt {
+      arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+      }
+    }
+    javaCompileOptions {
+      annotationProcessorOptions {
+        arguments["room.incremental"] = "true"
+      }
+    }
+    testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
   }
 
   buildFeatures{
@@ -44,6 +53,10 @@ dependencies {
   implementation(AppDependencies.kotlinStdLib)
   implementation(AppDependencies.kotlinCore)
   implementation(AppDependencies.appCompat)
+  implementation(AppDependencies.coroutines)
+  implementation(AppDependencies.lifecycleViewModel)
+  implementation(AppDependencies.room)
+  kapt(AppDependencies.roomCompiler)
   implementation(AppDependencies.material)
   implementation(AppDependencies.constraintLayout)
   implementation(AppDependencies.androidFragment)

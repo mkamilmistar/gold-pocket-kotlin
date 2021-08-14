@@ -6,10 +6,10 @@
   <data>
     <variable
       name="fragment"
-      type="com.mkamilmistar.gold_market.ui.settings.SettingFragment" />
+      type="com.mkamilmistar.gold_market.presentation.ui.settings.SettingFragment" />
     <variable
       name="viewmodel"
-      type="com.mkamilmistar.gold_market.ui.settings.SettingsViewModel" />
+      type="com.mkamilmistar.gold_market.presentation.ui.settings.SettingsViewModel" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +17,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_gray"
     android:orientation="vertical"
-    tools:context=".ui.settings.SettingFragment">
+    tools:context=".presentation.ui.settings.SettingFragment">
 
     <LinearLayout
       android:id="@+id/linearLayout3"

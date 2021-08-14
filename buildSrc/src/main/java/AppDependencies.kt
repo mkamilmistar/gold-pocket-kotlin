@@ -10,4 +10,8 @@ object AppDependencies {
   const val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espresso_version}"
   const val navigationFragment = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation_fragment_version}"
   const val navigationAndroid = "androidx.navigation:navigation-ui-ktx:${Versions.navigation_android_version}"
+  const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines_version}"
+  const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.livecycleViewModel_version}"
+  const val room = "androidx.room:room-runtime:${Versions.room_version}"
+  const val roomCompiler = "androidx.room:room-compiler:${Versions.roomCompiler_version}"
 }

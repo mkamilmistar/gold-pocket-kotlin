@@ -25,6 +25,8 @@ import com.mkamilmistar.gold_market.data.repository.ProductRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PurchaseRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
+import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModel
+import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModelFactory
 import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.formatDate
 import java.time.LocalDateTime
@@ -33,6 +35,8 @@ class HomeFragment : Fragment() {
 
   private lateinit var binding: FragmentHomeBinding
   private lateinit var homeViewModel: HomeViewModel
+  private lateinit var purchaseViewModel: PurchaseViewModel
+
   var product: Product = Product(
     productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
     productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
@@ -56,11 +60,12 @@ class HomeFragment : Fragment() {
 
   private fun initViewModel() {
     val db = AppDatabase.getDatabase(requireContext())
-    val transactionRepo = PurchaseRepositoryImpl(db)
+    val purchaseRepo = PurchaseRepositoryImpl(db)
     val pocketRepo = PocketRepositoryImpl(db)
     val productRepository = ProductRepositoryImpl(db)
-    homeViewModel = ViewModelProvider(this, HomeViewModelFactory(transactionRepo, pocketRepo, productRepository)).get(
+    homeViewModel = ViewModelProvider(this, HomeViewModelFactory(pocketRepo, productRepository)).get(
       HomeViewModel::class.java)
+    purchaseViewModel = ViewModelProvider(this, PurchaseViewModelFactory(purchaseRepo)).get(PurchaseViewModel::class.java)
   }
 
   @SuppressLint("SetTextI18n")
@@ -162,7 +167,7 @@ class HomeFragment : Fragment() {
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> {
-          homeViewModel.purchaseProduct(purchase)
+          purchaseViewModel.purchaseProduct(purchase)
         }
         DialogInterface.BUTTON_NEUTRAL -> {
         }

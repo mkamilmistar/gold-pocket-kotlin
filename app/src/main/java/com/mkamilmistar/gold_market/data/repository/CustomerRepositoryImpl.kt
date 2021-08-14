@@ -21,8 +21,8 @@ class CustomerRepositoryImpl(
     }
   }
 
-  override fun register(customer: Customer) {
-    db.customerDao().insert(customer)
+  override fun register(customer: Customer): Long {
+    return db.customerDao().insert(customer)
   }
 
   override fun customerPockets(customerId: Int): CustomerWithPockets {

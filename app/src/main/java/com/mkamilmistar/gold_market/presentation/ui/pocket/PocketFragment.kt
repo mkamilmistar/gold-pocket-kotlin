@@ -24,13 +24,14 @@ import com.mkamilmistar.gold_market.databinding.FragmentPocketBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
+import com.mkamilmistar.gold_market.utils.SharedPref
 
 class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
 
   private lateinit var binding: FragmentPocketBinding
   private lateinit var pocketAdapter: PocketAdapter
-
   private lateinit var pocketViewModel: PocketViewModel
+  private lateinit var activateCustomer: String
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +55,14 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     subscribe()
-    pocketViewModel.start(1)
+    val sharedPreferences = SharedPref(requireContext())
+    activateCustomer = sharedPreferences.retrived("ID").toString()
+    if (!activateCustomer.equals(null)) {
+      pocketViewModel.start(activateCustomer.toInt())
+    } else {
+      pocketViewModel.start(0)
+    }
+
     binding.apply {
       recycleViewPocket.apply {
         layoutManager = LinearLayoutManager(context)
@@ -69,8 +77,8 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
           .setView(inputEditTextField)
           .setPositiveButton("Create Pocket") { _, _ ->
             val editTextInput = inputEditTextField.text.toString()
-            val newPocket = Pocket(pocketName = editTextInput, pocketQty = 0, customerPocketId = 1, productPocketId = 1)
-            pocketViewModel.createPocket(newPocket)
+            val newPocket = Pocket(pocketName = editTextInput, pocketQty = 0, customerPocketId = activateCustomer.toInt(), productPocketId = 1)
+            pocketViewModel.createPocket(newPocket, activateCustomer.toInt())
           }
           .setNegativeButton("Cancel", null)
           .create()
@@ -87,7 +95,6 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
         when (event) {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
-            Log.d("TOLOL", event.data.toString())
             pocketAdapter.updateData(event.data)
             hideProgressBar()
           }
@@ -123,7 +130,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> {
-          pocketViewModel.deletePocket(position)
+          pocketViewModel.deletePocket(position, activateCustomer.toInt())
         }
         DialogInterface.BUTTON_NEUTRAL -> {
         }

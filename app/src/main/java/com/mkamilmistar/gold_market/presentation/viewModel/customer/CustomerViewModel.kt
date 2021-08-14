@@ -21,6 +21,12 @@ class CustomerViewModel(private val customerRepository: CustomerRepository) : Vi
       return _customerLiveData
     }
 
+  private var _successRegister = MutableLiveData<EventResult<Long>>()
+  val successRegister: LiveData<EventResult<Long>>
+    get() {
+      return _successRegister
+    }
+
   fun customerLogin(loginRequest: LoginRequest) {
     _customerLiveData.postValue(EventResult.Loading)
     Handler(Looper.getMainLooper()).postDelayed({
@@ -28,26 +34,26 @@ class CustomerViewModel(private val customerRepository: CustomerRepository) : Vi
         try {
           val customerData = customerRepository.customerLogin(loginRequest)
           _customerLiveData.postValue(EventResult.Success(data = customerData))
-
         } catch (e: Exception) {
           _customerLiveData.postValue(
             e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
         }
       }
-    }, 2000)
+    }, 1000)
   }
 
   fun registerCustomer(customer: Customer) {
-    _customerLiveData.postValue(EventResult.Loading)
+    _successRegister.postValue(EventResult.Loading)
     Handler(Looper.getMainLooper()).postDelayed({
-      try {
-        viewModelScope.launch(Dispatchers.IO) {
-          customerRepository.register(customer)
-          _customerLiveData.postValue(EventResult.Success(customer))
+      viewModelScope.launch(Dispatchers.IO) {
+        try {
+          val id = customerRepository.register(customer)
+          _successRegister.postValue(EventResult.Success(data = id))
+        } catch (e: Exception) {
+          _successRegister.postValue(
+            e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
         }
-      } catch (e: Exception) {
-        _customerLiveData.postValue(e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
       }
-    }, 2000)
+    }, 1000)
   }
 }

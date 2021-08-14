@@ -39,7 +39,7 @@ class HistoryViewModel(private val repository: PurchaseRepository) : ViewModel()
             e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
         }
       }
-    }, 2000)
+    }, 1000)
   }
 
   fun getPurchaseById(position: Int): Purchase {

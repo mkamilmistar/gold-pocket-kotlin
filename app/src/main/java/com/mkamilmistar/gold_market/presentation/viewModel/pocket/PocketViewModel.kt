@@ -11,6 +11,7 @@ import com.mkamilmistar.gold_market.data.model.entity.Pocket
 import com.mkamilmistar.gold_market.data.repository.CustomerRepository
 import com.mkamilmistar.gold_market.data.repository.PocketRepository
 import com.mkamilmistar.gold_market.helpers.EventResult
+import com.mkamilmistar.gold_market.utils.SharedPref
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -44,26 +45,26 @@ class PocketViewModel(
             e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
         }
       }
-    }, 3000)
+    }, 1000)
   }
 
-  fun createPocket(pocket: Pocket) {
+  fun createPocket(pocket: Pocket, customerId: Int) {
     Handler(Looper.getMainLooper()).postDelayed({
       viewModelScope.launch(Dispatchers.IO) {
         pocketRepository.addPocket(pocket)
       }
     }, 1000)
-    updateData(1)
+    updateData(customerId)
   }
 
-  fun deletePocket(position: Int) {
+  fun deletePocket(position: Int, customerId: Int) {
     Handler(Looper.getMainLooper()).postDelayed({
       viewModelScope.launch(Dispatchers.IO) {
         val delPocket = pocketCustomer.pockets[position]
         pocketRepository.deletePocket(delPocket.pocketId)
       }
     }, 1000)
-    updateData(1)
+    updateData(customerId)
   }
 
   fun getPocketById(position: Int): Pocket {

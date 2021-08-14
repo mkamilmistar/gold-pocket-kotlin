@@ -3,6 +3,7 @@ package com.mkamilmistar.gold_market.presentation.ui.register
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModelFactory
+import com.mkamilmistar.gold_market.utils.SharedPref
 import java.time.LocalDateTime
 import java.util.*
 
@@ -79,7 +81,10 @@ class RegisterFragment : Fragment(), TextWatcher {
       val lastName = lastNameText.text.toString()
       val email = emailRegisterText.text.toString()
       val pwd = pwdRegisterText.text.toString()
-      val newCustomer = Customer(0, firstName, lastName, email, "",pwd, "", "", "","")
+      val newCustomer =
+        Customer(
+          firstName = firstName, lastName = lastName,
+          email = email, username = "", password = pwd, address = "", birthDate = "", status = "", token = "")
       customerViewModel.registerCustomer(newCustomer)
     }
   }
@@ -93,11 +98,15 @@ class RegisterFragment : Fragment(), TextWatcher {
 
   private fun subscribe() {
     hideProgressBar()
+    val sharedPreferences = SharedPref(requireContext())
     binding.apply {
-      val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
+      val customerObserver: Observer<EventResult<Long>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
+            val idCustomer = event.data
+            Log.d("TOLOL", idCustomer.toString())
+            sharedPreferences.save("ID", idCustomer.toString())
             navigateToHome()
             hideProgressBar()
           }
@@ -110,7 +119,7 @@ class RegisterFragment : Fragment(), TextWatcher {
           }
         }
       }
-      customerViewModel.customerLivedata.observe(viewLifecycleOwner, customerObserver)
+      customerViewModel.successRegister.observe(viewLifecycleOwner, customerObserver)
     }
   }
 

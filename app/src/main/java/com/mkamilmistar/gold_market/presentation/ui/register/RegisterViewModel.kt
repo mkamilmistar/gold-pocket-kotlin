@@ -15,7 +15,7 @@ class RegisterViewModel(private val repository: CustomerRepository): ViewModel()
   val customerLiveData: LiveData<EventResult<Customer>>
     get() = _customerLiveData
 
-  private fun registerToRepository(customer: Customer) {
+  private fun registerToRepository(customer: Customer): Long {
     return repository.register(customer)
   }
 

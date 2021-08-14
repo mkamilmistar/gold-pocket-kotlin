@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class HomeViewModel(
-  private val purchaseRepository: PurchaseRepository,
   private val pocketRepository: PocketRepository,
   private val productRepository: ProductRepository
 ) : ViewModel() {
@@ -27,10 +26,6 @@ class HomeViewModel(
   private var _productLiveData = MutableLiveData<EventResult<Product>>(EventResult.Idle)
   val productLiveData: LiveData<EventResult<Product>>
     get() = _productLiveData
-
-  private var _isSuccess = MutableLiveData<EventResult<Boolean>>(EventResult.Idle)
-  val isSuccess: LiveData<EventResult<Boolean>>
-    get() = _isSuccess
 
   fun start(productId: Int, pocketPosition: Int) {
     updateProduct(productId)
@@ -58,7 +53,7 @@ class HomeViewModel(
           _productLiveData.postValue(e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
         }
       }
-    }, 2000)
+    }, 1000)
   }
 
   fun createProduct(product: Product) {
@@ -72,21 +67,7 @@ class HomeViewModel(
           _productLiveData.postValue(e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
         }
       }
-    }, 2000)
-  }
-
-  fun purchaseProduct(purchase: Purchase) {
-    _isSuccess.postValue(EventResult.Loading)
-    Handler(Looper.getMainLooper()).postDelayed({
-      viewModelScope.launch(Dispatchers.IO) {
-        try {
-          purchaseRepository.addPurchase(purchase)
-          _isSuccess.postValue(EventResult.Success(true))
-        } catch (e: Exception) {
-          _isSuccess.postValue(e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
-        }
-      }
-    }, 2000)
+    }, 1000)
   }
 
 }

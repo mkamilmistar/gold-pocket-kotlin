@@ -26,6 +26,7 @@ import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModelFactory
+import com.mkamilmistar.gold_market.utils.SharedPref
 
 class LoginFragment : Fragment(), TextWatcher {
 
@@ -94,16 +95,19 @@ class LoginFragment : Fragment(), TextWatcher {
   private fun subscribe() {
     hideProgressBar()
     binding.apply {
+      val sharedPreferences = SharedPref(requireContext())
       val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             val customer: Customer = event.data
+            sharedPreferences.save("ID", customer.customerId.toString())
             navToHome(customer)
             hideProgressBar()
           }
           is EventResult.Failed -> {
             val message = event.errorMessage.toString()
+
             hideProgressBar()
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
           }

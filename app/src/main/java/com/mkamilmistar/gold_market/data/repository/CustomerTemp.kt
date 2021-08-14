@@ -9,7 +9,7 @@ class CustomerTemp: CustomerRepository {
     TODO("Not yet implemented")
   }
 
-  override fun register(customer: Customer) {
+  override fun register(customer: Customer): Long {
     TODO("Not yet implemented")
   }
 

@@ -7,11 +7,10 @@ import com.mkamilmistar.gold_market.data.repository.ProductRepository
 import com.mkamilmistar.gold_market.data.repository.PurchaseRepository
 
 class HomeViewModelFactory (
-  private val purchaseRepository: PurchaseRepository,
   private val pocketRepository: PocketRepository,
   private val productRepository: ProductRepository
 ): ViewModelProvider.Factory {
   override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-    return HomeViewModel(purchaseRepository, pocketRepository, productRepository) as T
+    return HomeViewModel(pocketRepository, productRepository) as T
   }
 }

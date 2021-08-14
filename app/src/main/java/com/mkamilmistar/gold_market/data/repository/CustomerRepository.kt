@@ -6,7 +6,7 @@ import com.mkamilmistar.gold_market.data.model.request.LoginRequest
 
 interface CustomerRepository {
   fun customerLogin(loginRequest: LoginRequest): Customer
-  fun register(customer: Customer)
+  fun register(customer: Customer): Long
   fun customerPockets(customerId: Int): CustomerWithPockets
 }
 

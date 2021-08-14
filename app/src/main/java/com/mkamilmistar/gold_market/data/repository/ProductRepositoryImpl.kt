@@ -5,12 +5,13 @@ import com.mkamilmistar.gold_market.data.model.entity.Product
 
 class ProductRepositoryImpl(
   private val db: AppDatabase
-): ProductRepository {
-//  override fun findAllProduct(): List<Product> {
-//    return productDB
-//  }
-//
-//  override fun findProduct(position: Int): Product {
-//    return productDB[position]
-//  }
+) : ProductRepository {
+  override fun getProductById(productId: Int): Product {
+    return db.productDao().getProduct(productId)
+  }
+
+  override fun createProduct(product: Product): Product {
+    db.productDao().insert(product)
+    return product
+  }
 }

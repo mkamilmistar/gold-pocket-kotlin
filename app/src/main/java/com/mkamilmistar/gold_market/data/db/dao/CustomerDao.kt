@@ -5,6 +5,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.mkamilmistar.gold_market.data.model.entity.Customer
 import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
+import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPurchases
 
 @Dao
 interface CustomerDao: BaseDao<Customer> {

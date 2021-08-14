@@ -33,13 +33,12 @@ class HomeFragment : Fragment() {
 
   private lateinit var binding: FragmentHomeBinding
   private lateinit var homeViewModel: HomeViewModel
-  var product: Product =  Product(
+  var product: Product = Product(
     productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
     productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
   )
-  private var purchaseBuy: Purchase = Purchase(1, formatDate(LocalDateTime.now().toString()), 0, 0, 1.0, 1)
-
-  private var purchaseSell: Purchase = Purchase(2, formatDate(LocalDateTime.now().toString()), 1, 0, 1.0, 1)
+  private var purchaseBuy: Purchase = Purchase(1, formatDate(LocalDateTime.now().toString()), 0, 100000, 1.0, 1)
+  private var purchaseSell: Purchase = Purchase(2, formatDate(LocalDateTime.now().toString()), 1, 120000, 1.0, 1)
 
 
   override fun onCreateView(
@@ -67,11 +66,11 @@ class HomeFragment : Fragment() {
   @SuppressLint("SetTextI18n")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
+    homeViewModel.createProduct(product)
     subscribe()
-    homeViewModel.start(0, 0)
+    homeViewModel.start(1, 0)
     binding.apply {
-//      passCustomer  = arguments?.getSerializable("CUSTOMER") as Customer
-//      passCustomer  = CustomerRepositoryImpl().customerDBImport
     }
   }
 
@@ -127,17 +126,17 @@ class HomeFragment : Fragment() {
           is EventResult.Success -> {
             Log.d("HomeFragment", "Success Get Product...")
             val productData = event.data
-            product = Product(
-              productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
-              productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
-            )
-            priceBuyAmount.text = Utils.currencyFormatter(product.productPriceBuy)
-            priceSellAmount.text = Utils.currencyFormatter(product.productPriceSell)
+//            product = Product(
+//              productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
+//              productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
+//            )
+            priceBuyAmount.text = Utils.currencyFormatter(productData.productPriceBuy)
+            priceSellAmount.text = Utils.currencyFormatter(productData.productPriceSell)
 
             purchaseBuy =
-              Purchase(1, formatDate(LocalDateTime.now().toString()), 0, 0, 1.0, 1)
+              Purchase(1, formatDate(LocalDateTime.now().toString()), 0, 100000, 1.0, 1)
             purchaseSell =
-              Purchase(2, formatDate(LocalDateTime.now().toString()), 1, 0, 1.0, 1)
+              Purchase(2, formatDate(LocalDateTime.now().toString()), 1, 120000, 1.0, 1)
 
             hideProgressBar()
           }

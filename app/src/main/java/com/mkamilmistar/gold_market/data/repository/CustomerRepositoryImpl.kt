@@ -14,10 +14,19 @@ class CustomerRepositoryImpl(
 
   override fun customerLogin(loginRequest: LoginRequest): Customer {
     val data = db.customerDao().getDataLogin(loginRequest.email, loginRequest.password)
-    if (data != null) {
+    if (!data.equals(null)) {
       return data
     } else {
       throw BusinessException("Email or Password incorrect")
+    }
+  }
+
+  override fun getCustomerById(customerId: Int): Customer {
+    val data = db.customerDao().getDataCustomerById(customerId)
+    if (!data.equals(null)) {
+      return data
+    } else {
+      throw BusinessException("Data not found")
     }
   }
 

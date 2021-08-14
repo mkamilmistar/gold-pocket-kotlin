@@ -56,4 +56,19 @@ class CustomerViewModel(private val customerRepository: CustomerRepository) : Vi
       }
     }, 1000)
   }
+
+  fun getCustomerById(customerId: Int) {
+    _customerLiveData.postValue(EventResult.Loading)
+    Handler(Looper.getMainLooper()).postDelayed({
+      viewModelScope.launch(Dispatchers.IO) {
+        try {
+          val customerData = customerRepository.getCustomerById(customerId)
+          _customerLiveData.postValue(EventResult.Success(data = customerData))
+        } catch (e: Exception) {
+          _customerLiveData.postValue(
+            e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
+        }
+      }
+    }, 1000)
+  }
 }

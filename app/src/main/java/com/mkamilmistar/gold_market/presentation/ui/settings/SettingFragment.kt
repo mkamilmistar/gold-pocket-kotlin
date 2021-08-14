@@ -1,6 +1,9 @@
 package com.mkamilmistar.gold_market.presentation.ui.settings
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.entity.Customer
+import com.mkamilmistar.gold_market.data.model.entity.Purchase
 import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PurchaseRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
@@ -54,11 +58,37 @@ class SettingFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     binding.apply {
       logoutSettings.setOnClickListener {
-        findNavController().navigate(
-          R.id.loginFragment, null,
-          NavOptions.Builder().setPopUpTo(R.id.settingFragment, true).build()
-        )
+        showDialog("Are sure want to Logout?", "Click OK to Continue")
       }
     }
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    Log.d("SettingFragment", "DESTROY")
+  }
+
+  private fun showDialog(title: String, message: String) {
+    lateinit var dialog: AlertDialog
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle(title)
+    builder.setMessage(message)
+    val dialogClickListener = DialogInterface.OnClickListener { _, which ->
+      when (which) {
+        DialogInterface.BUTTON_POSITIVE -> {
+          findNavController().navigate(
+            R.id.loginFragment, null,
+            NavOptions.Builder().setPopUpTo(R.id.settingFragment, true).build()
+          )
+        }
+        DialogInterface.BUTTON_NEUTRAL -> {
+          Log.d("LOLOT", "LOLOT")
+        }
+      }
+    }
+    builder.setPositiveButton("YES", dialogClickListener)
+    builder.setNeutralButton("CANCEL", dialogClickListener)
+    dialog = builder.create()
+    dialog.show()
   }
 }

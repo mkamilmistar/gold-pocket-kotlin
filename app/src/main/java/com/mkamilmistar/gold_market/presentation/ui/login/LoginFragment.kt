@@ -102,6 +102,7 @@ class LoginFragment : Fragment(), TextWatcher {
           is EventResult.Success -> {
             val customer: Customer = event.data
             sharedPreferences.save("ID", customer.customerId.toString())
+            sharedPreferences.save("NAME", "${customer.firstName} ${customer.lastName}")
             navToHome(customer)
             hideProgressBar()
           }

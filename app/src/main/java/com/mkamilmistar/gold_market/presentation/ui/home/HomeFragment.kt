@@ -17,16 +17,21 @@ import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.*
+import com.mkamilmistar.gold_market.data.model.entity.Customer
 import com.mkamilmistar.gold_market.data.model.entity.Pocket
 import com.mkamilmistar.gold_market.data.model.entity.Product
 import com.mkamilmistar.gold_market.data.model.entity.Purchase
+import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.ProductRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PurchaseRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
+import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModel
+import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModelFactory
+import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.formatDate
 import java.time.LocalDateTime
@@ -36,6 +41,9 @@ class HomeFragment : Fragment() {
   private lateinit var binding: FragmentHomeBinding
   private lateinit var homeViewModel: HomeViewModel
   private lateinit var purchaseViewModel: PurchaseViewModel
+  private lateinit var customerViewModel: CustomerViewModel
+  private lateinit var activateCustomer: String
+
 
   var product: Product = Product(
     productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
@@ -63,16 +71,21 @@ class HomeFragment : Fragment() {
     val purchaseRepo = PurchaseRepositoryImpl(db)
     val pocketRepo = PocketRepositoryImpl(db)
     val productRepository = ProductRepositoryImpl(db)
+    val customerRepo = CustomerRepositoryImpl(db)
     homeViewModel = ViewModelProvider(this, HomeViewModelFactory(pocketRepo, productRepository)).get(
       HomeViewModel::class.java)
     purchaseViewModel = ViewModelProvider(this, PurchaseViewModelFactory(purchaseRepo)).get(PurchaseViewModel::class.java)
+    customerViewModel = ViewModelProvider(this, CustomerViewModelFactory(customerRepo)).get(CustomerViewModel::class.java)
   }
 
   @SuppressLint("SetTextI18n")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    val sharedPreferences = SharedPref(requireContext())
+    activateCustomer = sharedPreferences.retrived("ID").toString()
 
     homeViewModel.createProduct(product)
+    customerViewModel.getCustomerById(activateCustomer.toInt())
     subscribe()
     homeViewModel.start(1, 0)
     binding.apply {
@@ -131,10 +144,6 @@ class HomeFragment : Fragment() {
           is EventResult.Success -> {
             Log.d("HomeFragment", "Success Get Product...")
             val productData = event.data
-//            product = Product(
-//              productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
-//              productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
-//            )
             priceBuyAmount.text = Utils.currencyFormatter(productData.productPriceBuy)
             priceSellAmount.text = Utils.currencyFormatter(productData.productPriceSell)
 
@@ -154,8 +163,29 @@ class HomeFragment : Fragment() {
           }
         }
       }
+      val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
+        when (event) {
+          is EventResult.Loading -> showProgressBar()
+          is EventResult.Success -> {
+            Log.d("HomeFragment", "Success Get Customer...")
+            val customer = event.data
+            greetingHomeText.text = "Hi, ${customer.firstName} ${customer.lastName}"
+
+            hideProgressBar()
+          }
+          is EventResult.Failed -> {
+            val message = "Failed to get data"
+            hideProgressBar()
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+          }
+          else -> {
+          }
+        }
+      }
+
       homeViewModel.productLiveData.observe(viewLifecycleOwner, productObserver)
       homeViewModel.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
+      customerViewModel.customerLivedata.observe(viewLifecycleOwner, customerObserver)
     }
   }
 

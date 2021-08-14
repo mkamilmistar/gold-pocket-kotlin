@@ -105,7 +105,6 @@ class RegisterFragment : Fragment(), TextWatcher {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             val idCustomer = event.data
-            Log.d("TOLOL", idCustomer.toString())
             sharedPreferences.save("ID", idCustomer.toString())
             navigateToHome()
             hideProgressBar()

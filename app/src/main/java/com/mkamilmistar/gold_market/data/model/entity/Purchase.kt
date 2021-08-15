@@ -1,6 +1,5 @@
 package com.mkamilmistar.gold_market.data.model.entity
 
-import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey

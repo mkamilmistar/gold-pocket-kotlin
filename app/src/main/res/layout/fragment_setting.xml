@@ -9,7 +9,7 @@
       type="com.mkamilmistar.gold_market.presentation.ui.settings.SettingFragment" />
     <variable
       name="viewmodel"
-      type="com.mkamilmistar.gold_market.presentation.ui.settings.SettingsViewModel" />
+      type="com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModel" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -93,7 +93,6 @@
               android:layout_toEndOf="@id/profile_picture"
               android:fontFamily="@font/nunitosans_extrabold"
               android:includeFontPadding="false"
-              android:text="@{fragment.dummyUser.firstName + ` ` + fragment.dummyUser.lastName}"
               android:textColor="@color/black"
               android:textSize="18sp"
               tools:text="Name" />
@@ -107,7 +106,6 @@
               android:layout_toEndOf="@id/profile_picture"
               android:fontFamily="@font/nunitosans_light"
               android:includeFontPadding="false"
-              android:text="@{fragment.dummyUser.email}"
               android:textColor="@color/black"
               android:textSize="14sp"
               tools:text="email@gmail.com" />

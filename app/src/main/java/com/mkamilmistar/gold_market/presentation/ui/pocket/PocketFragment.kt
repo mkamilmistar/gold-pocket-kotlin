@@ -3,7 +3,6 @@ package com.mkamilmistar.gold_market.presentation.ui.pocket
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,7 @@ import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
 import com.mkamilmistar.gold_market.data.model.entity.Pocket
-import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
+import com.mkamilmistar.gold_market.data.repository.AuthRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentPocketBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
@@ -47,9 +46,8 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
 
   private fun initViewModel() {
     val db = AppDatabase.getDatabase(requireContext())
-    val customerRepo = CustomerRepositoryImpl(db)
     val pocketRepo = PocketRepositoryImpl(db)
-    pocketViewModel = ViewModelProvider(this, PocketViewModelFactory(customerRepo, pocketRepo)).get(PocketViewModel::class.java)
+    pocketViewModel = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(PocketViewModel::class.java)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -3,16 +3,13 @@ package com.mkamilmistar.gold_market.presentation.ui.register
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
@@ -20,20 +17,18 @@ import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.entity.Customer
-import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
+import com.mkamilmistar.gold_market.data.repository.AuthRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentRegisterBinding
-import com.mkamilmistar.gold_market.di.DependencyContainer
 import com.mkamilmistar.gold_market.helpers.EventResult
-import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModelFactory
+import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModel
+import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
-import java.time.LocalDateTime
 import java.util.*
 
 class RegisterFragment : Fragment(), TextWatcher {
 
   private lateinit var binding: FragmentRegisterBinding
-  private lateinit var customerViewModel: CustomerViewModel
+  private lateinit var authViewModel: AuthViewModel
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -44,14 +39,14 @@ class RegisterFragment : Fragment(), TextWatcher {
     return binding.apply {
       lifecycleOwner = this@RegisterFragment
       fragment = this@RegisterFragment
-      viewmodel = customerViewModel
+      viewmodel = authViewModel
     }.root
   }
 
   private fun initViewModel() {
     val db = AppDatabase.getDatabase(requireContext())
-    val repo = CustomerRepositoryImpl(db)
-    customerViewModel = ViewModelProvider(this, CustomerViewModelFactory(repo)).get(CustomerViewModel::class.java)
+    val authRepo = AuthRepositoryImpl(db)
+    authViewModel = ViewModelProvider(this, AuthViewModelFactory(authRepo)).get(AuthViewModel::class.java)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,7 +80,7 @@ class RegisterFragment : Fragment(), TextWatcher {
         Customer(
           firstName = firstName, lastName = lastName,
           email = email, username = "", password = pwd, address = "", birthDate = "", status = "", token = "")
-      customerViewModel.registerCustomer(newCustomer)
+      authViewModel.registerCustomer(newCustomer)
     }
   }
 
@@ -118,7 +113,7 @@ class RegisterFragment : Fragment(), TextWatcher {
           }
         }
       }
-      customerViewModel.successRegister.observe(viewLifecycleOwner, customerObserver)
+      authViewModel.successRegister.observe(viewLifecycleOwner, customerObserver)
     }
   }
 

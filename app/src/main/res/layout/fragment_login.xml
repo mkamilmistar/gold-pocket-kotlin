@@ -8,7 +8,7 @@
       type="com.mkamilmistar.gold_market.presentation.ui.login.LoginFragment" />
 
     <variable name="viewmodel"
-      type="com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModel" />
+      type="com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModel" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout

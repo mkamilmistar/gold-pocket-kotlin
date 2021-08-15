@@ -21,14 +21,11 @@ import com.mkamilmistar.gold_market.data.model.entity.Customer
 import com.mkamilmistar.gold_market.data.model.entity.Pocket
 import com.mkamilmistar.gold_market.data.model.entity.Product
 import com.mkamilmistar.gold_market.data.model.entity.Purchase
-import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
-import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
-import com.mkamilmistar.gold_market.data.repository.ProductRepositoryImpl
-import com.mkamilmistar.gold_market.data.repository.PurchaseRepositoryImpl
+import com.mkamilmistar.gold_market.data.repository.*
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
-import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModelFactory
+import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModel
+import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
@@ -41,7 +38,7 @@ class HomeFragment : Fragment() {
   private lateinit var binding: FragmentHomeBinding
   private lateinit var homeViewModel: HomeViewModel
   private lateinit var purchaseViewModel: PurchaseViewModel
-  private lateinit var customerViewModel: CustomerViewModel
+  private lateinit var profileViewModel: ProfileViewModel
   private lateinit var activateCustomer: String
 
 
@@ -71,11 +68,11 @@ class HomeFragment : Fragment() {
     val purchaseRepo = PurchaseRepositoryImpl(db)
     val pocketRepo = PocketRepositoryImpl(db)
     val productRepository = ProductRepositoryImpl(db)
-    val customerRepo = CustomerRepositoryImpl(db)
+    val profileRepo = ProfileRepositoryImpl(db)
     homeViewModel = ViewModelProvider(this, HomeViewModelFactory(pocketRepo, productRepository)).get(
       HomeViewModel::class.java)
     purchaseViewModel = ViewModelProvider(this, PurchaseViewModelFactory(purchaseRepo)).get(PurchaseViewModel::class.java)
-    customerViewModel = ViewModelProvider(this, CustomerViewModelFactory(customerRepo)).get(CustomerViewModel::class.java)
+    profileViewModel = ViewModelProvider(this, ProfileViewModelFactory(profileRepo)).get(ProfileViewModel::class.java)
   }
 
   @SuppressLint("SetTextI18n")
@@ -85,7 +82,7 @@ class HomeFragment : Fragment() {
     activateCustomer = sharedPreferences.retrived("ID").toString()
 
     homeViewModel.createProduct(product)
-    customerViewModel.getCustomerById(activateCustomer.toInt())
+    profileViewModel.getCustomerById(activateCustomer.toInt())
     subscribe()
     homeViewModel.start(1, 0)
     binding.apply {
@@ -125,8 +122,8 @@ class HomeFragment : Fragment() {
 //            pocketNameText.text = pocket.pocketName
 //            totalGramText.text = "${pocket.pocketQty} /gr"
             totalPriceText.text = Utils.currencyFormatter(totalAmount)
-            val pockets = PocketRepositoryImpl(AppDatabase.getDatabase(requireContext())).pocketDBImport
-            totalPocketsText.text = "Your total pockets: ${pockets.size}"
+//            val pockets = PocketRepositoryImpl(AppDatabase.getDatabase(requireContext())).pocketDBImport
+            totalPocketsText.text = "Your total pockets: null"
             hideProgressBar()
           }
           is EventResult.Failed -> {
@@ -163,7 +160,7 @@ class HomeFragment : Fragment() {
           }
         }
       }
-      val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
+      val profileObserver: Observer<EventResult<Customer>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
@@ -185,7 +182,7 @@ class HomeFragment : Fragment() {
 
       homeViewModel.productLiveData.observe(viewLifecycleOwner, productObserver)
       homeViewModel.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
-      customerViewModel.customerLivedata.observe(viewLifecycleOwner, customerObserver)
+      profileViewModel.customerLivedata.observe(viewLifecycleOwner, profileObserver)
     }
   }
 

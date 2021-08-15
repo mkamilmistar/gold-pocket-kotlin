@@ -8,7 +8,7 @@ import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
 import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPurchases
 
 @Dao
-interface CustomerDao : BaseDao<Customer> {
+interface AuthDao : BaseDao<Customer> {
   @Query("SELECT * FROM m_customers WHERE email = :email AND password = :password")
   fun getDataLogin(email: String, password: String): Customer
 

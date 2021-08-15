@@ -1,9 +1,20 @@
 package com.mkamilmistar.gold_market.data.repository
 
 import com.mkamilmistar.gold_market.data.db.AppDatabase
+import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
 import com.mkamilmistar.gold_market.data.model.entity.Pocket
+import com.mkamilmistar.gold_market.utils.BusinessException
 
 class PocketRepositoryImpl(private val db: AppDatabase): PocketRepository {
+
+  override fun customerPockets(customerId: Int): CustomerWithPockets {
+    val result = db.authDao().getCustomerPockets(customerId)
+    if (!result.equals(null)) {
+      return result
+    } else {
+      throw BusinessException("Gagal mendapatkan data Toket")
+    }
+  }
 
   override fun findPocketById(pocketId: Int): Pocket {
    return db.pocketDao().getPocketById(pocketId)
@@ -16,15 +27,4 @@ class PocketRepositoryImpl(private val db: AppDatabase): PocketRepository {
   override fun deletePocket(pocketId: Int) {
     db.pocketDao().deleteById(pocketId)
   }
-
-  companion object {
-    val pocketDB: MutableList<Pocket> = mutableListOf(
-      Pocket(1, "Gold Pocket", 10, 1, 1),
-      Pocket(2, "Platinum Pocket", 0, 1, 1),
-      Pocket(3, "Silver Pocket", 0, 1, 1),
-    )
-  }
-  val pocketDBImport
-    get() = pocketDB
-
 }

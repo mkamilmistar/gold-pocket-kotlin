@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,18 +19,17 @@ import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.entity.Customer
 import com.mkamilmistar.gold_market.data.model.request.LoginRequest
-import com.mkamilmistar.gold_market.data.repository.CustomerRepository
-import com.mkamilmistar.gold_market.data.repository.CustomerRepositoryImpl
+import com.mkamilmistar.gold_market.data.repository.AuthRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
-import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.customer.CustomerViewModelFactory
+import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModel
+import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 
 class LoginFragment : Fragment(), TextWatcher {
 
   private lateinit var binding: FragmentLoginBinding
-  private lateinit var customerViewModel: CustomerViewModel
+  private lateinit var authViewModel: AuthViewModel
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -42,14 +40,14 @@ class LoginFragment : Fragment(), TextWatcher {
     return binding.apply {
       lifecycleOwner = this@LoginFragment
       fragment = this@LoginFragment
-      viewmodel = customerViewModel
+      viewmodel = authViewModel
     }.root
   }
 
   private fun initViewModel() {
     val db = AppDatabase.getDatabase(requireContext())
-    val repo = CustomerRepositoryImpl(db)
-    customerViewModel = ViewModelProvider(this, CustomerViewModelFactory(repo)).get(CustomerViewModel::class.java)
+    val authRepo = AuthRepositoryImpl(db)
+    authViewModel = ViewModelProvider(this, AuthViewModelFactory(authRepo)).get(AuthViewModel::class.java)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,7 +85,7 @@ class LoginFragment : Fragment(), TextWatcher {
         loginEmail.text.toString(),
         loginPassword.text.toString()
       )
-      customerViewModel.customerLogin(login)
+      authViewModel.customerLogin(login)
     }
   }
 
@@ -116,7 +114,7 @@ class LoginFragment : Fragment(), TextWatcher {
           }
         }
       }
-      customerViewModel.customerLivedata.observe(viewLifecycleOwner, customerObserver)
+      authViewModel.customerLivedata.observe(viewLifecycleOwner, customerObserver)
     }
   }
 

@@ -8,16 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
 import com.mkamilmistar.gold_market.data.model.entity.Pocket
-import com.mkamilmistar.gold_market.data.repository.CustomerRepository
+import com.mkamilmistar.gold_market.data.repository.AuthRepository
 import com.mkamilmistar.gold_market.data.repository.PocketRepository
 import com.mkamilmistar.gold_market.helpers.EventResult
-import com.mkamilmistar.gold_market.utils.SharedPref
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class PocketViewModel(
-  private val customerRepository: CustomerRepository,
   private val pocketRepository: PocketRepository
 ) : ViewModel() {
   private var _pocketCustomerLiveData =
@@ -31,7 +29,7 @@ class PocketViewModel(
 
   private lateinit var pocketCustomer: CustomerWithPockets;
 
-  private fun getPocketRepository(customerId: Int) = customerRepository.customerPockets(customerId)
+  private fun getPocketRepository(customerId: Int) = pocketRepository.customerPockets(customerId)
 
   private fun updateData(customerId: Int) {
     _pocketCustomerLiveData.postValue(EventResult.Loading)

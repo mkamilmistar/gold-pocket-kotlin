@@ -26,13 +26,4 @@ class PurchaseRepositoryImpl(private val db: AppDatabase) : PurchaseRepository {
   override fun deletePurchase(purchaseId: Int) {
     db.purchaseDao().deleteById(purchaseId)
   }
-
-  companion object {
-    val purchaseDB: MutableList<Purchase> =
-      mutableListOf(
-        Purchase(1, "12 March 2021", 0, 120000, 1.0, 1),
-        Purchase(2, "12 March 2021", 1, 110000, 1.0, 1),
-        Purchase(3, "12 March 2021", 0, 130000, 1.0, 1),
-      )
-  }
 }

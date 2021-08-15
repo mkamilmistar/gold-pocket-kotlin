@@ -28,7 +28,6 @@ class PocketViewModel(
   private lateinit var customerPockets: CustomerWithPockets
   lateinit var pocketCustomer: Pocket
 
-
   fun start(customerId: Int) {
     pocketCustomerList(customerId)
   }

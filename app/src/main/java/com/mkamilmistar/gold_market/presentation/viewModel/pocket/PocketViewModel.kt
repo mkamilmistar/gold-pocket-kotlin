@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
 import com.mkamilmistar.gold_market.data.model.entity.Pocket
-import com.mkamilmistar.gold_market.data.repository.AuthRepository
 import com.mkamilmistar.gold_market.data.repository.PocketRepository
 import com.mkamilmistar.gold_market.helpers.EventResult
 import kotlinx.coroutines.Dispatchers
@@ -26,22 +25,38 @@ class PocketViewModel(
   private var _pocketLiveData = MutableLiveData<EventResult<Pocket>>(EventResult.Idle)
   val pocketLiveData: LiveData<EventResult<Pocket>>
     get() = _pocketLiveData
+  private lateinit var customerPockets: CustomerWithPockets
+  private lateinit var pocketCustomer: Pocket
+
 
   fun start(customerId: Int) {
-    updateData(customerId)
+    pocketCustomerList(customerId)
   }
 
-  private lateinit var pocketCustomer: CustomerWithPockets;
-
-  private fun updateData(customerId: Int) {
+  private fun pocketCustomerList(customerId: Int) {
     _pocketCustomerLiveData.postValue(EventResult.Loading)
     Handler(Looper.getMainLooper()).postDelayed({
       viewModelScope.launch(Dispatchers.IO) {
         try {
-          pocketCustomer = pocketRepository.customerPockets(customerId)
-          _pocketCustomerLiveData.postValue(EventResult.Success(pocketCustomer))
+          customerPockets = pocketRepository.customerPockets(customerId)
+          _pocketCustomerLiveData.postValue(EventResult.Success(customerPockets))
         } catch (e: Exception) {
           _pocketCustomerLiveData.postValue(
+            e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
+        }
+      }
+    }, 1000)
+  }
+
+  fun getPocketWithCustomerIdAndPocketId(customerId: Int, pocketId: Int) {
+    _pocketLiveData.postValue(EventResult.Loading)
+    Handler(Looper.getMainLooper()).postDelayed({
+      viewModelScope.launch(Dispatchers.IO) {
+        try {
+          pocketCustomer = pocketRepository.getPocketByCustomerAndPocketId(customerId, pocketId)
+          _pocketLiveData.postValue(EventResult.Success(pocketCustomer))
+        } catch (e: Exception) {
+          _pocketLiveData.postValue(
             e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
         }
       }
@@ -54,7 +69,7 @@ class PocketViewModel(
         pocketRepository.updatePocket(pocket)
       }
     }, 1000)
-    updateData(customerId)
+    pocketCustomerList(customerId)
   }
 
 
@@ -64,21 +79,21 @@ class PocketViewModel(
         pocketRepository.addPocket(pocket)
       }
     }, 1000)
-    updateData(customerId)
+    pocketCustomerList(customerId)
   }
 
   fun deletePocket(position: Int, customerId: Int) {
     Handler(Looper.getMainLooper()).postDelayed({
       viewModelScope.launch(Dispatchers.IO) {
-        val delPocket = pocketCustomer.pockets[position]
+        val delPocket = customerPockets.pockets[position]
         pocketRepository.deletePocket(delPocket.pocketId)
       }
     }, 1000)
-    updateData(customerId)
+    pocketCustomerList(customerId)
   }
 
   fun getPocketById(position: Int): Pocket {
-      return pocketCustomer.pockets[position]
+    return customerPockets.pockets[position]
   }
 
   private fun updatePocketActive(pocketPosition: Int) {

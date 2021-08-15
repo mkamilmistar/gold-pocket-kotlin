@@ -8,5 +8,6 @@ interface PocketRepository {
   fun addPocket(pocket: Pocket)
   fun deletePocket(pocketId: Int)
   fun customerPockets(customerId: Int): CustomerWithPockets
+  fun getPocketByCustomerAndPocketId(customerId: Int, pocketId: Int): Pocket
   fun updatePocket(pocket: Pocket)
 }

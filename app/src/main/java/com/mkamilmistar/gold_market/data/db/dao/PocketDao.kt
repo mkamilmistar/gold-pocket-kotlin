@@ -12,4 +12,7 @@ interface PocketDao: BaseDao<Pocket> {
 
   @Query("DELETE FROM m_pockets where pocket_id = :pocketId")
   fun deleteById(pocketId: Int)
+
+  @Query("SELECT * FROM m_pockets where customer_pocket_id = :customerId AND pocket_id = :pocketId")
+  fun getPocketByCustomerId(customerId: Int, pocketId: Int): Pocket
 }

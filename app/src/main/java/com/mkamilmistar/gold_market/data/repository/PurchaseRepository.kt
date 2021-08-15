@@ -1,6 +1,7 @@
 package com.mkamilmistar.gold_market.data.repository
 
 import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPurchases
+import com.mkamilmistar.gold_market.data.model.entity.Pocket
 import com.mkamilmistar.gold_market.data.model.entity.Purchase
 
 interface PurchaseRepository {

@@ -109,7 +109,10 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   override fun onClickItem(position: Int) {
-    Toast.makeText(context, pocketViewModel.getPocketById(position).pocketName, Toast.LENGTH_SHORT).show()
+    val sharedPref = SharedPref(requireContext())
+    val selectedPocket = pocketViewModel.getPocketById(position)
+    sharedPref.save("POCKET_ID", selectedPocket.pocketId.toString())
+    Toast.makeText(context, "${selectedPocket.pocketName} Selected", Toast.LENGTH_SHORT).show()
   }
 
   override fun deleteItem(position: Int) {

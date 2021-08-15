@@ -48,6 +48,7 @@ class HomeFragment : Fragment() {
   private lateinit var profileViewModels: ProfileViewModel
   private lateinit var pocketViewModels: PocketViewModel
   private lateinit var activateCustomer: String
+  private var activatePocket: String = "1"
   private lateinit var purchase: Purchase
   private lateinit var product: Product
   private lateinit var pocket: Pocket
@@ -80,19 +81,31 @@ class HomeFragment : Fragment() {
     pocketViewModels = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(PocketViewModel::class.java)
   }
 
+  private fun initShared() {
+    val sharedPreferences = SharedPref(requireContext())
+    activateCustomer = sharedPreferences.retrived("ID").toString()
+    sharedPreferences.retrived("POCKET_ID").toString().apply {
+      try {
+        if (!this.equals(null)) {
+          activatePocket = this
+        }
+      } catch (e: Exception) {
+        activatePocket = "1"
+      }
+    }
+  }
+
   @SuppressLint("SetTextI18n")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val sharedPreferences = SharedPref(requireContext())
-    activateCustomer = sharedPreferences.retrived("ID").toString()
-
+    initShared()
     product = Product(
       productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
       productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
     )
     productViewModels.createProduct(product)
     productViewModels.updateProduct(productId = 1)
-    pocketViewModels.start(activateCustomer.toInt())
+    pocketViewModels.getPocketWithCustomerIdAndPocketId(activateCustomer.toInt(), activatePocket.toInt())
     profileViewModels.getCustomerById(activateCustomer.toInt())
     subscribe()
     binding.apply {
@@ -128,7 +141,6 @@ class HomeFragment : Fragment() {
             Log.d("HomeFragment", "Success Get Pocket...")
             pocket = event.data
             val totalAmount = (pocket.pocketQty.toDouble() * product.productPriceSell.toDouble())
-
             pocketNameText.text = pocket.pocketName
             totalGramText.text = "${pocket.pocketQty} /gr"
             totalPriceText.text = Utils.currencyFormatter(totalAmount)
@@ -225,7 +237,7 @@ class HomeFragment : Fragment() {
         purchase = Purchase(
           purchaseDate = formatDate(LocalDateTime.now().toString()),
           purchaseType = purchaseType, price = price.toInt(), qtyInGram = qty,
-          customerPurchaseId = activateCustomer.toInt())
+          customerPurchaseId = activateCustomer.toInt(), pocketPurchaseId = activatePocket.toLong())
         val updatePocket: Pocket = pocket.copy(
           pocketQty = + qty.toInt()
         )

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "be738e5b75aae21e0fd02c211cab5051",
+    "identityHash": "c3a6d5d7e7477b7dc93f98837a244ca5",
     "entities": [
       {
         "tableName": "m_customers",
@@ -124,7 +124,7 @@
       },
       {
         "tableName": "m_purchases",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`purchase_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `purchase_date` TEXT NOT NULL, `type` INTEGER NOT NULL, `price` INTEGER NOT NULL, `qty_in_gram` REAL NOT NULL, `customer_purchase_id` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`purchase_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `purchase_date` TEXT NOT NULL, `type` INTEGER NOT NULL, `price` INTEGER NOT NULL, `qty_in_gram` REAL NOT NULL, `customer_purchase_id` INTEGER NOT NULL, `pocket_purchase_id` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "purchaseId",
@@ -159,6 +159,12 @@
           {
             "fieldPath": "customerPurchaseId",
             "columnName": "customer_purchase_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pocketPurchaseId",
+            "columnName": "pocket_purchase_id",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -238,7 +244,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'be738e5b75aae21e0fd02c211cab5051')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c3a6d5d7e7477b7dc93f98837a244ca5')"
     ]
   }
 }

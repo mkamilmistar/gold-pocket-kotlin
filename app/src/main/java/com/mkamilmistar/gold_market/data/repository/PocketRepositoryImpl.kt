@@ -16,6 +16,15 @@ class PocketRepositoryImpl(private val db: AppDatabase): PocketRepository {
     }
   }
 
+  override fun getPocketByCustomerAndPocketId(customerId: Int, pocketId: Int): Pocket {
+    val result = db.pocketDao().getPocketByCustomerId(customerId, pocketId)
+    if (!result.equals(null)) {
+      return result
+    } else {
+      throw BusinessException("Gagal mendapatkan data Toket")
+    }
+  }
+
   override fun updatePocket(pocket: Pocket) {
     db.pocketDao().update(pocket)
   }

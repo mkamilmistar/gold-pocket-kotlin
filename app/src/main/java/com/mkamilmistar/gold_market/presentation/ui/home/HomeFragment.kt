@@ -20,10 +20,7 @@ import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.*
-import com.mkamilmistar.gold_market.data.model.entity.Customer
-import com.mkamilmistar.gold_market.data.model.entity.Pocket
-import com.mkamilmistar.gold_market.data.model.entity.Product
-import com.mkamilmistar.gold_market.data.model.entity.Purchase
+import com.mkamilmistar.gold_market.data.model.entity.*
 import com.mkamilmistar.gold_market.data.repository.*
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
@@ -52,6 +49,7 @@ class HomeFragment : Fragment() {
   private lateinit var purchase: Purchase
   private lateinit var product: Product
   private lateinit var pocket: Pocket
+  private lateinit var customerPockets: CustomerWithPockets
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -84,15 +82,6 @@ class HomeFragment : Fragment() {
   private fun initShared() {
     val sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
-    sharedPreferences.retrived(Utils.POCKET_ID).toString().apply {
-      try {
-        if (!this.equals(null)) {
-          activatePocket = this
-        }
-      } catch (e: Exception) {
-        activatePocket = "1"
-      }
-    }
   }
 
   @SuppressLint("SetTextI18n")
@@ -103,9 +92,9 @@ class HomeFragment : Fragment() {
       productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
       productStatus = 1, updatedDate = "12 March 2021", createdDate = "10 March 2021"
     )
+    pocketViewModels.start(activateCustomer.toInt())
     productViewModels.createProduct(product)
 //    productViewModels.updateProduct(productId = 1)
-    pocketViewModels.getPocketWithCustomerIdAndPocketId(activateCustomer.toInt(), activatePocket.toInt())
     profileViewModels.getCustomerById(activateCustomer.toInt())
     subscribe()
     binding.apply {
@@ -145,14 +134,12 @@ class HomeFragment : Fragment() {
             totalGramText.text = "${pocket.pocketQty} /gr"
             totalPriceText.text = Utils.currencyFormatter(totalAmount)
 //            val pockets = PocketRepositoryImpl(AppDatabase.getDatabase(requireContext())).pocketDBImport
-            totalPocketsText.text = "Your total pockets: null"
             hideProgressBar()
           }
           is EventResult.Failed -> {
             pocketNameText.text = "Create pocket first"
             totalGramText.text = "0 /gr"
             totalPriceText.text = Utils.currencyFormatter(0.0)
-            totalPocketsText.text = "Your total pockets: null"
             val message = "Failed to get data"
             hideProgressBar()
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -217,9 +204,29 @@ class HomeFragment : Fragment() {
           }
         }
       }
+      val pocketListObserver: Observer<EventResult<CustomerWithPockets>> = Observer { event ->
+        when (event) {
+          is EventResult.Loading -> showProgressBar()
+          is EventResult.Success -> {
+            customerPockets = event.data
+            totalPocketsText.text = "Your total pockets: ${customerPockets.pockets.size}"
+            activatePocket = customerPockets.pockets.first().pocketId.toString()
+            pocketViewModels.getPocketWithCustomerIdAndPocketId(activateCustomer.toInt(), activatePocket.toInt())
+
+            hideProgressBar()
+          }
+          is EventResult.Failed -> {
+            hideProgressBar()
+            Toast.makeText(context, event.errorMessage.toString(), Toast.LENGTH_SHORT).show()
+          }
+          else -> {
+          }
+        }
+      }
       productViewModels.productLiveData.observe(viewLifecycleOwner, productObserver)
       profileViewModels.customerLivedata.observe(viewLifecycleOwner, profileObserver)
       pocketViewModels.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
+      pocketViewModels.pocketCustomerLiveData.observe(viewLifecycleOwner, pocketListObserver)
       purchaseViewModels.isSuccess.observe(viewLifecycleOwner, purchaseObserver)
     }
   }

@@ -211,7 +211,7 @@ class HomeFragment : Fragment() {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             customerPockets = event.data
-            totalPocketsText.text = "Your total pockets: ${customerPockets.pockets.size}"
+            totalPocketsText.text = "Your Total Pockets: ${customerPockets.pockets.size}"
             hideProgressBar()
           }
           is EventResult.Failed -> {

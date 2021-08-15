@@ -69,19 +69,21 @@ class SettingFragment : Fragment() {
 
   @SuppressLint("SetTextI18n")
   private fun subscribe() {
+    hideProgressBar()
     binding.apply {
       val profileObserver: Observer<EventResult<Customer>> = Observer { event ->
         when (event) {
-          is EventResult.Loading -> Log.d("SettingFragment", "Loading Get Customer...")
+          is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
-            Log.d("SettingFragment", "Success Get Customer...")
             val data = event.data
             profileName.text = "${data.firstName} ${data.lastName}"
             profileEmail.text = data.email
+            hideProgressBar()
           }
           is EventResult.Failed -> {
             val message = "Failed to get data"
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            hideProgressBar()
           }
           else -> {
           }
@@ -118,5 +120,13 @@ class SettingFragment : Fragment() {
     builder.setNeutralButton("CANCEL", dialogClickListener)
     dialog = builder.create()
     dialog.show()
+  }
+
+  private fun hideProgressBar() {
+    binding.progressBarSettings.visibility = View.GONE
+  }
+
+  private fun showProgressBar() {
+    binding.progressBarSettings.visibility = View.VISIBLE
   }
 }

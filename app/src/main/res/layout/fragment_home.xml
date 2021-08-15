@@ -50,7 +50,7 @@
         android:gravity="start"
         android:textColor="@color/black"
         android:textSize="32sp"
-        tools:text="Hi, Name" />
+        android:text="Hi, Name" />
 
     </LinearLayout>
 
@@ -103,7 +103,7 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="4dp"
               android:fontFamily="@font/nunitosans_semibold"
-              tools:text="PocketName"
+              android:text="PocketName"
               android:textColor="@color/black"
               android:textSize="18sp"
               app:layout_constraintStart_toStartOf="@+id/pocket_image"

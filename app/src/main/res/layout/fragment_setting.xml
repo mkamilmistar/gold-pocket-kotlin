@@ -23,10 +23,10 @@
       android:id="@+id/linearLayout3"
       android:layout_width="match_parent"
       android:layout_height="200dp"
-      android:translationY="-10dp"
       android:background="@drawable/rounded_corners"
       android:backgroundTint="@color/yellow"
       android:paddingHorizontal="40dp"
+      android:translationY="-10dp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent">
@@ -93,9 +93,9 @@
               android:layout_toEndOf="@id/profile_picture"
               android:fontFamily="@font/nunitosans_extrabold"
               android:includeFontPadding="false"
+              android:text="Name"
               android:textColor="@color/black"
-              android:textSize="18sp"
-              tools:text="Name" />
+              android:textSize="18sp" />
 
             <TextView
               android:id="@+id/profile_email"
@@ -106,9 +106,9 @@
               android:layout_toEndOf="@id/profile_picture"
               android:fontFamily="@font/nunitosans_light"
               android:includeFontPadding="false"
+              android:text="email@gmail.com"
               android:textColor="@color/black"
-              android:textSize="14sp"
-              tools:text="email@gmail.com" />
+              android:textSize="14sp" />
 
           </RelativeLayout>
 
@@ -349,6 +349,16 @@
         </com.google.android.material.card.MaterialCardView>
       </LinearLayout>
     </LinearLayout>
+
+    <ProgressBar
+      android:id="@+id/progressBarSettings"
+      android:theme="@style/progressBarYellow"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

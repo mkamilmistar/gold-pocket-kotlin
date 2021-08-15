@@ -22,23 +22,32 @@ import com.mkamilmistar.gold_market.presentation.viewModel.history.HistoryViewMo
 import com.mkamilmistar.gold_market.presentation.viewModel.history.HistoryViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModelFactory
+import com.mkamilmistar.gold_market.utils.SharedPref
+import com.mkamilmistar.gold_market.utils.Utils
 
 class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
 
   private lateinit var binding: FragmentHistoryBinding
   private lateinit var historyAdapter: HistoryAdapter
   private lateinit var historyViewModel: HistoryViewModel
+  private lateinit var activateCustomer: String
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
+    initShared()
     initViewModel()
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
     return binding.apply {
       lifecycleOwner = this@HistoryFragment
       viewmodel = historyViewModel
     }.root
+  }
+
+  private fun initShared() {
+    val sharedPreferences = SharedPref(requireContext())
+    activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
   }
 
   private fun initViewModel() {
@@ -51,7 +60,7 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     subscribe()
-    historyViewModel.start(1)
+    historyViewModel.start(activateCustomer.toInt())
     binding.apply {
       recycleViewHistory.apply {
         layoutManager = LinearLayoutManager(context)

@@ -32,7 +32,7 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
     }, 1000)
   }
 
-  private fun updateProduct(productId: Int) {
+  fun updateProduct(productId: Int) {
     _productLiveData.postValue(EventResult.Loading)
     Handler(Looper.getMainLooper()).postDelayed({
       viewModelScope.launch(Dispatchers.IO) {

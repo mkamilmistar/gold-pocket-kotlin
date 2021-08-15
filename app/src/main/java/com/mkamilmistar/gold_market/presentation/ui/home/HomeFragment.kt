@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
@@ -49,17 +48,8 @@ class HomeFragment : Fragment() {
   private lateinit var profileViewModels: ProfileViewModel
   private lateinit var pocketViewModels: PocketViewModel
   private lateinit var activateCustomer: String
-  private lateinit var purchaseBuy: Purchase
-  private lateinit var purchaseSell: Purchase
-
-
-  var product: Product = Product(
-    productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
-    productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
-  )
-//  private var purchaseBuy: Purchase = Purchase(1, formatDate(LocalDateTime.now().toString()), 0, 100000, 1.0, 1)
-//  private var purchaseSell: Purchase = Purchase(2, formatDate(LocalDateTime.now().toString()), 1, 120000, 1.0, 1)
-
+  private lateinit var purchase: Purchase
+  private lateinit var product: Product
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -95,11 +85,16 @@ class HomeFragment : Fragment() {
     val sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrived("ID").toString()
 
+    product = Product(
+      productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
+      productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
+    )
     productViewModels.createProduct(product)
+    productViewModels.updateProduct(productId = 1)
+    pocketViewModels.start(activateCustomer.toInt())
     profileViewModels.getCustomerById(activateCustomer.toInt())
     subscribe()
     binding.apply {
-
     }
   }
 
@@ -133,8 +128,8 @@ class HomeFragment : Fragment() {
             val pocket = event.data
             val totalAmount = (pocket.pocketQty.toDouble() * product.productPriceSell.toDouble())
 
-//            pocketNameText.text = pocket.pocketName
-//            totalGramText.text = "${pocket.pocketQty} /gr"
+            pocketNameText.text = pocket.pocketName
+            totalGramText.text = "${pocket.pocketQty} /gr"
             totalPriceText.text = Utils.currencyFormatter(totalAmount)
 //            val pockets = PocketRepositoryImpl(AppDatabase.getDatabase(requireContext())).pocketDBImport
             totalPocketsText.text = "Your total pockets: null"
@@ -154,15 +149,7 @@ class HomeFragment : Fragment() {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             Log.d("HomeFragment", "Success Get Product...")
-            val productData = event.data
-            priceBuyAmount.text = Utils.currencyFormatter(productData.productPriceBuy)
-            priceSellAmount.text = Utils.currencyFormatter(productData.productPriceSell)
-
-            purchaseBuy =
-              Purchase(1, formatDate(LocalDateTime.now().toString()), 0, 100000, 1.0, 1)
-            purchaseSell =
-              Purchase(2, formatDate(LocalDateTime.now().toString()), 1, 120000, 1.0, 1)
-
+            product = event.data
             hideProgressBar()
           }
           is EventResult.Failed -> {
@@ -234,11 +221,11 @@ class HomeFragment : Fragment() {
         } else {
           product.productPriceSell * qty
         }
-        purchaseBuy = Purchase(
+        purchase = Purchase(
           purchaseDate = formatDate(LocalDateTime.now().toString()),
           purchaseType = purchaseType, price = price.toInt(), qtyInGram = qty,
           customerPurchaseId = activateCustomer.toInt())
-        showDialog(title, message, purchaseBuy)
+        showDialog(title, message, purchase)
       }
       .setNegativeButton("Cancel", null)
       .create()

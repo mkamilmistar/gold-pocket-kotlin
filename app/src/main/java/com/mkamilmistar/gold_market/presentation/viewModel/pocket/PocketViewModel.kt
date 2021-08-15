@@ -27,8 +27,6 @@ class PocketViewModel(
   val pocketLiveData: LiveData<EventResult<Pocket>>
     get() = _pocketLiveData
 
-
-
   fun start(customerId: Int) {
     updateData(customerId)
 //    updatePocketActive(pocketPosition)

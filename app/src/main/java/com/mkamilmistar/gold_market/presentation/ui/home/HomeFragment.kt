@@ -187,9 +187,30 @@ class HomeFragment : Fragment() {
           }
         }
       }
+      val purchaseObserver: Observer<EventResult<Boolean>> = Observer { event ->
+        when (event) {
+          is EventResult.Loading -> showProgressBar()
+          is EventResult.Success -> {
+            val isSuccessPurchase = event.data
+            hideProgressBar()
+            if (isSuccessPurchase) {
+              Toast.makeText(context, "Purchased Success", Toast.LENGTH_SHORT).show()
+            }
+          }
+          is EventResult.Failed -> {
+            val message = "Failed to Purchase"
+            hideProgressBar()
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+          }
+          else -> {
+          }
+        }
+      }
+
       productViewModels.productLiveData.observe(viewLifecycleOwner, productObserver)
       profileViewModels.customerLivedata.observe(viewLifecycleOwner, profileObserver)
       pocketViewModels.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
+      purchaseViewModels.isSuccess.observe(viewLifecycleOwner, purchaseObserver)
     }
   }
 

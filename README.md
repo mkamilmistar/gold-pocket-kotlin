@@ -1,8 +1,7 @@
 # Gold Market (Android Kotlin Project)
 
-## Login
-* Email : melia@gmail.com
-* Password : melia123
+## How to Use
+* REGISTER FIRST TO LOGIN
 
 ## Screenshot
 <p align="center">

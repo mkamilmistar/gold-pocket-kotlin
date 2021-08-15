@@ -50,6 +50,7 @@ class HomeFragment : Fragment() {
   private lateinit var activateCustomer: String
   private lateinit var purchase: Purchase
   private lateinit var product: Product
+  private lateinit var pocket: Pocket
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -125,7 +126,7 @@ class HomeFragment : Fragment() {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             Log.d("HomeFragment", "Success Get Pocket...")
-            val pocket = event.data
+            pocket = event.data
             val totalAmount = (pocket.pocketQty.toDouble() * product.productPriceSell.toDouble())
 
             pocketNameText.text = pocket.pocketName
@@ -225,6 +226,10 @@ class HomeFragment : Fragment() {
           purchaseDate = formatDate(LocalDateTime.now().toString()),
           purchaseType = purchaseType, price = price.toInt(), qtyInGram = qty,
           customerPurchaseId = activateCustomer.toInt())
+        val updatePocket: Pocket = pocket.copy(
+          pocketQty = + qty.toInt()
+        )
+        pocketViewModels.updatePocket(updatePocket, activateCustomer.toInt())
         showDialog(title, message, purchase)
       }
       .setNegativeButton("Cancel", null)

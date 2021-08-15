@@ -29,19 +29,16 @@ class PocketViewModel(
 
   fun start(customerId: Int) {
     updateData(customerId)
-//    updatePocketActive(pocketPosition)
   }
 
   private lateinit var pocketCustomer: CustomerWithPockets;
-
-  private fun getPocketRepository(customerId: Int) = pocketRepository.customerPockets(customerId)
 
   private fun updateData(customerId: Int) {
     _pocketCustomerLiveData.postValue(EventResult.Loading)
     Handler(Looper.getMainLooper()).postDelayed({
       viewModelScope.launch(Dispatchers.IO) {
         try {
-          pocketCustomer = getPocketRepository(customerId)
+          pocketCustomer = pocketRepository.customerPockets(customerId)
           _pocketCustomerLiveData.postValue(EventResult.Success(pocketCustomer))
         } catch (e: Exception) {
           _pocketCustomerLiveData.postValue(
@@ -50,6 +47,16 @@ class PocketViewModel(
       }
     }, 1000)
   }
+
+  fun updatePocket(pocket: Pocket, customerId: Int) {
+    Handler(Looper.getMainLooper()).postDelayed({
+      viewModelScope.launch(Dispatchers.IO) {
+        pocketRepository.updatePocket(pocket)
+      }
+    }, 1000)
+    updateData(customerId)
+  }
+
 
   fun createPocket(pocket: Pocket, customerId: Int) {
     Handler(Looper.getMainLooper()).postDelayed({

@@ -16,6 +16,10 @@ class PocketRepositoryImpl(private val db: AppDatabase): PocketRepository {
     }
   }
 
+  override fun updatePocket(pocket: Pocket) {
+    db.pocketDao().update(pocket)
+  }
+
   override fun findPocketById(pocketId: Int): Pocket {
    return db.pocketDao().getPocketById(pocketId)
   }

@@ -103,7 +103,6 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="4dp"
               android:fontFamily="@font/nunitosans_semibold"
-              android:text="@{pocketViewModel.pocketLiveData.toData().pocketName}"
               tools:text="PocketName"
               android:textColor="@color/black"
               android:textSize="18sp"

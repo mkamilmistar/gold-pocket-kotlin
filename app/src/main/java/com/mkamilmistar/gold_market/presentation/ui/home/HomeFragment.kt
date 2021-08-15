@@ -149,6 +149,10 @@ class HomeFragment : Fragment() {
             hideProgressBar()
           }
           is EventResult.Failed -> {
+            pocketNameText.text = "Create pocket first"
+            totalGramText.text = "0 /gr"
+            totalPriceText.text = Utils.currencyFormatter(0.0)
+            totalPocketsText.text = "Your total pockets: null"
             val message = "Failed to get data"
             hideProgressBar()
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

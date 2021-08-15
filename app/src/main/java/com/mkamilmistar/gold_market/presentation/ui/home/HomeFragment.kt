@@ -82,6 +82,7 @@ class HomeFragment : Fragment() {
   private fun initShared() {
     val sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
+    activatePocket = sharedPreferences.retrived(Utils.POCKET_ID).toString()
   }
 
   @SuppressLint("SetTextI18n")
@@ -94,6 +95,7 @@ class HomeFragment : Fragment() {
     )
     pocketViewModels.start(activateCustomer.toInt())
     productViewModels.createProduct(product)
+    pocketViewModels.getPocketWithCustomerIdAndPocketId(activateCustomer.toInt(), activatePocket.toInt())
 //    productViewModels.updateProduct(productId = 1)
     profileViewModels.getCustomerById(activateCustomer.toInt())
     subscribe()
@@ -210,9 +212,6 @@ class HomeFragment : Fragment() {
           is EventResult.Success -> {
             customerPockets = event.data
             totalPocketsText.text = "Your total pockets: ${customerPockets.pockets.size}"
-            activatePocket = customerPockets.pockets.first().pocketId.toString()
-            pocketViewModels.getPocketWithCustomerIdAndPocketId(activateCustomer.toInt(), activatePocket.toInt())
-
             hideProgressBar()
           }
           is EventResult.Failed -> {

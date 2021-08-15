@@ -18,12 +18,16 @@ import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.entity.Customer
+import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
 import com.mkamilmistar.gold_market.data.model.request.LoginRequest
 import com.mkamilmistar.gold_market.data.repository.AuthRepositoryImpl
+import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModelFactory
+import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel
+import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
 
@@ -31,6 +35,7 @@ class LoginFragment : Fragment(), TextWatcher {
 
   private lateinit var binding: FragmentLoginBinding
   private lateinit var authViewModel: AuthViewModel
+  private lateinit var pocketViewModels: PocketViewModel
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -42,13 +47,17 @@ class LoginFragment : Fragment(), TextWatcher {
       lifecycleOwner = this@LoginFragment
       fragment = this@LoginFragment
       viewmodel = authViewModel
+      pocketVM = pocketViewModels
     }.root
   }
 
   private fun initViewModel() {
     val db = AppDatabase.getDatabase(requireContext())
     val authRepo = AuthRepositoryImpl(db)
+    val pocketRepo = PocketRepositoryImpl(db)
     authViewModel = ViewModelProvider(this, AuthViewModelFactory(authRepo)).get(AuthViewModel::class.java)
+    pocketViewModels = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(
+      PocketViewModel::class.java)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,8 +76,7 @@ class LoginFragment : Fragment(), TextWatcher {
     }
   }
 
-  private fun navToHome(customer: Customer) {
-//    val bundle = bundleOf("CUSTOMER" to customer)
+  private fun navToHome() {
     findNavController().navigate(
       R.id.homeFragment, null,
       NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
@@ -94,15 +102,15 @@ class LoginFragment : Fragment(), TextWatcher {
   private fun subscribe() {
     hideProgressBar()
     binding.apply {
-      val sharedPreferences = SharedPref(requireContext())
       val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
         when (event) {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             val customer: Customer = event.data
+            val sharedPreferences = SharedPref(requireContext())
             sharedPreferences.save(Utils.CUSTOMER_ID, customer.customerId.toString())
-            sharedPreferences.save(Utils.POCKET_ID, "0")
-            navToHome(customer)
+            pocketViewModels.start(customer.customerId)
+            subscribePocket()
             hideProgressBar()
           }
           is EventResult.Failed -> {
@@ -116,6 +124,31 @@ class LoginFragment : Fragment(), TextWatcher {
         }
       }
       authViewModel.customerLivedata.observe(viewLifecycleOwner, customerObserver)
+    }
+  }
+
+  private fun subscribePocket() {
+    hideProgressBar()
+    binding.apply {
+      val pocketListObserver: Observer<EventResult<CustomerWithPockets>> = Observer { event ->
+        when (event) {
+          is EventResult.Loading -> showProgressBar()
+          is EventResult.Success -> {
+            val customerPockets = event.data
+            val sharedPreferences = SharedPref(requireContext())
+            sharedPreferences.save(Utils.POCKET_ID,customerPockets.pockets.first().pocketId.toString())
+            navToHome()
+            hideProgressBar()
+          }
+          is EventResult.Failed -> {
+            hideProgressBar()
+            Toast.makeText(context, event.errorMessage.toString(), Toast.LENGTH_SHORT).show()
+          }
+          else -> {
+          }
+        }
+      }
+      pocketViewModels.pocketCustomerLiveData.observe(viewLifecycleOwner, pocketListObserver)
     }
   }
 

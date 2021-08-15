@@ -75,7 +75,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
           .setView(inputEditTextField)
           .setPositiveButton("Create Pocket") { _, _ ->
             val editTextInput = inputEditTextField.text.toString()
-            val newPocket = Pocket(pocketName = editTextInput, pocketQty = 0, customerPocketId = activateCustomer.toInt(), productPocketId = 1)
+            val newPocket = Pocket(pocketName = editTextInput, pocketQty = 0, customerPocketId = activateCustomer.toLong(), productPocketId = 1)
             pocketViewModel.createPocket(newPocket, activateCustomer.toInt())
           }
           .setNegativeButton("Cancel", null)
@@ -120,7 +120,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   override fun editItem(position: Int) {
-    Toast.makeText(context, pocketViewModel.getPocketById(position).customerPocketId, Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, pocketViewModel.getPocketById(position).customerPocketId.toString(), Toast.LENGTH_SHORT).show()
   }
 
   private fun showDialog(title: String, message: String, position: Int) {

@@ -16,11 +16,11 @@ data class Pocket(
   val pocketName: String,
 
   @ColumnInfo(name = "qty")
-  @Nullable val pocketQty: Int,
+  @Nullable var pocketQty: Int,
 
   @ColumnInfo(name = "customer_pocket_id")
-  val customerPocketId: Int,
+  val customerPocketId: Long,
 
   @ColumnInfo(name = "product_pocket_id")
-  val productPocketId: Int
+  val productPocketId: Long
 )

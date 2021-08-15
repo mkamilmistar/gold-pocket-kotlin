@@ -23,7 +23,7 @@ data class Purchase(
   val qtyInGram: Double,
 
   @ColumnInfo(name = "customer_purchase_id")
-  val customerPurchaseId: Int,
+  val customerPurchaseId: Long,
 
   @ColumnInfo(name = "pocket_purchase_id")
   val pocketPurchaseId: Long

@@ -200,6 +200,7 @@ class HomeFragment : Fragment() {
             val isSuccessPurchase = event.data
             hideProgressBar()
             if (isSuccessPurchase) {
+              pocketViewModels.getPocketWithCustomerIdAndPocketId(activateCustomer.toInt(), activatePocket.toInt())
               Toast.makeText(context, "Purchased Success", Toast.LENGTH_SHORT).show()
             }
           }
@@ -229,18 +230,18 @@ class HomeFragment : Fragment() {
       .setView(inputQty)
       .setPositiveButton("Purchase") { _, _ ->
         val qty: Double = inputQty.text.toString().toDouble()
+        val updatePocket: Pocket = pocketViewModels.pocketCustomer.copy()
         val price = if (purchaseType == 0) {
+          updatePocket.pocketQty += qty.toInt()
           product.productPriceBuy * qty
         } else {
+          updatePocket.pocketQty -= qty.toInt()
           product.productPriceSell * qty
         }
         purchase = Purchase(
           purchaseDate = formatDate(LocalDateTime.now().toString()),
           purchaseType = purchaseType, price = price.toInt(), qtyInGram = qty,
-          customerPurchaseId = activateCustomer.toInt(), pocketPurchaseId = activatePocket.toLong())
-        val updatePocket: Pocket = pocket.copy(
-          pocketQty = + qty.toInt()
-        )
+          customerPurchaseId = activateCustomer.toLong(), pocketPurchaseId = activatePocket.toLong())
         pocketViewModels.updatePocket(updatePocket, activateCustomer.toInt())
         showDialog(title, message, purchase)
       }

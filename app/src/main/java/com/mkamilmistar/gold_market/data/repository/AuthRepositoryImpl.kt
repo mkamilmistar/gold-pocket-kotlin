@@ -3,6 +3,7 @@ package com.mkamilmistar.gold_market.data.repository
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.entity.Customer
 import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
+import com.mkamilmistar.gold_market.data.model.entity.Pocket
 import com.mkamilmistar.gold_market.data.model.request.LoginRequest
 import com.mkamilmistar.gold_market.utils.BusinessException
 
@@ -20,7 +21,15 @@ class AuthRepositoryImpl(
     }
   }
 
-  override fun register(customer: Customer): Long {
-    return db.authDao().insert(customer)
+  override fun register(customer: Customer, pocket: Pocket): Long {
+    val newCustomer = db.authDao().insert(customer)
+    with(db) {
+      runInTransaction {
+        val newPocket = pocket.copy(customerPocketId = newCustomer)
+        pocketDao().insert(newPocket)
+      }
+    }
+    return newCustomer
   }
+
 }

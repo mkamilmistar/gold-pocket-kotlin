@@ -23,6 +23,7 @@ import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
+import com.mkamilmistar.gold_market.utils.Utils
 import java.util.*
 
 class RegisterFragment : Fragment(), TextWatcher {
@@ -100,7 +101,8 @@ class RegisterFragment : Fragment(), TextWatcher {
           is EventResult.Loading -> showProgressBar()
           is EventResult.Success -> {
             val idCustomer = event.data
-            sharedPreferences.save("ID", idCustomer.toString())
+            sharedPreferences.save(Utils.CUSTOMER_ID, idCustomer.toString())
+            sharedPreferences.save(Utils.POCKET_ID, "1")
             navigateToHome()
             hideProgressBar()
           }

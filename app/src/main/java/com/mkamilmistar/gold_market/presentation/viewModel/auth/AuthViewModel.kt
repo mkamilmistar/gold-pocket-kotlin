@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mkamilmistar.gold_market.data.model.entity.Customer
+import com.mkamilmistar.gold_market.data.model.entity.Pocket
 import com.mkamilmistar.gold_market.data.model.request.LoginRequest
 import com.mkamilmistar.gold_market.data.repository.AuthRepository
 import com.mkamilmistar.gold_market.data.repository.ProfileRepository
@@ -45,11 +46,15 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
   }
 
   fun registerCustomer(customer: Customer) {
+    val commonPocket = Pocket(
+      pocketName = "Tabungan Hari Tua",
+      productPocketId = 1
+    )
     _successRegister.postValue(EventResult.Loading)
     Handler(Looper.getMainLooper()).postDelayed({
       viewModelScope.launch(Dispatchers.IO) {
         try {
-          val id = authRepository.register(customer)
+          val id = authRepository.register(customer, commonPocket)
           _successRegister.postValue(EventResult.Success(data = id))
         } catch (e: Exception) {
           _successRegister.postValue(

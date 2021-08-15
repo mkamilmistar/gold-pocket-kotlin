@@ -83,8 +83,8 @@ class HomeFragment : Fragment() {
 
   private fun initShared() {
     val sharedPreferences = SharedPref(requireContext())
-    activateCustomer = sharedPreferences.retrived("ID").toString()
-    sharedPreferences.retrived("POCKET_ID").toString().apply {
+    activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
+    sharedPreferences.retrived(Utils.POCKET_ID).toString().apply {
       try {
         if (!this.equals(null)) {
           activatePocket = this
@@ -101,10 +101,10 @@ class HomeFragment : Fragment() {
     initShared()
     product = Product(
       productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
-      productStatus = 1, updatedDate = "12 Maret 2021", createdDate = "10 Maret 2021"
+      productStatus = 1, updatedDate = "12 March 2021", createdDate = "10 March 2021"
     )
     productViewModels.createProduct(product)
-    productViewModels.updateProduct(productId = 1)
+//    productViewModels.updateProduct(productId = 1)
     pocketViewModels.getPocketWithCustomerIdAndPocketId(activateCustomer.toInt(), activatePocket.toInt())
     profileViewModels.getCustomerById(activateCustomer.toInt())
     subscribe()

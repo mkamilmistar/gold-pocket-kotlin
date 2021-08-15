@@ -24,6 +24,7 @@ import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
+import com.mkamilmistar.gold_market.utils.Utils
 
 class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
 
@@ -111,7 +112,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   override fun onClickItem(position: Int) {
     val sharedPref = SharedPref(requireContext())
     val selectedPocket = pocketViewModel.getPocketById(position)
-    sharedPref.save("POCKET_ID", selectedPocket.pocketId.toString())
+    sharedPref.save(Utils.POCKET_ID, selectedPocket.pocketId.toString())
     Toast.makeText(context, "${selectedPocket.pocketName} Selected", Toast.LENGTH_SHORT).show()
   }
 

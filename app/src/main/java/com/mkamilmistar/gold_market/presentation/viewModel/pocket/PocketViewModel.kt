@@ -23,8 +23,15 @@ class PocketViewModel(
   val pocketCustomerLiveData: LiveData<EventResult<CustomerWithPockets>>
     get() = _pocketCustomerLiveData
 
+  private var _pocketLiveData = MutableLiveData<EventResult<Pocket>>(EventResult.Idle)
+  val pocketLiveData: LiveData<EventResult<Pocket>>
+    get() = _pocketLiveData
+
+
+
   fun start(customerId: Int) {
     updateData(customerId)
+//    updatePocketActive(pocketPosition)
   }
 
   private lateinit var pocketCustomer: CustomerWithPockets;
@@ -67,6 +74,16 @@ class PocketViewModel(
 
   fun getPocketById(position: Int): Pocket {
       return pocketCustomer.pockets[position]
+  }
+
+  private fun updatePocketActive(pocketPosition: Int) {
+    _pocketLiveData.value = EventResult.Loading
+    try {
+//      val pocketById: Pocket = pocketRepository.findPocket(pocketPosition)
+      _pocketLiveData.value = EventResult.Success(Pocket(1, "", 0, 1, 1))
+    } catch (e: Exception) {
+      _pocketLiveData.value = e.localizedMessage?.toString()?.let { EventResult.Failed(it) }
+    }
   }
 
 }

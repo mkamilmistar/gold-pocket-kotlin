@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
@@ -24,6 +25,10 @@ import com.mkamilmistar.gold_market.data.model.entity.Purchase
 import com.mkamilmistar.gold_market.data.repository.*
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
+import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel
+import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
+import com.mkamilmistar.gold_market.presentation.viewModel.product.ProductViewModel
+import com.mkamilmistar.gold_market.presentation.viewModel.product.ProductViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModel
@@ -36,9 +41,10 @@ import java.time.LocalDateTime
 class HomeFragment : Fragment() {
 
   private lateinit var binding: FragmentHomeBinding
-  private lateinit var homeViewModel: HomeViewModel
-  private lateinit var purchaseViewModel: PurchaseViewModel
-  private lateinit var profileViewModel: ProfileViewModel
+  private lateinit var purchaseViewModels: PurchaseViewModel
+  private lateinit var productViewModels: ProductViewModel
+  private lateinit var profileViewModels: ProfileViewModel
+  private lateinit var pocketViewModels: PocketViewModel
   private lateinit var activateCustomer: String
 
 
@@ -58,8 +64,11 @@ class HomeFragment : Fragment() {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
     return binding.apply {
       lifecycleOwner = this@HomeFragment
-      viewmodel = homeViewModel
       fragment = this@HomeFragment
+      pocketViewModel = pocketViewModels
+      productViewModel = productViewModels
+      profileViewModel = profileViewModels
+      purchaseViewModel = purchaseViewModels
     }.root
   }
 
@@ -69,10 +78,10 @@ class HomeFragment : Fragment() {
     val pocketRepo = PocketRepositoryImpl(db)
     val productRepository = ProductRepositoryImpl(db)
     val profileRepo = ProfileRepositoryImpl(db)
-    homeViewModel = ViewModelProvider(this, HomeViewModelFactory(pocketRepo, productRepository)).get(
-      HomeViewModel::class.java)
-    purchaseViewModel = ViewModelProvider(this, PurchaseViewModelFactory(purchaseRepo)).get(PurchaseViewModel::class.java)
-    profileViewModel = ViewModelProvider(this, ProfileViewModelFactory(profileRepo)).get(ProfileViewModel::class.java)
+    productViewModels = ViewModelProvider(this, ProductViewModelFactory(productRepository)).get(ProductViewModel::class.java)
+    purchaseViewModels = ViewModelProvider(this, PurchaseViewModelFactory(purchaseRepo)).get(PurchaseViewModel::class.java)
+    profileViewModels = ViewModelProvider(this, ProfileViewModelFactory(profileRepo)).get(ProfileViewModel::class.java)
+    pocketViewModels = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(PocketViewModel::class.java)
   }
 
   @SuppressLint("SetTextI18n")
@@ -81,10 +90,9 @@ class HomeFragment : Fragment() {
     val sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrived("ID").toString()
 
-    homeViewModel.createProduct(product)
-    profileViewModel.getCustomerById(activateCustomer.toInt())
+    productViewModels.createProduct(product)
+    profileViewModels.getCustomerById(activateCustomer.toInt())
     subscribe()
-    homeViewModel.start(1, 0)
     binding.apply {
     }
   }
@@ -179,10 +187,9 @@ class HomeFragment : Fragment() {
           }
         }
       }
-
-      homeViewModel.productLiveData.observe(viewLifecycleOwner, productObserver)
-      homeViewModel.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
-      profileViewModel.customerLivedata.observe(viewLifecycleOwner, profileObserver)
+      productViewModels.productLiveData.observe(viewLifecycleOwner, productObserver)
+      profileViewModels.customerLivedata.observe(viewLifecycleOwner, profileObserver)
+      pocketViewModels.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
     }
   }
 
@@ -194,7 +201,7 @@ class HomeFragment : Fragment() {
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> {
-          purchaseViewModel.purchaseProduct(purchase)
+          purchaseViewModels.purchaseProduct(purchase)
         }
         DialogInterface.BUTTON_NEUTRAL -> {
         }

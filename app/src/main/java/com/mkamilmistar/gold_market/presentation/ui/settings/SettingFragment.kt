@@ -24,6 +24,7 @@ import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
+import com.mkamilmistar.gold_market.utils.Utils
 import java.util.*
 
 class SettingFragment : Fragment() {
@@ -38,7 +39,7 @@ class SettingFragment : Fragment() {
   ): View {
     initViewModel()
     val sharedPreferences = SharedPref(requireContext())
-    activateCustomer = sharedPreferences.retrived("ID").toString()
+    activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false)
     return binding.apply {

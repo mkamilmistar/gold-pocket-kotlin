@@ -55,7 +55,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     super.onViewCreated(view, savedInstanceState)
     subscribe()
     val sharedPreferences = SharedPref(requireContext())
-    activateCustomer = sharedPreferences.retrived("ID").toString()
+    activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
     if (!activateCustomer.equals(null)) {
       pocketViewModel.start(activateCustomer.toInt())
     } else {

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,8 @@ import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.entity.Customer
 import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
 import com.mkamilmistar.gold_market.data.model.request.LoginRequest
+import com.mkamilmistar.gold_market.data.model.response.LoginResponse
+import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.AuthRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
@@ -30,6 +33,7 @@ import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewMode
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
 
 class LoginFragment : Fragment(), TextWatcher {
 
@@ -52,8 +56,10 @@ class LoginFragment : Fragment(), TextWatcher {
   }
 
   private fun initViewModel() {
+    val authRetrofit = RetrofitInstance.authApi
+    val authRepo = AuthRepositoryImpl(authRetrofit)
+
     val db = AppDatabase.getDatabase(requireContext())
-    val authRepo = AuthRepositoryImpl(db)
     val pocketRepo = PocketRepositoryImpl(db)
     authViewModel = ViewModelProvider(this, AuthViewModelFactory(authRepo)).get(AuthViewModel::class.java)
     pocketViewModels = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(
@@ -101,30 +107,19 @@ class LoginFragment : Fragment(), TextWatcher {
   @SuppressLint("SetTextI18n")
   private fun subscribe() {
     hideProgressBar()
-    binding.apply {
-      val customerObserver: Observer<EventResult<Customer>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> showProgressBar()
-          is EventResult.Success -> {
-            val customer: Customer = event.data
-            val sharedPreferences = SharedPref(requireContext())
-            sharedPreferences.save(Utils.CUSTOMER_ID, customer.customerId.toString())
-            pocketViewModels.start(customer.customerId)
-            subscribePocket()
-            hideProgressBar()
-          }
-          is EventResult.Failed -> {
-            val message = event.errorMessage.toString()
-
-            hideProgressBar()
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-          }
-          else -> {
-          }
+    authViewModel.customerLivedata.observe(viewLifecycleOwner, {
+      when (it.status) {
+        ResourceStatus.LOADING -> showProgressBar()
+        ResourceStatus.SUCCESS -> {
+          Log.d("AuthApi", "Subscribe : ${it.data}")
+          hideProgressBar()
+        }
+        ResourceStatus.ERROR -> {
+          Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+          hideProgressBar()
         }
       }
-      authViewModel.customerLivedata.observe(viewLifecycleOwner, customerObserver)
-    }
+    })
   }
 
   private fun subscribePocket() {

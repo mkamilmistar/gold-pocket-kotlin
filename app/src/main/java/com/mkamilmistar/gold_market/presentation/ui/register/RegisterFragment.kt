@@ -3,6 +3,7 @@ package com.mkamilmistar.gold_market.presentation.ui.register
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,8 @@ import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.entity.Customer
 import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
+import com.mkamilmistar.gold_market.data.model.request.RegisterRequest
+import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.AuthRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentRegisterBinding
@@ -28,6 +31,7 @@ import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewMode
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
 import java.util.*
 
 class RegisterFragment : Fragment(), TextWatcher {
@@ -52,7 +56,8 @@ class RegisterFragment : Fragment(), TextWatcher {
 
   private fun initViewModel() {
     val db = AppDatabase.getDatabase(requireContext())
-    val authRepo = AuthRepositoryImpl(db)
+    val authRetrofit = RetrofitInstance.authApi
+    val authRepo = AuthRepositoryImpl(authRetrofit)
     val pocketRepo = PocketRepositoryImpl(db)
     authViewModel = ViewModelProvider(this, AuthViewModelFactory(authRepo)).get(AuthViewModel::class.java)
     pocketViewModels = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(
@@ -87,9 +92,9 @@ class RegisterFragment : Fragment(), TextWatcher {
       val email = emailRegisterText.text.toString()
       val pwd = pwdRegisterText.text.toString()
       val newCustomer =
-        Customer(
+        RegisterRequest(
           firstName = firstName, lastName = lastName,
-          email = email, username = "", password = pwd, address = "", birthDate = "", status = "", token = "")
+          email = email, username = "", password = pwd, address = "", birthDate = "", status = "")
       authViewModel.registerCustomer(newCustomer)
     }
   }
@@ -105,26 +110,19 @@ class RegisterFragment : Fragment(), TextWatcher {
     hideProgressBar()
     val sharedPreferences = SharedPref(requireContext())
     binding.apply {
-      val customerObserver: Observer<EventResult<Long>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> showProgressBar()
-          is EventResult.Success -> {
-            val idCustomer = event.data
-            sharedPreferences.save(Utils.CUSTOMER_ID, idCustomer.toString())
-            pocketViewModels.start(idCustomer.toInt())
-            subscribePocket()
+      authViewModel.successRegister.observe(viewLifecycleOwner, {
+        when (it.status) {
+          ResourceStatus.LOADING -> showProgressBar()
+          ResourceStatus.SUCCESS -> {
+            Log.d("AuthApi", "Register Success : ${it.data}")
             hideProgressBar()
           }
-          is EventResult.Failed -> {
-            val message = event.errorMessage.toString()
+          ResourceStatus.ERROR -> {
+            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
             hideProgressBar()
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-          }
-          else -> {
           }
         }
-      }
-      authViewModel.successRegister.observe(viewLifecycleOwner, customerObserver)
+      })
     }
   }
 

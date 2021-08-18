@@ -12,6 +12,9 @@ object AppDependencies {
   const val navigationAndroid = "androidx.navigation:navigation-ui-ktx:${Versions.navigation_android_version}"
   const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines_version}"
   const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.livecycleViewModel_version}"
+  const val lifecycleLiveData = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.livecycleLiveData_version}"
   const val room = "androidx.room:room-runtime:${Versions.room_version}"
   const val roomCompiler = "androidx.room:room-compiler:${Versions.roomCompiler_version}"
+  const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit_version}"
+  const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.moshi_version}"
 }

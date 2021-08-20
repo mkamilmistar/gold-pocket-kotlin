@@ -22,7 +22,6 @@ import com.mkamilmistar.gold_market.data.model.*
 import com.mkamilmistar.gold_market.data.model.request.PocketRequest
 import com.mkamilmistar.gold_market.data.model.request.PurchaseDetailRequest
 import com.mkamilmistar.gold_market.data.model.request.PurchaseRequest
-import com.mkamilmistar.gold_market.data.model.request.UpdatePocketRequest
 import com.mkamilmistar.gold_market.data.model.response.*
 import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.*
@@ -49,8 +48,8 @@ class HomeFragment : Fragment() {
   private lateinit var activateCustomer: String
   private var activatePocket: String = "1"
   private lateinit var purchase: PurchaseRequest
-  private lateinit var purchaseDetailRequest: PurchaseDetailRequest
-  private lateinit var pocketReqest: PocketRequest
+  private lateinit var purchaseDetail: PurchaseDetailRequest
+  private lateinit var pocketRequest: PocketRequest
   private lateinit var product: Product
   private lateinit var pocket: Pocket
   private lateinit var customer: Customer
@@ -184,10 +183,10 @@ class HomeFragment : Fragment() {
           ResourceStatus.LOADING -> showProgressBar()
           ResourceStatus.SUCCESS -> {
             Log.d("ProductApi", "Subscribe : ${it.data}")
-            val productData = it.data
-            if (productData != null) {
-              priceBuyAmount.text = Utils.currencyFormatter(productData.productPriceBuy)
-              priceSellAmount.text = Utils.currencyFormatter(productData.productPriceSell)
+            if (it.data != null) {
+              product = it.data
+              priceBuyAmount.text = Utils.currencyFormatter(product.productPriceBuy)
+              priceSellAmount.text = Utils.currencyFormatter(product.productPriceSell)
             }
             hideProgressBar()
           }
@@ -202,11 +201,10 @@ class HomeFragment : Fragment() {
           ResourceStatus.LOADING -> showProgressBar()
           ResourceStatus.SUCCESS -> {
             Log.d("ProfileApi", "Subscribe : ${it.data}")
-            val customer = it.data
-            if (customer != null) {
+            if (it.data != null) {
+              customer = it.data
               greetingHomeText.text = "Hi, ${customer.firstName} ${customer.lastName}"
             }
-
             hideProgressBar()
           }
           ResourceStatus.ERROR -> {
@@ -221,18 +219,18 @@ class HomeFragment : Fragment() {
           ResourceStatus.LOADING -> showProgressBar()
           ResourceStatus.SUCCESS -> {
             Log.d("PocketApi", "Subscribe : ${it.data}")
-            val purchase = it.data
-            if (purchase != null) {
-              pocketViewModels.getPocketCustomerById(activatePocket)
-              Toast.makeText(context, "Purchased Success", Toast.LENGTH_SHORT).show()
+            val purchaseResponse = it.data
+            if (purchaseResponse != null) {
+              if (purchaseResponse.isSuccess) {
+                pocketViewModels.getPocketCustomerById(activatePocket)
+                Toast.makeText(context, "Purchased Success", Toast.LENGTH_SHORT).show()
+                hideProgressBar()
+              }
             }
-
-            hideProgressBar()
           }
           ResourceStatus.ERROR -> {
             val message = "Failed to Purchase"
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
-              .show()
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             hideProgressBar()
           }
         }
@@ -266,35 +264,28 @@ class HomeFragment : Fragment() {
       .setMessage("Input Quantity")
       .setView(inputQty)
       .setPositiveButton("Purchase") { _, _ ->
-        val qty: Int = inputQty.text.toString().toInt()
-//        val updatePocket: Pocket =
-//          pocketViewModels.pocketCustomer.copy()
-//        val price = if (purchaseType == 0) {
-//          updatePocket.pocketQty += qty.toInt()
-//          product.productPriceBuy * qty
-//        } else {
-//          updatePocket.pocketQty -= qty.toInt()
-//          product.productPriceSell * qty
-//        }
+        val qty: Double = inputQty.text.toString().toDouble()
 
-        pocketReqest = PocketRequest(activatePocket)
-        purchaseDetailRequest = PurchaseDetailRequest(
-          pocketRequest = pocketReqest, quantityInGram = qty
+        val pocketRequest = PocketRequest(
+          id = activatePocket
         )
-        purchase = PurchaseRequest(
+
+        val purchaseDetailRequest = PurchaseDetailRequest(
+          quantityInGram = qty, pocket = pocketRequest
+        )
+
+        val purchaseRequest = PurchaseRequest(
           purchaseType = purchaseType, purchaseDetails = listOf(purchaseDetailRequest)
         )
 
-//        pocketViewModels.updatePocket(UpdatePocketRequest(""), "")
-//        showDialog(title, message, purchase)
-        showDialog(title, message)
+        showDialog(title, message, purchaseRequest)
       }
       .setNegativeButton("Cancel", null)
       .create()
     dialog.show()
   }
 
-  private fun showDialog(title: String, message: String) {
+  private fun showDialog(title: String, message: String, purchase: PurchaseRequest) {
     lateinit var dialog: AlertDialog
     val builder = AlertDialog.Builder(context)
     builder.setTitle(title)

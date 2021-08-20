@@ -3,7 +3,6 @@ package com.mkamilmistar.gold_market.data.repository
 import android.util.Log
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.response.Product
-import com.mkamilmistar.gold_market.data.model.response.ProductResponse
 import com.mkamilmistar.gold_market.data.remote.api.ProductApi
 
 class ProductRepositoryImpl(

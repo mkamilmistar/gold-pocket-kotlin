@@ -31,14 +31,14 @@ class HistoryAdapter(private val onClickItemListener: OnClickItemListener) :
         historyDateText.text = this.purchaseDate
 
         if (this.purchaseType.toInt() == 0) {
-          productNameText.text = "Buy ${purchaseDetails[0].product?.productName} /gr"
+          productNameText.text = "Buy ${purchaseDetails[0].quantityInGram} /gr"
           pictureProduct.setImageResource(R.drawable.gold)
-          priceProductText.text = "+${purchaseDetails[0].product?.let { Utils.currencyFormatter(it.productPriceBuy) }}"
+          priceProductText.text = "+${purchaseDetails[0].product.let { Utils.currencyFormatter(it.productPriceBuy) }}"
           priceProductText.setTextColor(Color.parseColor("#1EC15F"))
         } else {
           productNameText.text = "Sell ${purchaseDetails[0].quantityInGram} /gr"
           pictureProduct.setImageResource(R.drawable.bronze)
-          priceProductText.text = "-${purchaseDetails[0].product?.let { Utils.currencyFormatter(it.productPriceSell) }}"
+          priceProductText.text = "-${purchaseDetails[0].product.let { Utils.currencyFormatter(it.productPriceSell) }}"
           priceProductText.setTextColor(Color.parseColor("#FF5B37"))
         }
 

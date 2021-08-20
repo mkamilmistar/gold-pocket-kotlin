@@ -1,13 +1,10 @@
 package com.mkamilmistar.gold_market.data.repository
 
 import android.util.Log
-import com.mkamilmistar.gold_market.data.db.AppDatabase
-import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
 import com.mkamilmistar.gold_market.data.model.request.CreatePocketRequest
 import com.mkamilmistar.gold_market.data.model.request.UpdatePocketRequest
 import com.mkamilmistar.gold_market.data.model.response.*
 import com.mkamilmistar.gold_market.data.remote.api.PocketApi
-import com.mkamilmistar.gold_market.utils.BusinessException
 
 class PocketRepositoryImpl(private val pocketApi: PocketApi): PocketRepository {
 
@@ -24,15 +21,6 @@ class PocketRepositoryImpl(private val pocketApi: PocketApi): PocketRepository {
       null
     }
   }
-
-//  override suspend fun getPocketByCustomerAndPocketId(customerId: Int, pocketId: Int): Pocket {
-//    val result = AppDatabase.pocketDao().getPocketByCustomerId(customerId, pocketId)
-//    if (!result.equals(null)) {
-//      return result
-//    } else {
-//      throw BusinessException("Gagal mendapatkan data Toket")
-//    }
-//  }
 
   override suspend fun updatePocket(request: UpdatePocketRequest): Pocket? {
     return try {

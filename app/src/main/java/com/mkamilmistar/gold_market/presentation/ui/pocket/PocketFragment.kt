@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.model.request.CreatePocketRequest
+import com.mkamilmistar.gold_market.data.model.request.UpdatePocketRequest
 import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentPocketBinding
@@ -32,6 +33,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   private lateinit var pocketAdapter: PocketAdapter
   private lateinit var pocketViewModel: PocketViewModel
   private lateinit var activateCustomer: String
+  private lateinit var activateProduct: String
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -56,8 +58,9 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     subscribe()
     val sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
+    activateProduct = sharedPreferences.retrived(Utils.PRODUCT_ID).toString()
     if (!activateCustomer.equals(null)) {
-      pocketViewModel.start("8a68e41478f8d0090178f8d0a5410001")
+      pocketViewModel.start(activateCustomer)
     } else {
       pocketViewModel.start("")
     }
@@ -76,7 +79,9 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
           .setView(inputEditTextField)
           .setPositiveButton("Create Pocket") { _, _ ->
             val editTextInput = inputEditTextField.text.toString()
-            val newPocket = CreatePocketRequest(pocketName = editTextInput)
+            val newPocket = CreatePocketRequest(
+              pocketName = editTextInput, product = CreatePocketRequest.ProductId(activateProduct), customer = CreatePocketRequest.CustomerId(activateCustomer)
+            )
             pocketViewModel.createPocket(newPocket, activateCustomer)
           }
           .setNegativeButton("Cancel", null)
@@ -123,14 +128,30 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   override fun deleteItem(position: Int) {
-    showDialog("Are you sure want to delete this pocket?", "Click OK to Continue", position)
+    deleteDialog("Are you sure want to delete this pocket?", "Click OK to Continue", position)
   }
 
   override fun editItem(position: Int) {
-    Toast.makeText(context, pocketViewModel.getPocketById(position).pocketName, Toast.LENGTH_SHORT).show()
+    updatePocket(position)
   }
 
-  private fun showDialog(title: String, message: String, position: Int) {
+  private fun updatePocket(position: Int) {
+    val inputName = EditText(requireActivity())
+    inputName.setText(pocketViewModel.getPocketById(position).pocketName)
+    val dialog = AlertDialog.Builder(requireContext())
+      .setTitle("Update Pocket")
+      .setMessage("Input New Pocket Name")
+      .setView(inputName)
+      .setPositiveButton("Update Pocket") { _, _ ->
+        val editTextInput = inputName.text.toString()
+        pocketViewModel.updatePocket(editTextInput, position, activateCustomer, activateProduct)
+      }
+      .setNegativeButton("Cancel", null)
+      .create()
+    dialog.show()
+  }
+
+  private fun deleteDialog(title: String, message: String, position: Int) {
     lateinit var dialog: AlertDialog
     val builder = AlertDialog.Builder(context)
     builder.setTitle(title)
@@ -138,7 +159,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> {
-          pocketViewModel.deletePocket("", activateCustomer)
+          pocketViewModel.deletePocket(position, activateCustomer)
         }
         DialogInterface.BUTTON_NEUTRAL -> {
         }

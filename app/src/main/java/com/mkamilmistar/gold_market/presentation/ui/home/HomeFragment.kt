@@ -187,6 +187,8 @@ class HomeFragment : Fragment() {
               product = it.data
               priceBuyAmount.text = Utils.currencyFormatter(product.productPriceBuy)
               priceSellAmount.text = Utils.currencyFormatter(product.productPriceSell)
+              val sharedPreferences = SharedPref(requireContext())
+              sharedPreferences.save(Utils.PRODUCT_ID, product.id)
             }
             hideProgressBar()
           }

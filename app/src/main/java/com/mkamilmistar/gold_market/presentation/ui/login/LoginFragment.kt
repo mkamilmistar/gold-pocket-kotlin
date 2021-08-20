@@ -123,7 +123,7 @@ class LoginFragment : Fragment(), TextWatcher {
           hideProgressBar()
         }
         ResourceStatus.ERROR -> {
-          Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+          Toast.makeText(requireContext(), "Failed Login", Toast.LENGTH_SHORT).show()
           hideProgressBar()
         }
       }
@@ -146,7 +146,7 @@ class LoginFragment : Fragment(), TextWatcher {
           hideProgressBar()
         }
         ResourceStatus.ERROR -> {
-          Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+          Toast.makeText(requireContext(), "Failed Get Data Pocket", Toast.LENGTH_SHORT).show()
           hideProgressBar()
         }
       }

@@ -1,7 +1,5 @@
 package com.mkamilmistar.gold_market.presentation.viewModel.pocket
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -59,40 +57,47 @@ class PocketViewModel(
     }
   }
 
-  fun updatePocket(request: UpdatePocketRequest, customerId: String) {
+  fun updatePocket(input: String, position: Int, customerId: String, productId: String) {
     viewModelScope.launch(Dispatchers.IO) {
-      pocketRepository.updatePocket(request)
+      _pocketLiveData.postValue(Resource.loading())
+
+      val activePocket = customerPockets[position]
+      val request = UpdatePocketRequest(
+        pocketName = input,
+        product = CreatePocketRequest.ProductId(productId),
+        customer = CreatePocketRequest.CustomerId(customerId),
+        id = activePocket.id,
+        pocketQty = activePocket.pocketQty
+      )
+      val response = pocketRepository.updatePocket(request)
+      if (response != null) {
+        pocketCustomer = response
+        _pocketLiveData.postValue(Resource.success(data = response))
+        pocketCustomerList(customerId)
+      } else {
+        _pocketLiveData.postValue(Resource.error(message = response))
+      }
     }
-    pocketCustomerList(customerId)
   }
 
 
   fun createPocket(request: CreatePocketRequest, customerId: String) {
     viewModelScope.launch(Dispatchers.IO) {
       pocketRepository.addPocket(request)
+      pocketCustomerList(customerId)
     }
-    pocketCustomerList(customerId)
   }
 
-  fun deletePocket(pocketId: String, customerId: String) {
+  fun deletePocket(position: Int, customerId: String) {
     viewModelScope.launch(Dispatchers.IO) {
-      pocketRepository.deletePocket(pocketId)
+      val delPocket = customerPockets[position]
+      pocketRepository.deletePocket(delPocket.id)
+      pocketCustomerList(customerId)
     }
-    pocketCustomerList(customerId)
   }
 
   fun getPocketById(position: Int): Pocket {
     return customerPockets[position]
   }
-
-//  private fun updatePocketActive(pocketPosition: Int) {
-//    _pocketLiveData.value = EventResult.Loading
-//    try {
-////      val pocketById: Pocket = pocketRepository.findPocket(pocketPosition)
-//      _pocketLiveData.value = EventResult.Success(Pocket(1, "", 0, 1, 1))
-//    } catch (e: Exception) {
-//      _pocketLiveData.value = e.localizedMessage?.toString()?.let { EventResult.Failed(it) }
-//    }
-//  }
 
 }

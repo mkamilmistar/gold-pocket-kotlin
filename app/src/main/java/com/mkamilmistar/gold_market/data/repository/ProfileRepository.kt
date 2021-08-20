@@ -1,7 +1,8 @@
 package com.mkamilmistar.gold_market.data.repository
 
-import com.mkamilmistar.gold_market.data.model.entity.Customer
+import com.mkamilmistar.gold_market.data.model.response.Customer
+import com.mkamilmistar.gold_market.data.model.response.CustomerByIdResponse
 
 interface ProfileRepository {
-  fun getCustomerById(customerId: Int): Customer
+  suspend fun getCustomerById(customerId: String): Customer?
 }

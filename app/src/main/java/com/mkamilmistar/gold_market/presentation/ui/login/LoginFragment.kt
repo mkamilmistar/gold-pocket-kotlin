@@ -57,13 +57,15 @@ class LoginFragment : Fragment(), TextWatcher {
 
   private fun initViewModel() {
     val authRetrofit = RetrofitInstance.authApi
+    val pocketApi = RetrofitInstance.pocketApi
     val authRepo = AuthRepositoryImpl(authRetrofit)
 
-    val db = AppDatabase.getDatabase(requireContext())
-    val pocketRepo = PocketRepositoryImpl(db)
-    authViewModel = ViewModelProvider(this, AuthViewModelFactory(authRepo)).get(AuthViewModel::class.java)
+    val pocketRepo = PocketRepositoryImpl(pocketApi)
+    authViewModel =
+      ViewModelProvider(this, AuthViewModelFactory(authRepo)).get(AuthViewModel::class.java)
     pocketViewModels = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(
-      PocketViewModel::class.java)
+      PocketViewModel::class.java
+    )
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,7 +80,6 @@ class LoginFragment : Fragment(), TextWatcher {
         Navigation.findNavController(view)
           .navigate(R.id.action_loginFragment_to_forgetPasswordFragment)
       }
-
     }
   }
 
@@ -112,6 +113,13 @@ class LoginFragment : Fragment(), TextWatcher {
         ResourceStatus.LOADING -> showProgressBar()
         ResourceStatus.SUCCESS -> {
           Log.d("AuthApi", "Subscribe : ${it.data}")
+          val customer = it.data
+          val sharedPreferences = SharedPref(requireContext())
+          if (customer!=null) {
+            sharedPreferences.save(Utils.CUSTOMER_ID, customer.userId)
+            pocketViewModels.start(customer.userId)
+          }
+          subscribePocket()
           hideProgressBar()
         }
         ResourceStatus.ERROR -> {
@@ -124,27 +132,25 @@ class LoginFragment : Fragment(), TextWatcher {
 
   private fun subscribePocket() {
     hideProgressBar()
-    binding.apply {
-      val pocketListObserver: Observer<EventResult<CustomerWithPockets>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> showProgressBar()
-          is EventResult.Success -> {
-            val customerPockets = event.data
-            val sharedPreferences = SharedPref(requireContext())
-            sharedPreferences.save(Utils.POCKET_ID,customerPockets.pockets.first().pocketId.toString())
-            navToHome()
-            hideProgressBar()
+    pocketViewModels.pocketCustomerLiveData.observe(viewLifecycleOwner, {
+      when (it.status) {
+        ResourceStatus.LOADING -> showProgressBar()
+        ResourceStatus.SUCCESS -> {
+          Log.d("PocketApi", "Subscribe : ${it.data}")
+          val customerPockets = it.data
+          val sharedPreferences = SharedPref(requireContext())
+          if (customerPockets!=null) {
+            sharedPreferences.save(Utils.POCKET_ID, customerPockets.first().id)
           }
-          is EventResult.Failed -> {
-            hideProgressBar()
-            Toast.makeText(context, event.errorMessage.toString(), Toast.LENGTH_SHORT).show()
-          }
-          else -> {
-          }
+          navToHome()
+          hideProgressBar()
+        }
+        ResourceStatus.ERROR -> {
+          Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+          hideProgressBar()
         }
       }
-      pocketViewModels.pocketCustomerLiveData.observe(viewLifecycleOwner, pocketListObserver)
-    }
+    })
   }
 
   override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

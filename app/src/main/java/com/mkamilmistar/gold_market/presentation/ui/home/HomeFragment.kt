@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.InputType
+import android.util.ArraySet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,12 @@ import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.*
 import com.mkamilmistar.gold_market.data.model.entity.*
+import com.mkamilmistar.gold_market.data.model.request.UpdatePocketRequest
+import com.mkamilmistar.gold_market.data.model.response.Customer
+import com.mkamilmistar.gold_market.data.model.response.Pocket
+import com.mkamilmistar.gold_market.data.model.response.Purchase
+import com.mkamilmistar.gold_market.data.model.response.PurchaseDetail
+import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.*
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
@@ -35,6 +42,7 @@ import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseView
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.formatDate
+import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
 import java.time.LocalDateTime
 
 class HomeFragment : Fragment() {
@@ -46,10 +54,10 @@ class HomeFragment : Fragment() {
   private lateinit var pocketViewModels: PocketViewModel
   private lateinit var activateCustomer: String
   private var activatePocket: String = "1"
-  private lateinit var purchase: Purchase
+  private lateinit var purchase: com.mkamilmistar.gold_market.data.model.response.Purchase
   private lateinit var product: Product
   private lateinit var pocket: Pocket
-  private lateinit var customerPockets: CustomerWithPockets
+  private lateinit var customerPockets: List<Pocket>
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -69,14 +77,29 @@ class HomeFragment : Fragment() {
 
   private fun initViewModel() {
     val db = AppDatabase.getDatabase(requireContext())
-    val purchaseRepo = PurchaseRepositoryImpl(db)
-    val pocketRepo = PocketRepositoryImpl(db)
-    val productRepository = ProductRepositoryImpl(db)
-    val profileRepo = ProfileRepositoryImpl(db)
-    productViewModels = ViewModelProvider(this, ProductViewModelFactory(productRepository)).get(ProductViewModel::class.java)
-    purchaseViewModels = ViewModelProvider(this, PurchaseViewModelFactory(purchaseRepo)).get(PurchaseViewModel::class.java)
-    profileViewModels = ViewModelProvider(this, ProfileViewModelFactory(profileRepo)).get(ProfileViewModel::class.java)
-    pocketViewModels = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(PocketViewModel::class.java)
+    val api = RetrofitInstance
+    val purchaseApi = api.purchaseApi
+    val pocketApi = api.pocketApi
+    val productApi = api.productApi
+    val profileApi = api.profileApi
+    val purchaseRepo = PurchaseRepositoryImpl(db, purchaseApi)
+    val pocketRepo = PocketRepositoryImpl(pocketApi)
+    val productRepository = ProductRepositoryImpl(db, productApi)
+    val profileRepo = ProfileRepositoryImpl(db, profileApi)
+    productViewModels = ViewModelProvider(
+      this,
+      ProductViewModelFactory(productRepository)
+    ).get(ProductViewModel::class.java)
+    purchaseViewModels = ViewModelProvider(
+      this,
+      PurchaseViewModelFactory(purchaseRepo)
+    ).get(PurchaseViewModel::class.java)
+    profileViewModels = ViewModelProvider(
+      this,
+      ProfileViewModelFactory(profileRepo)
+    ).get(ProfileViewModel::class.java)
+    pocketViewModels =
+      ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(PocketViewModel::class.java)
   }
 
   private fun initShared() {
@@ -90,14 +113,20 @@ class HomeFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     initShared()
     product = Product(
-      productId = 1, productName = "TOLOL", productImage = "TEMPE", productPriceBuy = 100000, productPriceSell = 120000,
-      productStatus = 1, updatedDate = "12 March 2021", createdDate = "10 March 2021"
+      productId = 1,
+      productName = "TOLOL",
+      productImage = "TEMPE",
+      productPriceBuy = 100000,
+      productPriceSell = 120000,
+      productStatus = 1,
+      updatedDate = "12 March 2021",
+      createdDate = "10 March 2021"
     )
-    pocketViewModels.start(activateCustomer.toInt())
-    productViewModels.createProduct(product)
-    pocketViewModels.getPocketWithCustomerIdAndPocketId(activateCustomer.toInt(), activatePocket.toInt())
+    pocketViewModels.start(activateCustomer)
+    pocketViewModels.getPocketWithCustomerIdAndPocketId(activatePocket)
+    productViewModels.getProduct("4028e4b97b5e973a017b5e99802a0000")
 //    productViewModels.updateProduct(productId = 1)
-    profileViewModels.getCustomerById(activateCustomer.toInt())
+    profileViewModels.getCustomerById(activateCustomer)
     subscribe()
     binding.apply {
     }
@@ -125,108 +154,102 @@ class HomeFragment : Fragment() {
   private fun subscribe() {
     hideProgressBar()
     binding.apply {
-      val pocketObserver: Observer<EventResult<Pocket>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> showProgressBar()
-          is EventResult.Success -> {
-            Log.d("HomeFragment", "Success Get Pocket...")
-            pocket = event.data
-            val totalAmount = (pocket.pocketQty.toDouble() * product.productPriceSell.toDouble())
-            pocketNameText.text = pocket.pocketName
-            totalGramText.text = "${pocket.pocketQty} /gr"
-            totalPriceText.text = Utils.currencyFormatter(totalAmount)
-//            val pockets = PocketRepositoryImpl(AppDatabase.getDatabase(requireContext())).pocketDBImport
+      pocketViewModels.pocketLiveData.observe(viewLifecycleOwner, {
+        when (it.status) {
+          ResourceStatus.LOADING -> showProgressBar()
+          ResourceStatus.SUCCESS -> {
+            Log.d("PocketApiById", "Subscribe : ${it.data}")
+            if (it.data != null) {
+              pocket = it.data
+              val totalAmount = (pocket.pocketQty * product.productPriceSell.toDouble())
+              pocketNameText.text = pocket.pocketName
+              totalGramText.text = "${pocket.pocketQty} /gr"
+              totalPriceText.text = Utils.currencyFormatter(totalAmount)
+            }
             hideProgressBar()
           }
-          is EventResult.Failed -> {
+          ResourceStatus.ERROR -> {
             pocketNameText.text = "Create pocket first"
             totalGramText.text = "0 /gr"
             totalPriceText.text = Utils.currencyFormatter(0.0)
-            val message = "Failed to get data"
+            Toast.makeText(
+              requireContext(),
+              "Gagal Mendapatkan Pocket Customer",
+              Toast.LENGTH_SHORT
+            ).show()
             hideProgressBar()
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-          }
-          else -> {
           }
         }
-      }
-      val productObserver: Observer<EventResult<Product>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> showProgressBar()
-          is EventResult.Success -> {
-            Log.d("HomeFragment", "Success Get Product...")
-            product = event.data
+      })
+      productViewModels.productLiveData.observe(viewLifecycleOwner, {
+        when (it.status) {
+          ResourceStatus.LOADING -> showProgressBar()
+          ResourceStatus.SUCCESS -> {
+            Log.d("ProductApi", "Subscribe : ${it.data}")
+            val productData = it.data
+            if (productData != null) {
+              priceBuyAmount.text = Utils.currencyFormatter(productData.productPriceBuy)
+              priceSellAmount.text = Utils.currencyFormatter(productData.productPriceSell)
+            }
             hideProgressBar()
           }
-          is EventResult.Failed -> {
-            val message = "Failed to get data"
+          ResourceStatus.ERROR -> {
+            Toast.makeText(requireContext(), "Gagal Mendapatkan Product", Toast.LENGTH_SHORT).show()
             hideProgressBar()
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-          }
-          else -> {
           }
         }
-      }
-      val profileObserver: Observer<EventResult<Customer>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> showProgressBar()
-          is EventResult.Success -> {
-            Log.d("HomeFragment", "Success Get Customer...")
-            val customer = event.data
-            greetingHomeText.text = "Hi, ${customer.firstName} ${customer.lastName}"
+      })
+      profileViewModels.customerLivedata.observe(viewLifecycleOwner, {
+        when (it.status) {
+          ResourceStatus.LOADING -> showProgressBar()
+          ResourceStatus.SUCCESS -> {
+            Log.d("ProfileApi", "Subscribe : ${it.data}")
+            val customer = it.data
+            if (customer != null) {
+              greetingHomeText.text = "Hi, ${customer.firstName} ${customer.lastName}"
+            }
 
             hideProgressBar()
           }
-          is EventResult.Failed -> {
-            val message = "Failed to get data"
+          ResourceStatus.ERROR -> {
+            Toast.makeText(requireContext(), "Gagal Mendapatkan Data Customer", Toast.LENGTH_SHORT)
+              .show()
             hideProgressBar()
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-          }
-          else -> {
           }
         }
-      }
-      val purchaseObserver: Observer<EventResult<Boolean>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> showProgressBar()
-          is EventResult.Success -> {
-            val isSuccessPurchase = event.data
+      })
+      purchaseViewModels.purchaseLiveData.observe(viewLifecycleOwner, {
+        when (it.status) {
+          ResourceStatus.LOADING -> showProgressBar()
+          ResourceStatus.SUCCESS -> {
+            Log.d("PocketApi", "Subscribe : ${it.data}")
             hideProgressBar()
-            if (isSuccessPurchase) {
-              pocketViewModels.getPocketWithCustomerIdAndPocketId(activateCustomer.toInt(), activatePocket.toInt())
-              Toast.makeText(context, "Purchased Success", Toast.LENGTH_SHORT).show()
+          }
+          ResourceStatus.ERROR -> {
+            Toast.makeText(requireContext(), "Gagal Mendapatkan List Pocket", Toast.LENGTH_SHORT)
+              .show()
+            hideProgressBar()
+          }
+        }
+      })
+      pocketViewModels.pocketCustomerLiveData.observe(viewLifecycleOwner, {
+        when (it.status) {
+          ResourceStatus.LOADING -> showProgressBar()
+          ResourceStatus.SUCCESS -> {
+            Log.d("PocketApi", "Subscribe : ${it.data}")
+            if (it.data != null){
+              customerPockets = it.data
+              totalPocketsText.text = "Your Total Pockets: ${customerPockets.size}"
             }
-          }
-          is EventResult.Failed -> {
-            val message = "Failed to Purchase"
+
             hideProgressBar()
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
           }
-          else -> {
+          ResourceStatus.ERROR -> {
+            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+            hideProgressBar()
           }
         }
-      }
-      val pocketListObserver: Observer<EventResult<CustomerWithPockets>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> showProgressBar()
-          is EventResult.Success -> {
-            customerPockets = event.data
-            totalPocketsText.text = "Your Total Pockets: ${customerPockets.pockets.size}"
-            hideProgressBar()
-          }
-          is EventResult.Failed -> {
-            hideProgressBar()
-            Toast.makeText(context, event.errorMessage.toString(), Toast.LENGTH_SHORT).show()
-          }
-          else -> {
-          }
-        }
-      }
-      productViewModels.productLiveData.observe(viewLifecycleOwner, productObserver)
-      profileViewModels.customerLivedata.observe(viewLifecycleOwner, profileObserver)
-      pocketViewModels.pocketLiveData.observe(viewLifecycleOwner, pocketObserver)
-      pocketViewModels.pocketCustomerLiveData.observe(viewLifecycleOwner, pocketListObserver)
-      purchaseViewModels.isSuccess.observe(viewLifecycleOwner, purchaseObserver)
+      })
     }
   }
 
@@ -240,7 +263,8 @@ class HomeFragment : Fragment() {
       .setView(inputQty)
       .setPositiveButton("Purchase") { _, _ ->
         val qty: Double = inputQty.text.toString().toDouble()
-        val updatePocket: Pocket = pocketViewModels.pocketCustomer.copy()
+        val updatePocket: com.mkamilmistar.gold_market.data.model.response.Pocket =
+          pocketViewModels.pocketCustomer.copy()
         val price = if (purchaseType == 0) {
           updatePocket.pocketQty += qty.toInt()
           product.productPriceBuy * qty
@@ -248,19 +272,19 @@ class HomeFragment : Fragment() {
           updatePocket.pocketQty -= qty.toInt()
           product.productPriceSell * qty
         }
-        purchase = Purchase(
-          purchaseDate = formatDate(LocalDateTime.now().toString()),
-          purchaseType = purchaseType, price = price.toInt(), qtyInGram = qty,
-          customerPurchaseId = activateCustomer.toLong(), pocketPurchaseId = activatePocket.toLong())
-        pocketViewModels.updatePocket(updatePocket, activateCustomer.toInt())
-        showDialog(title, message, purchase)
+//        purchase = Purchase(
+//          purchaseType = 1, purchaseDate = "", purchaseDetail = ArraySet(1)
+//        )
+        pocketViewModels.updatePocket(UpdatePocketRequest(""), "")
+//        showDialog(title, message, purchase)
+        showDialog(title, message)
       }
       .setNegativeButton("Cancel", null)
       .create()
     dialog.show()
   }
 
-  private fun showDialog(title: String, message: String, purchase: Purchase) {
+  private fun showDialog(title: String, message: String) {
     lateinit var dialog: AlertDialog
     val builder = AlertDialog.Builder(context)
     builder.setTitle(title)
@@ -268,7 +292,7 @@ class HomeFragment : Fragment() {
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> {
-          purchaseViewModels.purchaseProduct(purchase)
+//          purchaseViewModels.purchaseProduct("", purchase)
         }
         DialogInterface.BUTTON_NEUTRAL -> {
         }

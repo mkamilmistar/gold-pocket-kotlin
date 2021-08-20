@@ -4,8 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
-import com.mkamilmistar.gold_market.data.model.entity.Pocket
+import com.mkamilmistar.gold_market.data.model.response.Pocket
 import com.mkamilmistar.gold_market.databinding.PocketListItemBinding
 
 class PocketAdapter(private val onClickItemListener: OnClickItemListener) :
@@ -44,9 +43,11 @@ class PocketAdapter(private val onClickItemListener: OnClickItemListener) :
   }
 
   @SuppressLint("NotifyDataSetChanged")
-  fun updateData(pocketCustomer: CustomerWithPockets) {
+  fun updateData(pocketCustomer: List<Pocket>?) {
     this.pockets.clear()
-    this.pockets.addAll(pocketCustomer.pockets)
+    if (pocketCustomer != null) {
+      this.pockets.addAll(pocketCustomer)
+    }
     notifyDataSetChanged()
   }
 

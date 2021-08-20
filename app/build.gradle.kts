@@ -55,6 +55,7 @@ android {
 }
 
 dependencies {
+  implementation("com.squareup.retrofit:converter-gson:2.0.0-beta1")
   implementation(AppDependencies.retrofit)
   implementation(AppDependencies.moshiConverter)
   implementation(AppDependencies.kotlinStdLib)

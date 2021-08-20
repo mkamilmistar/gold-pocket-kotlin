@@ -1,17 +1,26 @@
 package com.mkamilmistar.gold_market.data.repository
 
+import android.util.Log
 import com.mkamilmistar.gold_market.data.db.AppDatabase
-import com.mkamilmistar.gold_market.data.model.entity.Customer
+import com.mkamilmistar.gold_market.data.model.request.CustomerByIdRequest
+import com.mkamilmistar.gold_market.data.model.response.Customer
+import com.mkamilmistar.gold_market.data.model.response.CustomerByIdResponse
+import com.mkamilmistar.gold_market.data.remote.api.ProfileApi
 import com.mkamilmistar.gold_market.utils.BusinessException
 
-class ProfileRepositoryImpl(private val db: AppDatabase): ProfileRepository {
+class ProfileRepositoryImpl(private val db: AppDatabase, private val profileApi: ProfileApi): ProfileRepository {
 
-  override fun getCustomerById(customerId: Int): Customer {
-    val data = db.authDao().getDataCustomerById(customerId)
-    if (!data.equals(null)) {
-      return data
-    } else {
-      throw BusinessException("Data not found")
+  override suspend fun getCustomerById(customerId: String): Customer? {
+    return try {
+      val response = profileApi.customerById(customerId)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("ProfileApi", e.localizedMessage)
+      null
     }
   }
 }

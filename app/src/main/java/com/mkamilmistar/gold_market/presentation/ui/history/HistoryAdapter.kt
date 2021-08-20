@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPurchases
-import com.mkamilmistar.gold_market.data.model.entity.Purchase
+import com.mkamilmistar.gold_market.data.model.response.Purchase
 import com.mkamilmistar.gold_market.databinding.HistoryListItemBinding
 import com.mkamilmistar.gold_market.utils.Utils
 
@@ -31,15 +30,15 @@ class HistoryAdapter(private val onClickItemListener: OnClickItemListener) :
 
         historyDateText.text = this.purchaseDate
 
-        if (this.purchaseType == 0) {
-          productNameText.text = "Buy $qtyInGram /gr"
+        if (this.purchaseType.toInt() == 0) {
+          productNameText.text = "Buy ${purchaseDetails[0].product?.productName} /gr"
           pictureProduct.setImageResource(R.drawable.gold)
-          priceProductText.text = "+${Utils.currencyFormatter(this.price)}"
+          priceProductText.text = "+${purchaseDetails[0].product?.let { Utils.currencyFormatter(it.productPriceBuy) }}"
           priceProductText.setTextColor(Color.parseColor("#1EC15F"))
         } else {
-          productNameText.text = "Sell $qtyInGram /gr"
+          productNameText.text = "Sell ${purchaseDetails[0].quantityInGram} /gr"
           pictureProduct.setImageResource(R.drawable.bronze)
-          priceProductText.text = "-${Utils.currencyFormatter(this.price)}"
+          priceProductText.text = "-${purchaseDetails[0].product?.let { Utils.currencyFormatter(it.productPriceSell) }}"
           priceProductText.setTextColor(Color.parseColor("#FF5B37"))
         }
 
@@ -51,9 +50,11 @@ class HistoryAdapter(private val onClickItemListener: OnClickItemListener) :
   }
 
   @SuppressLint("NotifyDataSetChanged")
-  fun updateData(purchaseHistories: CustomerWithPurchases) {
+  fun updateData(purchaseHistories: List<Purchase>?) {
     this.histories.clear()
-    this.histories.addAll(purchaseHistories.purchases)
+    if (purchaseHistories != null) {
+      this.histories.addAll(purchaseHistories)
+    }
     notifyDataSetChanged()
   }
 

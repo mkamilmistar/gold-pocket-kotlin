@@ -6,93 +6,82 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
-import com.mkamilmistar.gold_market.data.model.entity.Pocket
+import com.mkamilmistar.gold_market.data.model.request.CreatePocketRequest
+import com.mkamilmistar.gold_market.data.model.request.UpdatePocketRequest
+import com.mkamilmistar.gold_market.data.model.response.Pocket
 import com.mkamilmistar.gold_market.data.repository.PocketRepository
-import com.mkamilmistar.gold_market.helpers.EventResult
+import com.mkamilmistar.mysimpleretrofit.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class PocketViewModel(
   private val pocketRepository: PocketRepository
 ) : ViewModel() {
   private var _pocketCustomerLiveData =
-    MutableLiveData<EventResult<CustomerWithPockets>>(EventResult.Idle)
-  val pocketCustomerLiveData: LiveData<EventResult<CustomerWithPockets>>
+    MutableLiveData<Resource<List<Pocket>>>()
+  val pocketCustomerLiveData: LiveData<Resource<List<Pocket>>>
     get() = _pocketCustomerLiveData
 
-  private var _pocketLiveData = MutableLiveData<EventResult<Pocket>>(EventResult.Idle)
-  val pocketLiveData: LiveData<EventResult<Pocket>>
+  private var _pocketLiveData = MutableLiveData<Resource<Pocket>>()
+  val pocketLiveData: LiveData<Resource<Pocket>>
     get() = _pocketLiveData
-  private lateinit var customerPockets: CustomerWithPockets
+
+  private lateinit var customerPockets: List<Pocket>
   lateinit var pocketCustomer: Pocket
 
-  fun start(customerId: Int) {
+  fun start(customerId: String) {
     pocketCustomerList(customerId)
   }
 
-  private fun pocketCustomerList(customerId: Int) {
-    _pocketCustomerLiveData.postValue(EventResult.Loading)
-    Handler(Looper.getMainLooper()).postDelayed({
-      viewModelScope.launch(Dispatchers.IO) {
-        try {
-          customerPockets = pocketRepository.customerPockets(customerId)
-          _pocketCustomerLiveData.postValue(EventResult.Success(customerPockets))
-        } catch (e: Exception) {
-          _pocketCustomerLiveData.postValue(
-            e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
-        }
+  private fun pocketCustomerList(customerId: String) {
+    viewModelScope.launch(Dispatchers.IO) {
+      _pocketCustomerLiveData.postValue(Resource.loading())
+      val response = pocketRepository.customerPockets(customerId)
+      if (response != null) {
+        customerPockets = response
+        _pocketCustomerLiveData.postValue(Resource.success(data = response))
+      } else {
+        _pocketCustomerLiveData.postValue(Resource.error(message = response))
       }
-    }, 1000)
+    }
   }
 
-  fun getPocketWithCustomerIdAndPocketId(customerId: Int, pocketId: Int) {
-    _pocketLiveData.postValue(EventResult.Loading)
-    Handler(Looper.getMainLooper()).postDelayed({
-      viewModelScope.launch(Dispatchers.IO) {
-        try {
-          pocketCustomer = pocketRepository.getPocketByCustomerAndPocketId(customerId, pocketId)
-          _pocketLiveData.postValue(EventResult.Success(pocketCustomer))
-        } catch (e: Exception) {
-          _pocketLiveData.postValue(
-            e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
-        }
+  fun getPocketWithCustomerIdAndPocketId(pocketId: String) {
+    viewModelScope.launch(Dispatchers.IO) {
+      _pocketLiveData.postValue(Resource.loading())
+      val response = pocketRepository.findPocketById(pocketId)
+      if (response != null) {
+        _pocketLiveData.postValue(Resource.success(data = response))
+      } else {
+        _pocketLiveData.postValue(Resource.error(message = response))
       }
-    }, 1000)
+    }
   }
 
-  fun updatePocket(pocket: Pocket, customerId: Int) {
-    Handler(Looper.getMainLooper()).postDelayed({
-      viewModelScope.launch(Dispatchers.IO) {
-        pocketRepository.updatePocket(pocket)
-      }
-    }, 1000)
+  fun updatePocket(request: UpdatePocketRequest, customerId: String) {
+    viewModelScope.launch(Dispatchers.IO) {
+      pocketRepository.updatePocket(request)
+    }
     pocketCustomerList(customerId)
   }
 
 
-  fun createPocket(pocket: Pocket, customerId: Int) {
-    Handler(Looper.getMainLooper()).postDelayed({
-      viewModelScope.launch(Dispatchers.IO) {
-        pocketRepository.addPocket(pocket)
-      }
-    }, 1000)
+  fun createPocket(request: CreatePocketRequest, customerId: String) {
+    viewModelScope.launch(Dispatchers.IO) {
+      pocketRepository.addPocket(request)
+    }
     pocketCustomerList(customerId)
   }
 
-  fun deletePocket(position: Int, customerId: Int) {
-    Handler(Looper.getMainLooper()).postDelayed({
-      viewModelScope.launch(Dispatchers.IO) {
-        val delPocket = customerPockets.pockets[position]
-        pocketRepository.deletePocket(delPocket.pocketId)
-      }
-    }, 1000)
+  fun deletePocket(pocketId: String, customerId: String) {
+    viewModelScope.launch(Dispatchers.IO) {
+      pocketRepository.deletePocket(pocketId)
+    }
     pocketCustomerList(customerId)
   }
 
   fun getPocketById(position: Int): Pocket {
-    return customerPockets.pockets[position]
+    return customerPockets[position]
   }
 
 //  private fun updatePocketActive(pocketPosition: Int) {

@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.entity.Customer
+import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.ProfileRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
 import com.mkamilmistar.gold_market.helpers.EventResult
@@ -25,6 +26,7 @@ import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewMo
 import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
 import java.util.*
 
 class SettingFragment : Fragment() {
@@ -51,14 +53,15 @@ class SettingFragment : Fragment() {
 
   private fun initViewModel() {
     val db = AppDatabase.getDatabase(requireContext())
-    val repo = ProfileRepositoryImpl(db)
+    val profileApi = RetrofitInstance.profileApi
+    val repo = ProfileRepositoryImpl(db, profileApi)
     profileViewModel =
       ViewModelProvider(this, ProfileViewModelFactory(repo)).get(ProfileViewModel::class.java)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    profileViewModel.getCustomerById(activateCustomer.toInt())
+    profileViewModel.getCustomerById(activateCustomer)
     subscribe()
     binding.apply {
       logoutSettings.setOnClickListener {
@@ -71,25 +74,25 @@ class SettingFragment : Fragment() {
   private fun subscribe() {
     hideProgressBar()
     binding.apply {
-      val profileObserver: Observer<EventResult<Customer>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> showProgressBar()
-          is EventResult.Success -> {
-            val data = event.data
-            profileName.text = "${data.firstName} ${data.lastName}"
-            profileEmail.text = data.email
+      profileViewModel.customerLivedata.observe(viewLifecycleOwner, {
+        when (it.status) {
+          ResourceStatus.LOADING -> showProgressBar()
+          ResourceStatus.SUCCESS -> {
+            Log.d("profileApi", "Subscribe : ${it.data}")
+            val data = it.data
+            if (data != null) {
+              profileName.text = "${data.firstName} ${data.lastName}"
+              profileEmail.text = data.email
+            }
+
             hideProgressBar()
           }
-          is EventResult.Failed -> {
-            val message = "Failed to get data"
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+          ResourceStatus.ERROR -> {
+            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
             hideProgressBar()
-          }
-          else -> {
           }
         }
-      }
-      profileViewModel.customerLivedata.observe(viewLifecycleOwner, profileObserver)
+      })
     }
   }
 

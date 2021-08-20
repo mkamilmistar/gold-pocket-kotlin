@@ -1,8 +1,7 @@
 package com.mkamilmistar.gold_market.data.model.response
 
-data class LoginResponse (
-  val userId: String,
-  val token: String,
+data class CustomerByIdResponse (
+  val id: String,
   val firstName: String,
   val lastName: String,
   val birthDate: String,
@@ -11,4 +10,5 @@ data class LoginResponse (
   val username: String,
   val password: String,
   val email: String,
+  val pockets: List<PocketByIdResponse>
   )

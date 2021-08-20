@@ -2,6 +2,7 @@ package com.mkamilmistar.gold_market.data.remote
 
 import com.mkamilmistar.gold_market.BuildConfig
 import com.mkamilmistar.gold_market.data.remote.api.*
+import retrofit.GsonConverterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
@@ -32,5 +33,9 @@ object RetrofitInstance {
 
   val profileApi by lazy {
     retrofit.create(ProfileApi::class.java)
+  }
+
+  val productApi by lazy {
+    retrofit.create(ProductApi::class.java)
   }
 }

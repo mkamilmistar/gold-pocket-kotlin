@@ -11,23 +11,20 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.db.AppDatabase
-import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
-import com.mkamilmistar.gold_market.data.model.entity.Pocket
-import com.mkamilmistar.gold_market.data.repository.AuthRepositoryImpl
+import com.mkamilmistar.gold_market.data.model.request.CreatePocketRequest
+import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentPocketBinding
-import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
 
 class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
 
@@ -49,8 +46,8 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   private fun initViewModel() {
-    val db = AppDatabase.getDatabase(requireContext())
-    val pocketRepo = PocketRepositoryImpl(db)
+    val pocketApi = RetrofitInstance.pocketApi
+    val pocketRepo = PocketRepositoryImpl(pocketApi)
     pocketViewModel = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(PocketViewModel::class.java)
   }
 
@@ -60,9 +57,9 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     val sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
     if (!activateCustomer.equals(null)) {
-      pocketViewModel.start(activateCustomer.toInt())
+      pocketViewModel.start("8a68e41478f8d0090178f8d0a5410001")
     } else {
-      pocketViewModel.start(0)
+      pocketViewModel.start("")
     }
 
     binding.apply {
@@ -79,8 +76,8 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
           .setView(inputEditTextField)
           .setPositiveButton("Create Pocket") { _, _ ->
             val editTextInput = inputEditTextField.text.toString()
-            val newPocket = Pocket(pocketName = editTextInput, pocketQty = 0, customerPocketId = activateCustomer.toLong(), productPocketId = 1)
-            pocketViewModel.createPocket(newPocket, activateCustomer.toInt())
+            val newPocket = CreatePocketRequest(pocketName = editTextInput)
+            pocketViewModel.createPocket(newPocket, activateCustomer)
           }
           .setNegativeButton("Cancel", null)
           .create()
@@ -93,22 +90,20 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     hideProgressBar()
     binding.apply {
       pocketAdapter = PocketAdapter(this@PocketFragment)
-      val pocketObserver: Observer<EventResult<CustomerWithPockets>> = Observer { event ->
-        when (event) {
-          is EventResult.Loading -> showProgressBar()
-          is EventResult.Success -> {
-            pocketAdapter.updateData(event.data)
+      pocketViewModel.pocketCustomerLiveData.observe(viewLifecycleOwner, {
+        when (it.status) {
+          ResourceStatus.LOADING -> showProgressBar()
+          ResourceStatus.SUCCESS -> {
+            Log.d("PocketApi", "Subscribe : ${it.data}")
+            pocketAdapter.updateData(it.data)
             hideProgressBar()
           }
-          is EventResult.Failed -> {
+          ResourceStatus.ERROR -> {
+            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
             hideProgressBar()
-            Toast.makeText(context, event.errorMessage.toString(), Toast.LENGTH_SHORT).show()
-          }
-          else -> {
           }
         }
-      }
-      pocketViewModel.pocketCustomerLiveData.observe(viewLifecycleOwner, pocketObserver)
+      })
     }
   }
 
@@ -122,7 +117,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   override fun onClickItem(position: Int) {
     val sharedPref = SharedPref(requireContext())
     val selectedPocket = pocketViewModel.getPocketById(position)
-    sharedPref.save(Utils.POCKET_ID, selectedPocket.pocketId.toString())
+    sharedPref.save(Utils.POCKET_ID, selectedPocket.id)
     navToHome()
     Toast.makeText(context, "${selectedPocket.pocketName} Selected", Toast.LENGTH_SHORT).show()
   }
@@ -132,7 +127,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   override fun editItem(position: Int) {
-    Toast.makeText(context, pocketViewModel.getPocketById(position).customerPocketId.toString(), Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, pocketViewModel.getPocketById(position).pocketName, Toast.LENGTH_SHORT).show()
   }
 
   private fun showDialog(title: String, message: String, position: Int) {
@@ -143,7 +138,7 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> {
-          pocketViewModel.deletePocket(position, activateCustomer.toInt())
+          pocketViewModel.deletePocket("", activateCustomer)
         }
         DialogInterface.BUTTON_NEUTRAL -> {
         }

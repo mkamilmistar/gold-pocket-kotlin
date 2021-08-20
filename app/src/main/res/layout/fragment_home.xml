@@ -141,7 +141,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:fontFamily="@font/nunitosans_light"
-              android:text="@{pocketViewModel.pocketLiveData.toData().pocketQty + ` /gr`}"
+              android:text="TES"
               android:textColor="@color/black"
               android:textSize="14sp"
               app:layout_constraintEnd_toEndOf="@+id/total_price_text"
@@ -256,13 +256,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunitosans_bold"
-                android:text="@{Utils.currencyFormatter(productViewModel.productLiveData.toData().productPriceBuy)}"
+                android:text="@string/price_product_history"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/price_buy_title"
                 app:layout_constraintStart_toStartOf="@+id/price_buy_title"
-                app:layout_constraintTop_toBottomOf="@+id/price_buy_title"
-                tools:text="Rp. 900.000" />
+                app:layout_constraintTop_toBottomOf="@+id/price_buy_title"/>
 
               <TextView
                 android:id="@+id/price_sell_title"
@@ -281,7 +280,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunitosans_bold"
-                android:text="@{Utils.currencyFormatter(productViewModel.productLiveData.toData().productPriceSell)}"
+                android:text="@string/price_product_history"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/price_sell_title"

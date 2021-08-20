@@ -1,37 +1,31 @@
 package com.mkamilmistar.gold_market.presentation.viewModel.profile
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mkamilmistar.gold_market.data.model.entity.Customer
+import com.mkamilmistar.gold_market.data.model.response.Customer
 import com.mkamilmistar.gold_market.data.repository.ProfileRepository
-import com.mkamilmistar.gold_market.helpers.EventResult
+import com.mkamilmistar.mysimpleretrofit.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class ProfileViewModel(private val profileRepo: ProfileRepository) : ViewModel() {
-  private var _customerLiveData = MutableLiveData<EventResult<Customer>>()
-  val customerLivedata: LiveData<EventResult<Customer>>
+  private var _customerLiveData = MutableLiveData<Resource<Customer>>()
+  val customerLivedata: LiveData<Resource<Customer>>
     get() {
       return _customerLiveData
     }
 
-  fun getCustomerById(customerId: Int) {
-    _customerLiveData.postValue(EventResult.Loading)
-    Handler(Looper.getMainLooper()).postDelayed({
-      viewModelScope.launch(Dispatchers.IO) {
-        try {
-          val customerData = profileRepo.getCustomerById(customerId)
-          _customerLiveData.postValue(EventResult.Success(data = customerData))
-        } catch (e: Exception) {
-          _customerLiveData.postValue(
-            e.localizedMessage?.toString()?.let { EventResult.Failed(it) })
-        }
+  fun getCustomerById(customerId: String) {
+    viewModelScope.launch(Dispatchers.IO) {
+      _customerLiveData.postValue(Resource.loading())
+      val response = profileRepo.getCustomerById(customerId)
+      if (response != null) {
+        _customerLiveData.postValue(Resource.success(data = response))
+      } else {
+        _customerLiveData.postValue(Resource.error(message = response))
       }
-    }, 1000)
+    }
   }
 }

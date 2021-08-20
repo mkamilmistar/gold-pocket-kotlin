@@ -12,8 +12,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
 object Utils {
-  const val EMAIL = "EMAIL"
-  const val PASSWORD = "PASSWORD"
   const val CUSTOMER_ID = "CUSTOMER_ID"
   const val POCKET_ID = "POCKET_ID"
 

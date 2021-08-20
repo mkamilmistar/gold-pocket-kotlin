@@ -2,6 +2,7 @@ package com.mkamilmistar.gold_market.data.repository
 
 import android.util.Log
 import com.mkamilmistar.gold_market.data.db.AppDatabase
+import com.mkamilmistar.gold_market.data.model.request.PurchaseRequest
 import com.mkamilmistar.gold_market.data.model.response.Purchase
 import com.mkamilmistar.gold_market.data.remote.api.PurchaseApi
 
@@ -24,9 +25,9 @@ class PurchaseRepositoryImpl(private val db: AppDatabase, private val purchaseAp
     return db.purchaseDao().getPurchaseById(purchaseId)
   }
 
-  override suspend fun addPurchase(customerId: String, purchase: Purchase): Purchase? {
+  override suspend fun addPurchase(customerId: String, request: PurchaseRequest): Purchase? {
     return try {
-      val response = purchaseApi.purchase(customerId, purchase)
+      val response = purchaseApi.purchase(customerId, request)
       if (response.isSuccessful) {
         response.body()
       } else {

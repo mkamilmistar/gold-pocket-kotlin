@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.InputType
-import android.util.ArraySet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,22 +14,19 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.model.*
-import com.mkamilmistar.gold_market.data.model.entity.*
+import com.mkamilmistar.gold_market.data.model.request.PocketRequest
+import com.mkamilmistar.gold_market.data.model.request.PurchaseDetailRequest
+import com.mkamilmistar.gold_market.data.model.request.PurchaseRequest
 import com.mkamilmistar.gold_market.data.model.request.UpdatePocketRequest
-import com.mkamilmistar.gold_market.data.model.response.Customer
-import com.mkamilmistar.gold_market.data.model.response.Pocket
-import com.mkamilmistar.gold_market.data.model.response.Purchase
-import com.mkamilmistar.gold_market.data.model.response.PurchaseDetail
+import com.mkamilmistar.gold_market.data.model.response.*
 import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.*
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
-import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.product.ProductViewModel
@@ -41,9 +37,7 @@ import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseView
 import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
-import com.mkamilmistar.gold_market.utils.formatDate
 import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
-import java.time.LocalDateTime
 
 class HomeFragment : Fragment() {
 
@@ -54,9 +48,12 @@ class HomeFragment : Fragment() {
   private lateinit var pocketViewModels: PocketViewModel
   private lateinit var activateCustomer: String
   private var activatePocket: String = "1"
-  private lateinit var purchase: com.mkamilmistar.gold_market.data.model.response.Purchase
+  private lateinit var purchase: PurchaseRequest
+  private lateinit var purchaseDetailRequest: PurchaseDetailRequest
+  private lateinit var pocketReqest: PocketRequest
   private lateinit var product: Product
   private lateinit var pocket: Pocket
+  private lateinit var customer: Customer
   private lateinit var customerPockets: List<Pocket>
 
   override fun onCreateView(
@@ -113,17 +110,18 @@ class HomeFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     initShared()
     product = Product(
-      productId = 1,
+      id = "1",
       productName = "TOLOL",
       productImage = "TEMPE",
       productPriceBuy = 100000,
       productPriceSell = 120000,
       productStatus = 1,
       updatedDate = "12 March 2021",
-      createdDate = "10 March 2021"
+      createdDate = "10 March 2021",
+      historyPrices = listOf()
     )
     pocketViewModels.start(activateCustomer)
-    pocketViewModels.getPocketWithCustomerIdAndPocketId(activatePocket)
+    pocketViewModels.getPocketCustomerById(activatePocket)
     productViewModels.getProduct("4028e4b97b5e973a017b5e99802a0000")
 //    productViewModels.updateProduct(productId = 1)
     profileViewModels.getCustomerById(activateCustomer)
@@ -223,10 +221,17 @@ class HomeFragment : Fragment() {
           ResourceStatus.LOADING -> showProgressBar()
           ResourceStatus.SUCCESS -> {
             Log.d("PocketApi", "Subscribe : ${it.data}")
+            val purchase = it.data
+            if (purchase != null) {
+              pocketViewModels.getPocketCustomerById(activatePocket)
+              Toast.makeText(context, "Purchased Success", Toast.LENGTH_SHORT).show()
+            }
+
             hideProgressBar()
           }
           ResourceStatus.ERROR -> {
-            Toast.makeText(requireContext(), "Gagal Mendapatkan List Pocket", Toast.LENGTH_SHORT)
+            val message = "Failed to Purchase"
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
               .show()
             hideProgressBar()
           }
@@ -241,11 +246,10 @@ class HomeFragment : Fragment() {
               customerPockets = it.data
               totalPocketsText.text = "Your Total Pockets: ${customerPockets.size}"
             }
-
             hideProgressBar()
           }
           ResourceStatus.ERROR -> {
-            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Gagal Mendapatkan List Pocket", Toast.LENGTH_SHORT).show()
             hideProgressBar()
           }
         }
@@ -262,20 +266,26 @@ class HomeFragment : Fragment() {
       .setMessage("Input Quantity")
       .setView(inputQty)
       .setPositiveButton("Purchase") { _, _ ->
-        val qty: Double = inputQty.text.toString().toDouble()
-        val updatePocket: com.mkamilmistar.gold_market.data.model.response.Pocket =
-          pocketViewModels.pocketCustomer.copy()
-        val price = if (purchaseType == 0) {
-          updatePocket.pocketQty += qty.toInt()
-          product.productPriceBuy * qty
-        } else {
-          updatePocket.pocketQty -= qty.toInt()
-          product.productPriceSell * qty
-        }
-//        purchase = Purchase(
-//          purchaseType = 1, purchaseDate = "", purchaseDetail = ArraySet(1)
-//        )
-        pocketViewModels.updatePocket(UpdatePocketRequest(""), "")
+        val qty: Int = inputQty.text.toString().toInt()
+//        val updatePocket: Pocket =
+//          pocketViewModels.pocketCustomer.copy()
+//        val price = if (purchaseType == 0) {
+//          updatePocket.pocketQty += qty.toInt()
+//          product.productPriceBuy * qty
+//        } else {
+//          updatePocket.pocketQty -= qty.toInt()
+//          product.productPriceSell * qty
+//        }
+
+        pocketReqest = PocketRequest(activatePocket)
+        purchaseDetailRequest = PurchaseDetailRequest(
+          pocketRequest = pocketReqest, quantityInGram = qty
+        )
+        purchase = PurchaseRequest(
+          purchaseType = purchaseType, purchaseDetails = listOf(purchaseDetailRequest)
+        )
+
+//        pocketViewModels.updatePocket(UpdatePocketRequest(""), "")
 //        showDialog(title, message, purchase)
         showDialog(title, message)
       }
@@ -292,7 +302,7 @@ class HomeFragment : Fragment() {
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> {
-//          purchaseViewModels.purchaseProduct("", purchase)
+          purchaseViewModels.purchaseProduct(activateCustomer, purchase)
         }
         DialogInterface.BUTTON_NEUTRAL -> {
         }

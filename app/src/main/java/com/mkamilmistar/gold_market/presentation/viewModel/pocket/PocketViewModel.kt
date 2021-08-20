@@ -46,11 +46,12 @@ class PocketViewModel(
     }
   }
 
-  fun getPocketWithCustomerIdAndPocketId(pocketId: String) {
+  fun getPocketCustomerById(pocketId: String) {
     viewModelScope.launch(Dispatchers.IO) {
       _pocketLiveData.postValue(Resource.loading())
       val response = pocketRepository.findPocketById(pocketId)
       if (response != null) {
+        pocketCustomer = response
         _pocketLiveData.postValue(Resource.success(data = response))
       } else {
         _pocketLiveData.postValue(Resource.error(message = response))

@@ -6,6 +6,7 @@
 * Set Local IP for path Url in ``local.properties``  
 * Run Project
 * REGISTER FIRST TO LOGIN
+* CLICK THE POCKET IN POCKET LIST TO SET THE POCKET 
 
 ## Screenshot
 <p align="center">

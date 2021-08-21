@@ -53,12 +53,17 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
     pocketViewModel = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(PocketViewModel::class.java)
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    subscribe()
+  private fun initShared() {
     val sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
     activateProduct = sharedPreferences.retrived(Utils.PRODUCT_ID).toString()
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    subscribe()
+    initShared()
+
     if (!activateCustomer.equals(null)) {
       pocketViewModel.start(activateCustomer)
     } else {

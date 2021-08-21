@@ -17,12 +17,10 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.remote.request.LoginRequest
-import com.mkamilmistar.gold_market.data.remote.response.LoginResponse
 import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.AuthRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
-import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel

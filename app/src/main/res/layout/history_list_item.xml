@@ -4,14 +4,8 @@
 
   <data>
     <variable
-      name="productNameItem"
-      type="String" />
-    <variable
-      name="productDateItem"
-      type="String" />
-    <variable
       name="viewmodel"
-      type="com.mkamilmistar.gold_market.ui.history.HistoryViewModel" />
+      type="com.mkamilmistar.gold_market.presentation.viewModel.history.HistoryViewModel" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,9 +48,8 @@
           android:layout_marginStart="8dp"
           android:layout_marginTop="-10dp"
           android:fontFamily="@font/nunitosans_extrabold"
-          android:text="@={productNameItem}"
           android:textColor="@color/black"
-          android:textSize="16sp"
+          android:textSize="13sp"
           app:layout_constraintBottom_toBottomOf="@+id/picture_product"
           app:layout_constraintStart_toEndOf="@+id/picture_product"
           app:layout_constraintTop_toTopOf="@+id/picture_product"
@@ -67,7 +60,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:fontFamily="@font/nunitosans_light"
-          android:text="@{productDateItem}"
           android:textColor="#707070"
           android:textSize="10sp"
           app:layout_constraintStart_toStartOf="@+id/product_name_text"

@@ -1,8 +1,9 @@
 package com.mkamilmistar.gold_market.data.repository
 
-import com.mkamilmistar.gold_market.data.model.Product
+import com.mkamilmistar.gold_market.data.remote.entity.Product
 
 interface ProductRepository {
-  fun findAllProduct(): List<Product>
-  fun findProduct(position: Int): Product
+  suspend fun getProductById(productId: String): Product?
+  suspend fun getProducts(): List<Product>?
+  suspend fun createProduct(request: Product): Product?
 }

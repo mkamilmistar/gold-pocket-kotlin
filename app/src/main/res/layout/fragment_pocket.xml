@@ -6,14 +6,14 @@
   <data>
     <variable
       name="viewmodel"
-      type="com.mkamilmistar.gold_market.ui.pocket.PocketViewModel" />
+      type="com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_gray"
-    tools:context=".ui.pocket.PocketFragment">
+    tools:context=".presentation.ui.pocket.PocketFragment">
 
     <LinearLayout
       android:id="@+id/header_pocket"

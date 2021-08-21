@@ -10,4 +10,12 @@ object Versions {
   const val fragment_version = "1.4.0-alpha04"
   const val navigation_fragment_version = "2.4.0-alpha05"
   const val navigation_android_version = "2.4.0-alpha05"
+  const val coroutines_version = "1.5.0"
+  const val livecycleViewModel_version = "2.3.1"
+  const val livecycleLiveData_version = "2.3.1"
+  const val room_version = "2.2.6"
+  const val roomCompiler_version = "2.2.6"
+  const val retrofit_version = "2.9.0"
+  const val moshi_version = "2.4.0"
+  const val security_crypto_version = "1.0.0"
 }

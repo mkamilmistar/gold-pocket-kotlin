@@ -1,32 +1,81 @@
 package com.mkamilmistar.gold_market.data.repository
 
-import com.mkamilmistar.gold_market.data.model.Pocket
+import android.util.Log
+import com.mkamilmistar.gold_market.data.remote.request.CreatePocketRequest
+import com.mkamilmistar.gold_market.data.remote.request.UpdatePocketRequest
+import com.mkamilmistar.gold_market.data.remote.response.*
+import com.mkamilmistar.gold_market.data.remote.api.PocketApi
+import com.mkamilmistar.gold_market.data.remote.entity.Pocket
 
-class PocketRepositoryImpl: PocketRepository {
-  override fun findAllPocket(): List<Pocket> {
-    return pocketDB
+class PocketRepositoryImpl(private val pocketApi: PocketApi): PocketRepository {
+
+  override suspend fun customerPockets(customerId: String): List<Pocket>? {
+    return try {
+      val response = pocketApi.customerWithPockets(customerId)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("PocketApi", e.localizedMessage)
+      null
+    }
   }
 
-  override fun findPocket(position: Int): Pocket {
-    return pocketDB[position]
+  override suspend fun updatePocket(request: UpdatePocketRequest): Pocket? {
+    return try {
+      val response = pocketApi.updatePocket(request)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("PocketApi", e.localizedMessage)
+      null
+    }
   }
 
-  override fun addPocket(pocket: Pocket) {
-    pocketDB.add(pocket)
+  override suspend fun findPocketById(pocketId: String): Pocket? {
+    return try {
+      val response = pocketApi.pocketById(pocketId)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("PocketApi", e.localizedMessage)
+      null
+    }
   }
 
-  override fun deletePocket(position: Int) {
-    pocketDB.removeAt(position)
+  override suspend fun addPocket(request: CreatePocketRequest): Pocket? {
+    return try {
+      val response = pocketApi.createPocket(request)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("PocketApi", e.localizedMessage)
+      null
+    }
   }
 
-  companion object {
-    val pocketDB: MutableList<Pocket> = mutableListOf(
-      Pocket("pocket-1", "Gold Pocket", 10.0),
-      Pocket("pocket-2", "Platinum Pocket", 0),
-      Pocket("pocket-3", "Silver Pocket", 0),
-    )
+  override suspend fun deletePocket(pocketId: String): DeletePocketResponse? {
+    return try {
+      val response = pocketApi.deletePocketById(pocketId)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("PocketApi", e.localizedMessage)
+      null
+    }
   }
-  val pocketDBImport
-    get() = pocketDB
-
 }

@@ -1,8 +1,12 @@
 # Gold Market (Android Kotlin Project)
 
-## Login
-* Email : melia@gmail.com
-* Password : melia123
+## How to Use
+* Download Jar Backend in <a href="https://git.enigmacamp.com/enigma-camp/class-mandiri/muhammad-kamil/kotlin/challenge/challenge-android/-/blob/retrofit/backend/gold-pocket-boot-0.0.1-SNAPSHOT.jar">Backend Gold Pocket</a>
+* Run Jar file with command ``java -jar gold-pocket-boot-0.0.1-SNAPSHOT.jar``
+* Set Local IP for path Url in ``local.properties``  
+* Run Project
+* REGISTER FIRST TO LOGIN
+* **CLICK THE POCKET IN POCKET LIST TO SET THE POCKET**
 
 ## Screenshot
 <p align="center">

@@ -1,30 +1,38 @@
 package com.mkamilmistar.gold_market.data.repository
 
-import com.mkamilmistar.gold_market.data.model.Purchase
+import android.util.Log
+import com.mkamilmistar.gold_market.data.db.AppDatabase
+import com.mkamilmistar.gold_market.data.remote.request.PurchaseRequest
+import com.mkamilmistar.gold_market.data.remote.entity.Purchase
+import com.mkamilmistar.gold_market.data.remote.response.PurchaseResponse
+import com.mkamilmistar.gold_market.data.remote.api.PurchaseApi
 
-class PurchaseRepositoryImpl: PurchaseRepository {
-  override fun findAllPurchase(): List<Purchase> {
-    return purchaseDB
+class PurchaseRepositoryImpl(private val purchaseApi: PurchaseApi) : PurchaseRepository {
+  override suspend fun customerPurchases(customerId: String): List<Purchase>? {
+    return try {
+      val response = purchaseApi.customerPurchasesList(customerId)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("PocketApi", e.localizedMessage)
+      null
+    }
   }
 
-  override fun findPurchase(position: Int): Purchase {
-    return purchaseDB[position]
-  }
-
-  override fun addPurchase(purchase: Purchase) {
-    purchaseDB.add(purchase)
-  }
-
-  override fun deletePurchase(position: Int) {
-    purchaseDB.removeAt(position)
-  }
-
-  companion object {
-    val purchaseDB: MutableList<Purchase> =
-      mutableListOf(
-        Purchase("Purchase-1", "12 March 2021", 0, 120000, 1.0),
-        Purchase("Purchase-2", "12 March 2021", 1, 110000, 1.0),
-        Purchase("Purchase-3", "12 March 2021", 0, 130000, 1.0),
-        )
+  override suspend fun addPurchase(customerId: String, purchase: PurchaseRequest): PurchaseResponse? {
+    return try {
+      val response = purchaseApi.purchase(purchase, customerId)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("PocketApi", e.localizedMessage)
+      null
+    }
   }
 }

@@ -1,25 +1,53 @@
 package com.mkamilmistar.gold_market.data.repository
 
-import com.mkamilmistar.gold_market.data.model.Product
+import android.util.Log
+import com.mkamilmistar.gold_market.data.db.AppDatabase
+import com.mkamilmistar.gold_market.data.remote.entity.Product
+import com.mkamilmistar.gold_market.data.remote.api.ProductApi
 
-class ProductRepositoryImpl: ProductRepository {
-  override fun findAllProduct(): List<Product> {
-    return productDB
+class ProductRepositoryImpl(
+  private val productApi: ProductApi
+) : ProductRepository {
+
+  override suspend fun getProductById(productId: String): Product? {
+    return try {
+      val response = productApi.getProductById(productId)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("ProductApi", e.localizedMessage)
+      null
+    }
   }
 
-  override fun findProduct(position: Int): Product {
-    return productDB[position]
+  override suspend fun getProducts(): List<Product>? {
+    return try {
+      val response = productApi.getProducts()
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("ProductApi", e.localizedMessage)
+      null
+    }
   }
 
-  companion object {
-    val productDB: MutableList<Product> =
-      mutableListOf(
-       Product("Product-1", "Gold", 100000,
-         120000, "", 1, "", ""),
-        Product("Product-2", "Platinum", 120000,
-          130000, "", 1, "", ""),
-        Product("Product-3", "Silver", 70000,
-          80000, "", 1, "", ""),
-      )
+  override suspend fun createProduct(request: Product): Product? {
+    return try {
+      val response = productApi.createProduct(request)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("ProductApi", e.localizedMessage)
+      null
+    }
   }
 }

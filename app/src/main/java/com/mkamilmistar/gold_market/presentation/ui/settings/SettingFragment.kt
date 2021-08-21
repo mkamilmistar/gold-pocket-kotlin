@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.ProfileRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
@@ -38,7 +37,7 @@ class SettingFragment : Fragment() {
   ): View {
     initViewModel()
     val sharedPreferences = SharedPref(requireContext())
-    activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
+    activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false)
     return binding.apply {
@@ -80,7 +79,6 @@ class SettingFragment : Fragment() {
               profileName.text = "${data.firstName} ${data.lastName}"
               profileEmail.text = data.email
             }
-
             hideProgressBar()
           }
           ResourceStatus.ERROR -> {
@@ -109,6 +107,8 @@ class SettingFragment : Fragment() {
             R.id.loginFragment, null,
             NavOptions.Builder().setPopUpTo(R.id.settingFragment, true).build()
           )
+          val sharedPref = SharedPref(requireContext())
+          sharedPref.clear()
         }
         DialogInterface.BUTTON_NEUTRAL -> {
           Log.d("LOLOT", "LOLOT")

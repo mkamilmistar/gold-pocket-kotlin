@@ -55,8 +55,8 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
 
   private fun initShared() {
     val sharedPreferences = SharedPref(requireContext())
-    activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
-    activateProduct = sharedPreferences.retrived(Utils.PRODUCT_ID).toString()
+    activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
+    activateProduct = sharedPreferences.retrieved(Utils.PRODUCT_ID).toString()
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

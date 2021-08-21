@@ -17,4 +17,5 @@ object AppDependencies {
   const val roomCompiler = "androidx.room:room-compiler:${Versions.roomCompiler_version}"
   const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit_version}"
   const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.moshi_version}"
+  const val securityCrypto = "androidx.security:security-crypto:${Versions.security_crypto_version}"
 }

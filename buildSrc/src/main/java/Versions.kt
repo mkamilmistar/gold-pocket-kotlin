@@ -17,4 +17,5 @@ object Versions {
   const val roomCompiler_version = "2.2.6"
   const val retrofit_version = "2.9.0"
   const val moshi_version = "2.4.0"
+  const val security_crypto_version = "1.0.0"
 }

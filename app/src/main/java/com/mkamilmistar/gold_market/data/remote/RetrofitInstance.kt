@@ -2,7 +2,6 @@ package com.mkamilmistar.gold_market.data.remote
 
 import com.mkamilmistar.gold_market.BuildConfig
 import com.mkamilmistar.gold_market.data.remote.api.*
-import retrofit.GsonConverterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 

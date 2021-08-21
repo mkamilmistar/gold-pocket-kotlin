@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.remote.request.PocketRequest
 import com.mkamilmistar.gold_market.data.remote.request.PurchaseDetailRequest
 import com.mkamilmistar.gold_market.data.remote.request.PurchaseRequest
@@ -100,8 +99,8 @@ class HomeFragment : Fragment() {
 
   private fun initShared() {
     val sharedPreferences = SharedPref(requireContext())
-    activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
-    activatePocket = sharedPreferences.retrived(Utils.POCKET_ID).toString()
+    activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
+    activatePocket = sharedPreferences.retrieved(Utils.POCKET_ID).toString()
   }
 
   @SuppressLint("SetTextI18n")

@@ -11,7 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.PurchaseRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHistoryBinding
@@ -43,7 +42,7 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
 
   private fun initShared() {
     val sharedPreferences = SharedPref(requireContext())
-    activateCustomer = sharedPreferences.retrived(Utils.CUSTOMER_ID).toString()
+    activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
   }
 
   private fun initViewModel() {

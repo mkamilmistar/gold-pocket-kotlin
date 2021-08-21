@@ -47,9 +47,8 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
   }
 
   private fun initViewModel() {
-    val db = AppDatabase.getDatabase(requireContext())
     val purchaseApi = RetrofitInstance.purchaseApi
-    val repo = PurchaseRepositoryImpl(db, purchaseApi)
+    val repo = PurchaseRepositoryImpl(purchaseApi)
     historyViewModel = ViewModelProvider(this, HistoryViewModelFactory(repo)).get(
       HistoryViewModel::class.java)
   }

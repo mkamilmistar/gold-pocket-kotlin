@@ -51,9 +51,6 @@ class HomeFragment : Fragment() {
   private lateinit var pocketViewModels: PocketViewModel
   private lateinit var activateCustomer: String
   private var activatePocket: String = "1"
-  private lateinit var purchase: PurchaseRequest
-  private lateinit var purchaseDetail: PurchaseDetailRequest
-  private lateinit var pocketRequest: PocketRequest
   private lateinit var product: Product
   private lateinit var pocket: Pocket
   private lateinit var customer: Customer
@@ -76,13 +73,12 @@ class HomeFragment : Fragment() {
   }
 
   private fun initViewModel() {
-    val db = AppDatabase.getDatabase(requireContext())
     val api = RetrofitInstance
     val purchaseApi = api.purchaseApi
     val pocketApi = api.pocketApi
     val productApi = api.productApi
     val profileApi = api.profileApi
-    val purchaseRepo = PurchaseRepositoryImpl(db, purchaseApi)
+    val purchaseRepo = PurchaseRepositoryImpl(purchaseApi)
     val pocketRepo = PocketRepositoryImpl(pocketApi)
     val productRepository = ProductRepositoryImpl(productApi)
     val profileRepo = ProfileRepositoryImpl(profileApi)
@@ -158,7 +154,7 @@ class HomeFragment : Fragment() {
             hideProgressBar()
           }
           ResourceStatus.ERROR -> {
-            pocketNameText.text = "Create pocket first"
+            pocketNameText.text = "-"
             totalGramText.text = "0 /gr"
             totalPriceText.text = Utils.currencyFormatter(0.0)
             Toast.makeText(
@@ -271,11 +267,11 @@ class HomeFragment : Fragment() {
           purchaseDetails = listOf(purchaseDetailRequest)
         )
         when {
-          qty.toInt() <= 0 -> {
+          pocket.pocketQty <= 0 || qty.toInt() <= 0 -> {
             showOKDialog(
               requireContext(),
               "Failed Purchase",
-              "Your Input Failure"
+              "Your Pocket Quantity Cannot be Minus"
             )
           }
           customerPockets.isNotEmpty() -> {

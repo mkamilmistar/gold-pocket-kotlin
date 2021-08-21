@@ -7,7 +7,7 @@ import com.mkamilmistar.gold_market.data.remote.entity.Purchase
 import com.mkamilmistar.gold_market.data.remote.response.PurchaseResponse
 import com.mkamilmistar.gold_market.data.remote.api.PurchaseApi
 
-class PurchaseRepositoryImpl(private val db: AppDatabase, private val purchaseApi: PurchaseApi) : PurchaseRepository {
+class PurchaseRepositoryImpl(private val purchaseApi: PurchaseApi) : PurchaseRepository {
   override suspend fun customerPurchases(customerId: String): List<Purchase>? {
     return try {
       val response = purchaseApi.customerPurchasesList(customerId)
@@ -22,10 +22,6 @@ class PurchaseRepositoryImpl(private val db: AppDatabase, private val purchaseAp
     }
   }
 
-  override fun findPurchaseById(purchaseId: Int): com.mkamilmistar.gold_market.data.db.entity.Purchase {
-    return db.purchaseDao().getPurchaseById(purchaseId)
-  }
-
   override suspend fun addPurchase(customerId: String, purchase: PurchaseRequest): PurchaseResponse? {
     return try {
       val response = purchaseApi.purchase(purchase, customerId)
@@ -38,9 +34,5 @@ class PurchaseRepositoryImpl(private val db: AppDatabase, private val purchaseAp
       Log.e("PocketApi", e.localizedMessage)
       null
     }
-  }
-
-  override fun deletePurchase(purchaseId: Int) {
-    db.purchaseDao().deleteById(purchaseId)
   }
 }

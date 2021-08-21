@@ -266,7 +266,21 @@ class HomeFragment : Fragment() {
           purchaseDetails = listOf(purchaseDetailRequest)
         )
         when {
-          pocket.pocketQty <= 0 || qty.toInt() <= 0 -> {
+          qty.toInt() <= 0 -> {
+            showOKDialog(
+              requireContext(),
+              "Failed Purchase",
+              "Input Was Wrong"
+            )
+          }
+          activatePocket.isEmpty() -> {
+            showOKDialog(
+              requireContext(),
+              "Failed Purchase",
+              "Your Pocket is Not Selected or Not Exist!"
+            )
+          }
+          purchaseType == 1 && pocket.pocketQty - qty < 0 -> {
             showOKDialog(
               requireContext(),
               "Failed Purchase",
@@ -275,13 +289,6 @@ class HomeFragment : Fragment() {
           }
           customerPockets.isNotEmpty() -> {
             showDialog(title, message, purchaseRequest)
-          }
-          else -> {
-            showOKDialog(
-              requireContext(),
-              "Failed Purchase",
-              "Your Pocket is Not Selected or Not Exist!"
-            )
           }
         }
       }

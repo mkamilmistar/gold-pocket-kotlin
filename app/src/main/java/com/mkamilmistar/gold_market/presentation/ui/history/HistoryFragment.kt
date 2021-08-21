@@ -57,7 +57,7 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     subscribe()
-    historyViewModel.start("8a68e41478f8d0090178f8d0a5410001")
+    historyViewModel.start(activateCustomer)
     binding.apply {
       recycleViewHistory.apply {
         layoutManager = LinearLayoutManager(context)
@@ -79,7 +79,7 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
             hideProgressBar()
           }
           ResourceStatus.ERROR -> {
-            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Failed Get History", Toast.LENGTH_SHORT).show()
             hideProgressBar()
           }
         }

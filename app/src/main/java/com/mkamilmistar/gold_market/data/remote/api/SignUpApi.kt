@@ -1,7 +1,7 @@
 package com.mkamilmistar.gold_market.data.remote.api
 
-import com.mkamilmistar.gold_market.data.model.request.RegisterRequest
-import com.mkamilmistar.gold_market.data.model.response.RegisterResponse
+import com.mkamilmistar.gold_market.data.remote.request.RegisterRequest
+import com.mkamilmistar.gold_market.data.remote.response.RegisterResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

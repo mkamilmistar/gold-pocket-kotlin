@@ -2,7 +2,7 @@ package com.mkamilmistar.gold_market.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.mkamilmistar.gold_market.data.model.entity.Product
+import com.mkamilmistar.gold_market.data.db.entity.Product
 
 @Dao
 interface ProductDao : BaseDao<Product> {

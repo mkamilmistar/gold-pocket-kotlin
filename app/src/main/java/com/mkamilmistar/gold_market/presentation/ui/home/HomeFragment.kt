@@ -18,12 +18,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
-import com.mkamilmistar.gold_market.data.model.*
-import com.mkamilmistar.gold_market.data.model.request.PocketRequest
-import com.mkamilmistar.gold_market.data.model.request.PurchaseDetailRequest
-import com.mkamilmistar.gold_market.data.model.request.PurchaseRequest
-import com.mkamilmistar.gold_market.data.model.response.*
+import com.mkamilmistar.gold_market.data.remote.request.PocketRequest
+import com.mkamilmistar.gold_market.data.remote.request.PurchaseDetailRequest
+import com.mkamilmistar.gold_market.data.remote.request.PurchaseRequest
+import com.mkamilmistar.gold_market.data.remote.response.*
 import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
+import com.mkamilmistar.gold_market.data.remote.entity.Customer
+import com.mkamilmistar.gold_market.data.remote.entity.Pocket
+import com.mkamilmistar.gold_market.data.remote.entity.Product
 import com.mkamilmistar.gold_market.data.repository.*
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel
@@ -80,8 +82,8 @@ class HomeFragment : Fragment() {
     val profileApi = api.profileApi
     val purchaseRepo = PurchaseRepositoryImpl(db, purchaseApi)
     val pocketRepo = PocketRepositoryImpl(pocketApi)
-    val productRepository = ProductRepositoryImpl(db, productApi)
-    val profileRepo = ProfileRepositoryImpl(db, profileApi)
+    val productRepository = ProductRepositoryImpl(productApi)
+    val profileRepo = ProfileRepositoryImpl(profileApi)
     productViewModels = ViewModelProvider(
       this,
       ProductViewModelFactory(productRepository)
@@ -109,7 +111,6 @@ class HomeFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     initShared()
     product = Product(
-      id = "1",
       productName = "TOLOL",
       productImage = "TEMPE",
       productPriceBuy = 100000,
@@ -121,7 +122,7 @@ class HomeFragment : Fragment() {
     )
     pocketViewModels.start(activateCustomer)
     pocketViewModels.getPocketCustomerById(activatePocket)
-    productViewModels.getProduct("4028e4b97b5e973a017b5e99802a0000")
+    productViewModels.getProductList()
 //    productViewModels.updateProduct(productId = 1)
     profileViewModels.getCustomerById(activateCustomer)
     subscribe()
@@ -155,10 +156,13 @@ class HomeFragment : Fragment() {
         when (it.status) {
           ResourceStatus.LOADING -> showProgressBar()
           ResourceStatus.SUCCESS -> {
-            Log.d("PocketApiById", "Subscribe : ${it.data}")
+            Log.d("PocketApi", "Subscribe : ${it.data}")
             if (it.data != null) {
               pocket = it.data
-              val totalAmount = (pocket.pocketQty * product.productPriceSell.toDouble())
+              val totalAmount = (pocket.pocketQty * pocket.product.productPriceSell.toDouble())
+              Log.d("TOT", pocket.product.productPriceSell.toString())
+              Log.d("TOT", pocket.pocketQty.toString())
+              Log.d("TOT", totalAmount.toString())
               pocketNameText.text = pocket.pocketName
               totalGramText.text = "${pocket.pocketQty} /gr"
               totalPriceText.text = Utils.currencyFormatter(totalAmount)
@@ -178,13 +182,13 @@ class HomeFragment : Fragment() {
           }
         }
       })
-      productViewModels.productLiveData.observe(viewLifecycleOwner, {
+      productViewModels.productListLiveData.observe(viewLifecycleOwner, {
         when (it.status) {
           ResourceStatus.LOADING -> showProgressBar()
           ResourceStatus.SUCCESS -> {
             Log.d("ProductApi", "Subscribe : ${it.data}")
             if (it.data != null) {
-              product = it.data
+              product = it.data.last()
               priceBuyAmount.text = Utils.currencyFormatter(product.productPriceBuy)
               priceSellAmount.text = Utils.currencyFormatter(product.productPriceSell)
               val sharedPreferences = SharedPref(requireContext())

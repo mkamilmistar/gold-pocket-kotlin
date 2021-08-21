@@ -1,10 +1,11 @@
 package com.mkamilmistar.gold_market.data.repository
 
 import android.util.Log
-import com.mkamilmistar.gold_market.data.model.request.CreatePocketRequest
-import com.mkamilmistar.gold_market.data.model.request.UpdatePocketRequest
-import com.mkamilmistar.gold_market.data.model.response.*
+import com.mkamilmistar.gold_market.data.remote.request.CreatePocketRequest
+import com.mkamilmistar.gold_market.data.remote.request.UpdatePocketRequest
+import com.mkamilmistar.gold_market.data.remote.response.*
 import com.mkamilmistar.gold_market.data.remote.api.PocketApi
+import com.mkamilmistar.gold_market.data.remote.entity.Pocket
 
 class PocketRepositoryImpl(private val pocketApi: PocketApi): PocketRepository {
 

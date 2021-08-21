@@ -3,8 +3,8 @@ package com.mkamilmistar.gold_market.data.db.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPurchases
-import com.mkamilmistar.gold_market.data.model.entity.Purchase
+import com.mkamilmistar.gold_market.data.db.entity.CustomerWithPurchases
+import com.mkamilmistar.gold_market.data.db.entity.Purchase
 
 @Dao
 interface PurchaseDao: BaseDao<Purchase> {

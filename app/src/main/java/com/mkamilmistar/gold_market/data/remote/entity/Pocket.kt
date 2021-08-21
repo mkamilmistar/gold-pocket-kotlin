@@ -1,4 +1,4 @@
-package com.mkamilmistar.gold_market.data.model.response
+package com.mkamilmistar.gold_market.data.remote.entity
 
 data class Pocket (
   val id: String = "",

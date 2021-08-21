@@ -16,8 +16,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.model.request.CreatePocketRequest
-import com.mkamilmistar.gold_market.data.model.request.UpdatePocketRequest
+import com.mkamilmistar.gold_market.data.remote.request.CreatePocketRequest
 import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentPocketBinding

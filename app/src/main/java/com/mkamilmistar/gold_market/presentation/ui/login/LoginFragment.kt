@@ -11,17 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.db.AppDatabase
-import com.mkamilmistar.gold_market.data.model.entity.Customer
-import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
-import com.mkamilmistar.gold_market.data.model.request.LoginRequest
-import com.mkamilmistar.gold_market.data.model.response.LoginResponse
+import com.mkamilmistar.gold_market.data.remote.request.LoginRequest
+import com.mkamilmistar.gold_market.data.remote.response.LoginResponse
 import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.AuthRepositoryImpl
 import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
@@ -139,8 +135,13 @@ class LoginFragment : Fragment(), TextWatcher {
           Log.d("PocketApi", "Subscribe : ${it.data}")
           val customerPockets = it.data
           val sharedPreferences = SharedPref(requireContext())
-          if (customerPockets!=null) {
-            sharedPreferences.save(Utils.POCKET_ID, customerPockets.first().id)
+          when {
+            customerPockets?.isNotEmpty() == true -> {
+              sharedPreferences.save(Utils.POCKET_ID, it.data.first().id)
+            }
+            else -> {
+              sharedPreferences.save(Utils.POCKET_ID, "")
+            }
           }
           navToHome()
           hideProgressBar()

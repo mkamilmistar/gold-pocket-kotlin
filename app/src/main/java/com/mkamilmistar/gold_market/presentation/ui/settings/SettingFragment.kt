@@ -11,17 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.db.AppDatabase
-import com.mkamilmistar.gold_market.data.model.entity.Customer
 import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.repository.ProfileRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
-import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModel
 import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
@@ -52,9 +49,8 @@ class SettingFragment : Fragment() {
   }
 
   private fun initViewModel() {
-    val db = AppDatabase.getDatabase(requireContext())
     val profileApi = RetrofitInstance.profileApi
-    val repo = ProfileRepositoryImpl(db, profileApi)
+    val repo = ProfileRepositoryImpl(profileApi)
     profileViewModel =
       ViewModelProvider(this, ProfileViewModelFactory(repo)).get(ProfileViewModel::class.java)
   }

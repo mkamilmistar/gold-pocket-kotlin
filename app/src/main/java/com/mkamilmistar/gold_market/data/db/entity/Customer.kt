@@ -1,12 +1,8 @@
-package com.mkamilmistar.gold_market.data.model.entity
+package com.mkamilmistar.gold_market.data.db.entity
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.Serializable
-import java.time.LocalDateTime
-import java.util.*
 
 @Entity(tableName = "m_customers")
 data class Customer(

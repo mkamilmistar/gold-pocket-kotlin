@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.model.response.Purchase
+import com.mkamilmistar.gold_market.data.remote.entity.Purchase
 import com.mkamilmistar.gold_market.databinding.HistoryListItemBinding
 import com.mkamilmistar.gold_market.utils.Utils
 
@@ -29,16 +29,17 @@ class HistoryAdapter(private val onClickItemListener: OnClickItemListener) :
       with(histories[position]) {
 
         historyDateText.text = this.purchaseDate
+        val qty = purchaseDetails[0].quantityInGram
 
         if (this.purchaseType.toInt() == 0) {
-          productNameText.text = "Buy ${purchaseDetails[0].quantityInGram} /gr"
+          productNameText.text = "Buy $qty /gr"
           pictureProduct.setImageResource(R.drawable.gold)
-          priceProductText.text = "+${purchaseDetails[0].product.let { Utils.currencyFormatter(it.productPriceBuy) }}"
+          priceProductText.text = "+${purchaseDetails[0].product.let { Utils.currencyFormatter(it.productPriceSell * qty) }}"
           priceProductText.setTextColor(Color.parseColor("#1EC15F"))
         } else {
-          productNameText.text = "Sell ${purchaseDetails[0].quantityInGram} /gr"
+          productNameText.text = "Sell $qty /gr"
           pictureProduct.setImageResource(R.drawable.bronze)
-          priceProductText.text = "-${purchaseDetails[0].product.let { Utils.currencyFormatter(it.productPriceSell) }}"
+          priceProductText.text = "-${purchaseDetails[0].product.let { Utils.currencyFormatter(it.productPriceBuy * qty) }}"
           priceProductText.setTextColor(Color.parseColor("#FF5B37"))
         }
 

@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.mkamilmistar.gold_market.data.db.dao.*
-import com.mkamilmistar.gold_market.data.model.entity.*
+import com.mkamilmistar.gold_market.data.db.entity.*
 
 @Database(entities = [Customer::class, Pocket::class, Purchase::class, Product::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {

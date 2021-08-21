@@ -3,9 +3,8 @@ package com.mkamilmistar.gold_market.data.db.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.mkamilmistar.gold_market.data.model.entity.Customer
-import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPockets
-import com.mkamilmistar.gold_market.data.model.entity.CustomerWithPurchases
+import com.mkamilmistar.gold_market.data.db.entity.Customer
+import com.mkamilmistar.gold_market.data.db.entity.CustomerWithPockets
 
 @Dao
 interface AuthDao : BaseDao<Customer> {

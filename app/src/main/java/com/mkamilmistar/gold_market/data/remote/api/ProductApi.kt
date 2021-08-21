@@ -1,6 +1,6 @@
 package com.mkamilmistar.gold_market.data.remote.api
 
-import com.mkamilmistar.gold_market.data.model.response.Product
+import com.mkamilmistar.gold_market.data.remote.entity.Product
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

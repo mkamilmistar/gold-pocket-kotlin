@@ -1,4 +1,4 @@
-package com.mkamilmistar.gold_market.data.model.entity
+package com.mkamilmistar.gold_market.data.db.entity
 
 import androidx.room.Embedded
 import androidx.room.Relation

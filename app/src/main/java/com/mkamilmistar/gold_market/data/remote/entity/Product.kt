@@ -1,7 +1,7 @@
-package com.mkamilmistar.gold_market.data.model.response
+package com.mkamilmistar.gold_market.data.remote.entity
 
 data class Product (
-  val id: String,
+  val id: String = "",
   val productName: String,
   val productPriceBuy: Long,
   val productPriceSell: Long,

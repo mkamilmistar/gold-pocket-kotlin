@@ -1,4 +1,4 @@
-package com.mkamilmistar.gold_market.data.model.request
+package com.mkamilmistar.gold_market.data.remote.request
 
 data class RegisterRequest (
   val firstName: String,

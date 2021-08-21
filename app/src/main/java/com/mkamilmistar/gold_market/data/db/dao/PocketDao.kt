@@ -2,8 +2,7 @@ package com.mkamilmistar.gold_market.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import androidx.room.Transaction
-import com.mkamilmistar.gold_market.data.model.entity.Pocket
+import com.mkamilmistar.gold_market.data.db.entity.Pocket
 
 @Dao
 interface PocketDao: BaseDao<Pocket> {

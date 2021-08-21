@@ -1,8 +1,7 @@
-package com.mkamilmistar.gold_market.data.model.entity
+package com.mkamilmistar.gold_market.data.db.entity
 
 import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

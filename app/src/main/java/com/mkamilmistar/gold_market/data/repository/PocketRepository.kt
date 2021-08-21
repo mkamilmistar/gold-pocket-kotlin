@@ -1,8 +1,9 @@
 package com.mkamilmistar.gold_market.data.repository
 
-import com.mkamilmistar.gold_market.data.model.request.CreatePocketRequest
-import com.mkamilmistar.gold_market.data.model.request.UpdatePocketRequest
-import com.mkamilmistar.gold_market.data.model.response.*
+import com.mkamilmistar.gold_market.data.remote.entity.Pocket
+import com.mkamilmistar.gold_market.data.remote.request.CreatePocketRequest
+import com.mkamilmistar.gold_market.data.remote.request.UpdatePocketRequest
+import com.mkamilmistar.gold_market.data.remote.response.*
 
 interface PocketRepository {
   suspend fun findPocketById(pocketId: String): Pocket?

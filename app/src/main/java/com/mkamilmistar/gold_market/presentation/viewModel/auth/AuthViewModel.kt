@@ -1,23 +1,18 @@
 package com.mkamilmistar.gold_market.presentation.viewModel.auth
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mkamilmistar.gold_market.data.model.entity.Customer
-import com.mkamilmistar.gold_market.data.model.entity.Pocket
-import com.mkamilmistar.gold_market.data.model.request.LoginRequest
-import com.mkamilmistar.gold_market.data.model.request.RegisterRequest
-import com.mkamilmistar.gold_market.data.model.response.LoginResponse
-import com.mkamilmistar.gold_market.data.model.response.RegisterResponse
+import com.mkamilmistar.gold_market.data.db.entity.Pocket
+import com.mkamilmistar.gold_market.data.remote.request.LoginRequest
+import com.mkamilmistar.gold_market.data.remote.request.RegisterRequest
+import com.mkamilmistar.gold_market.data.remote.response.LoginResponse
+import com.mkamilmistar.gold_market.data.remote.response.RegisterResponse
 import com.mkamilmistar.gold_market.data.repository.AuthRepository
-import com.mkamilmistar.gold_market.helpers.EventResult
 import com.mkamilmistar.mysimpleretrofit.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 

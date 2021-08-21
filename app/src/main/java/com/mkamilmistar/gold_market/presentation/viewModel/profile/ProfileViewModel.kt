@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mkamilmistar.gold_market.data.model.response.Customer
+import com.mkamilmistar.gold_market.data.remote.entity.Customer
 import com.mkamilmistar.gold_market.data.repository.ProfileRepository
 import com.mkamilmistar.mysimpleretrofit.utils.Resource
 import kotlinx.coroutines.Dispatchers

@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mkamilmistar.gold_market.data.model.request.CreatePocketRequest
-import com.mkamilmistar.gold_market.data.model.request.UpdatePocketRequest
-import com.mkamilmistar.gold_market.data.model.response.Pocket
+import com.mkamilmistar.gold_market.data.remote.request.CreatePocketRequest
+import com.mkamilmistar.gold_market.data.remote.request.UpdatePocketRequest
+import com.mkamilmistar.gold_market.data.remote.entity.Pocket
 import com.mkamilmistar.gold_market.data.repository.PocketRepository
 import com.mkamilmistar.mysimpleretrofit.utils.Resource
 import kotlinx.coroutines.Dispatchers

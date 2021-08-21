@@ -43,10 +43,19 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
     }
   }
 
-  fun createProduct(request: Product) {
+  fun createProduct() {
+    val newProduct = Product(
+      productName = "Gold",
+      productImage = "gold.jpg",
+      productPriceBuy = 100000,
+      productPriceSell = 120000,
+      productStatus = 1,
+      historyPrices = listOf()
+    )
+
     viewModelScope.launch(Dispatchers.IO) {
       _productListLiveData.postValue(Resource.loading())
-      val response = productRepository.createProduct(request)
+      val response = productRepository.createProduct(newProduct)
       if (response != null) {
         _productListLiveData.postValue(Resource.success(data = listOf(response)))
       } else {

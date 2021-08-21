@@ -182,15 +182,7 @@ class HomeFragment : Fragment() {
               val sharedPreferences = SharedPref(requireContext())
               sharedPreferences.save(Utils.PRODUCT_ID, product.id)
             } else {
-              val newProduct = Product(
-                productName = "Gold",
-                productImage = "gold.jpg",
-                productPriceBuy = 100000,
-                productPriceSell = 120000,
-                productStatus = 1,
-                historyPrices = listOf()
-              )
-              productViewModels.createProduct(newProduct)
+              productViewModels.createProduct()
             }
             hideProgressBar()
           }
@@ -279,6 +271,13 @@ class HomeFragment : Fragment() {
           purchaseDetails = listOf(purchaseDetailRequest)
         )
         when {
+          qty.toInt() <= 0 -> {
+            showOKDialog(
+              requireContext(),
+              "Failed Purchase",
+              "Your Input Failure"
+            )
+          }
           customerPockets.isNotEmpty() -> {
             showDialog(title, message, purchaseRequest)
           }

@@ -91,7 +91,7 @@ class RegisterFragment : Fragment(), TextWatcher {
       val newCustomer =
         RegisterRequest(
           firstName = firstName, lastName = lastName,
-          email = email, username = "", password = pwd, address = "", birthDate = "", status = ""
+          email = email, username = "", password = pwd, address = "", birthDate = "", status = 1
         )
       authViewModel.registerCustomer(newCustomer)
     }
@@ -106,13 +106,18 @@ class RegisterFragment : Fragment(), TextWatcher {
 
   private fun subscribe() {
     hideProgressBar()
-    val sharedPreferences = SharedPref(requireContext())
     binding.apply {
       authViewModel.successRegister.observe(viewLifecycleOwner, {
         when (it.status) {
           ResourceStatus.LOADING -> showProgressBar()
           ResourceStatus.SUCCESS -> {
             Log.d("AuthApi", "Register Success : ${it.data}")
+            val customer = it.data
+            val sharedPreferences = SharedPref(requireContext())
+            if (customer!=null) {
+              sharedPreferences.save(Utils.CUSTOMER_ID, customer.id)
+              pocketViewModels.start(customer.id)
+            }
             subscribePocket()
             hideProgressBar()
           }

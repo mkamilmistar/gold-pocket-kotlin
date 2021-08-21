@@ -6,7 +6,7 @@ data class RegisterRequest (
   val email: String,
   val username: String,
   val password: String,
-  val status: String?,
-  val birthDate: String?,
-  val address: String?,
+  val status: Long,
+  val birthDate: String = "",
+  val address: String = "",
 )

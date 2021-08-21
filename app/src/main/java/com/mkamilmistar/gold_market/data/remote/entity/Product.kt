@@ -8,6 +8,6 @@ data class Product (
   val productImage: String,
   val productStatus: Long,
   val historyPrices: List<HistoryPrice>,
-  val createdDate: String,
-  val updatedDate: String
+  val createdDate: String = "",
+  val updatedDate: String = ""
   )

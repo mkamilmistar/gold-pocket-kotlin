@@ -40,6 +40,7 @@ import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.showOKDialog
 import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
+import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -111,20 +112,9 @@ class HomeFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initShared()
-    product = Product(
-      productName = "TOLOL",
-      productImage = "TEMPE",
-      productPriceBuy = 100000,
-      productPriceSell = 120000,
-      productStatus = 1,
-      updatedDate = "12 March 2021",
-      createdDate = "10 March 2021",
-      historyPrices = listOf()
-    )
     pocketViewModels.start(activateCustomer)
     pocketViewModels.getPocketCustomerById(activatePocket)
     productViewModels.getProductList()
-//    productViewModels.updateProduct(productId = 1)
     profileViewModels.getCustomerById(activateCustomer)
     subscribe()
     binding.apply {
@@ -185,12 +175,22 @@ class HomeFragment : Fragment() {
           ResourceStatus.LOADING -> showProgressBar()
           ResourceStatus.SUCCESS -> {
             Log.d("ProductApi", "Subscribe : ${it.data}")
-            if (it.data != null) {
+            if (it.data?.isNotEmpty() == true) {
               product = it.data.last()
               priceBuyAmount.text = Utils.currencyFormatter(product.productPriceBuy)
               priceSellAmount.text = Utils.currencyFormatter(product.productPriceSell)
               val sharedPreferences = SharedPref(requireContext())
               sharedPreferences.save(Utils.PRODUCT_ID, product.id)
+            } else {
+              val newProduct = Product(
+                productName = "Gold",
+                productImage = "gold.jpg",
+                productPriceBuy = 100000,
+                productPriceSell = 120000,
+                productStatus = 1,
+                historyPrices = listOf()
+              )
+              productViewModels.createProduct(newProduct)
             }
             hideProgressBar()
           }
@@ -283,7 +283,11 @@ class HomeFragment : Fragment() {
             showDialog(title, message, purchaseRequest)
           }
           else -> {
-            showOKDialog(requireContext(), "Failed Purchase", "Your Pocket is Not Selected or Not Exist!")
+            showOKDialog(
+              requireContext(),
+              "Failed Purchase",
+              "Your Pocket is Not Selected or Not Exist!"
+            )
           }
         }
       }

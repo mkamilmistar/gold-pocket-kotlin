@@ -37,8 +37,17 @@ class ProductRepositoryImpl(
     }
   }
 
-//  override fun createProduct(product: Product): Product {
-//    db.productDao().insert(product)
-//    return product
-//  }
+  override suspend fun createProduct(request: Product): Product? {
+    return try {
+      val response = productApi.createProduct(request)
+      if (response.isSuccessful) {
+        response.body()
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      Log.e("ProductApi", e.localizedMessage)
+      null
+    }
+  }
 }

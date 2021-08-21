@@ -42,4 +42,16 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
       }
     }
   }
+
+  fun createProduct(request: Product) {
+    viewModelScope.launch(Dispatchers.IO) {
+      _productListLiveData.postValue(Resource.loading())
+      val response = productRepository.createProduct(request)
+      if (response != null) {
+        _productListLiveData.postValue(Resource.success(data = listOf(response)))
+      } else {
+        _productListLiveData.postValue(Resource.error(message = response))
+      }
+    }
+  }
 }

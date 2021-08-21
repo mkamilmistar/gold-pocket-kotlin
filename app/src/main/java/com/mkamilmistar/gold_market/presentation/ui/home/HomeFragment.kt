@@ -38,6 +38,7 @@ import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseView
 import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.gold_market.utils.showOKDialog
 import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
 
 class HomeFragment : Fragment() {
@@ -160,9 +161,6 @@ class HomeFragment : Fragment() {
             if (it.data != null) {
               pocket = it.data
               val totalAmount = (pocket.pocketQty * pocket.product.productPriceSell.toDouble())
-              Log.d("TOT", pocket.product.productPriceSell.toString())
-              Log.d("TOT", pocket.pocketQty.toString())
-              Log.d("TOT", totalAmount.toString())
               pocketNameText.text = pocket.pocketName
               totalGramText.text = "${pocket.pocketQty} /gr"
               totalPriceText.text = Utils.currencyFormatter(totalAmount)
@@ -246,14 +244,15 @@ class HomeFragment : Fragment() {
           ResourceStatus.LOADING -> showProgressBar()
           ResourceStatus.SUCCESS -> {
             Log.d("PocketApi", "Subscribe : ${it.data}")
-            if (it.data != null){
+            if (it.data != null) {
               customerPockets = it.data
               totalPocketsText.text = "Your Total Pockets: ${customerPockets.size}"
             }
             hideProgressBar()
           }
           ResourceStatus.ERROR -> {
-            Toast.makeText(requireContext(), "Gagal Mendapatkan List Pocket", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Gagal Mendapatkan List Pocket", Toast.LENGTH_SHORT)
+              .show()
             hideProgressBar()
           }
         }
@@ -272,19 +271,21 @@ class HomeFragment : Fragment() {
       .setPositiveButton("Purchase") { _, _ ->
         val qty: Double = inputQty.text.toString().toDouble()
 
-        val pocketRequest = PocketRequest(
-          id = activatePocket
-        )
-
-        val purchaseDetailRequest = PurchaseDetailRequest(
-          quantityInGram = qty, pocket = pocketRequest
-        )
-
+        val pocketRequest = PocketRequest(id = activatePocket)
+        val purchaseDetailRequest =
+          PurchaseDetailRequest(quantityInGram = qty, pocket = pocketRequest)
         val purchaseRequest = PurchaseRequest(
-          purchaseType = purchaseType, purchaseDetails = listOf(purchaseDetailRequest)
+          purchaseType = purchaseType,
+          purchaseDetails = listOf(purchaseDetailRequest)
         )
-
-        showDialog(title, message, purchaseRequest)
+        when {
+          customerPockets.isNotEmpty() -> {
+            showDialog(title, message, purchaseRequest)
+          }
+          else -> {
+            showOKDialog(requireContext(), "Failed Purchase", "Your Pocket is Not Selected or Not Exist!")
+          }
+        }
       }
       .setNegativeButton("Cancel", null)
       .create()

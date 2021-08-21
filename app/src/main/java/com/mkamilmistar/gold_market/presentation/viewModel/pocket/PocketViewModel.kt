@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.mkamilmistar.gold_market.data.remote.request.CreatePocketRequest
 import com.mkamilmistar.gold_market.data.remote.request.UpdatePocketRequest
 import com.mkamilmistar.gold_market.data.remote.entity.Pocket
+import com.mkamilmistar.gold_market.data.remote.response.DeletePocketResponse
 import com.mkamilmistar.gold_market.data.repository.PocketRepository
 import com.mkamilmistar.mysimpleretrofit.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,11 @@ class PocketViewModel(
   private var _pocketLiveData = MutableLiveData<Resource<Pocket>>()
   val pocketLiveData: LiveData<Resource<Pocket>>
     get() = _pocketLiveData
+
+  private var _isExistDataValidate =
+    MutableLiveData<Resource<Boolean>>()
+  val isExistDataValidate: LiveData<Resource<Boolean>>
+    get() = _isExistDataValidate
 
   private lateinit var customerPockets: List<Pocket>
   lateinit var pocketCustomer: Pocket
@@ -60,7 +66,6 @@ class PocketViewModel(
   fun updatePocket(input: String, position: Int, customerId: String, productId: String) {
     viewModelScope.launch(Dispatchers.IO) {
       _pocketLiveData.postValue(Resource.loading())
-
       val activePocket = customerPockets[position]
       val request = UpdatePocketRequest(
         pocketName = input,
@@ -80,7 +85,6 @@ class PocketViewModel(
     }
   }
 
-
   fun createPocket(request: CreatePocketRequest, customerId: String) {
     viewModelScope.launch(Dispatchers.IO) {
       pocketRepository.addPocket(request)
@@ -90,9 +94,15 @@ class PocketViewModel(
 
   fun deletePocket(position: Int, customerId: String) {
     viewModelScope.launch(Dispatchers.IO) {
+      _isExistDataValidate.postValue(Resource.loading())
       val delPocket = customerPockets[position]
-      pocketRepository.deletePocket(delPocket.id)
-      pocketCustomerList(customerId)
+      if (delPocket.pocketQty > 0.0) {
+        _isExistDataValidate.postValue(Resource.success(false))
+      } else {
+        _isExistDataValidate.postValue(Resource.success(data = true))
+        pocketRepository.deletePocket(delPocket.id)
+        pocketCustomerList(customerId)
+      }
     }
   }
 

@@ -24,6 +24,7 @@ import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewMode
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.gold_market.utils.showOKDialog
 import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
 
 class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
@@ -100,6 +101,22 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
           ResourceStatus.SUCCESS -> {
             Log.d("PocketApi", "Subscribe : ${it.data}")
             pocketAdapter.updateData(it.data)
+            hideProgressBar()
+          }
+          ResourceStatus.ERROR -> {
+            Toast.makeText(requireContext(), "Gagal Mendapatkan Data Pocket List", Toast.LENGTH_SHORT).show()
+            hideProgressBar()
+          }
+        }
+      })
+      pocketViewModel.isExistDataValidate.observe(viewLifecycleOwner, {
+        when (it.status) {
+          ResourceStatus.LOADING -> showProgressBar()
+          ResourceStatus.SUCCESS -> {
+            Log.d("PocketApi", "Subscribe : ${it.data}")
+            if (it.data == false) {
+              showOKDialog(requireContext(), "Gagal Menghapus Pocket", "Data Pocket Masih Ada!")
+            }
             hideProgressBar()
           }
           ResourceStatus.ERROR -> {

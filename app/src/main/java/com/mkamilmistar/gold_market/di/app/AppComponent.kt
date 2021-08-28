@@ -10,6 +10,7 @@ import com.mkamilmistar.gold_market.di.feature.purchase.PurchaseComponent
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
+import javax.inject.Singleton
 
 @AppScope
 @Component(

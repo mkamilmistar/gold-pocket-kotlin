@@ -11,9 +11,6 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ProfileModule {
   @ContributesAndroidInjector
-  abstract fun contributeHomeFragment(): HomeFragment
-
-  @ContributesAndroidInjector
   abstract fun contributeSettingsFragment(): SettingFragment
 
   companion object {

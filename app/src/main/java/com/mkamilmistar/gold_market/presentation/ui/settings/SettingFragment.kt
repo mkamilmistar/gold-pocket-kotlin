@@ -35,8 +35,7 @@ class SettingFragment : DaggerFragment() {
   @Inject
   lateinit var profileViewModel: ProfileViewModel
 
-  @Inject
-  lateinit var sharedPreferences: SharedPref
+  private val sharedPreferences: SharedPref = SharedPref(requireContext())
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,

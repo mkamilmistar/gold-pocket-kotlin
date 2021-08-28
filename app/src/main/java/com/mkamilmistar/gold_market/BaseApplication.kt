@@ -1,5 +1,6 @@
 package com.mkamilmistar.gold_market
 
+import com.mkamilmistar.gold_market.di.app.DaggerAppComponent
 import com.mkamilmistar.gold_market.di.data.DaggerDataComponent
 import com.mkamilmistar.gold_market.di.data.DataComponent
 import com.mkamilmistar.gold_market.di.feature.auth.AuthComponent
@@ -12,7 +13,6 @@ import com.mkamilmistar.gold_market.di.feature.profile.DaggerProfileComponent
 import com.mkamilmistar.gold_market.di.feature.profile.ProfileComponent
 import com.mkamilmistar.gold_market.di.feature.purchase.DaggerPurchaseComponent
 import com.mkamilmistar.gold_market.di.feature.purchase.PurchaseComponent
-import com.mkamilmistar.gold_market.di.app.DaggerAppComponent
 
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
@@ -21,6 +21,10 @@ class BaseApplication: DaggerApplication() {
   override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
     return DaggerAppComponent.builder()
       .authComponent(provideAuthComponent())
+      .pocketComponent(providePocketComponent())
+      .productComponent(provideProductComponent())
+      .profileComponent(provideProfileComponent())
+      .purchaseComponent(providePurchaseComponent())
       .build()
   }
 

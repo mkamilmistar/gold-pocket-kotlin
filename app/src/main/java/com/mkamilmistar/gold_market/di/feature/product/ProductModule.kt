@@ -9,8 +9,6 @@ import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ProductModule {
-  @ContributesAndroidInjector
-  abstract fun contributeHomeFragment(): HomeFragment
 
   companion object {
     @Provides

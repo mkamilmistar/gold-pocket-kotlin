@@ -20,7 +20,7 @@ import javax.inject.Singleton
 interface DataComponent {
   fun provideRetrofit(): Retrofit
   fun provideDatabase(): AppDatabase
-  fun provideSharedPref(): SharedPref
+//  fun provideSharedPref(): SharedPref
 
   @Component.Builder
   interface Builder {

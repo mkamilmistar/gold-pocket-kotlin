@@ -15,15 +15,6 @@ abstract class PocketModule {
   @ContributesAndroidInjector
   abstract fun contributePocketFragment(): PocketFragment
 
-  @ContributesAndroidInjector
-  abstract fun contributeHomeFragment(): HomeFragment
-
-  @ContributesAndroidInjector
-  abstract fun contributeRegisterFragment(): RegisterFragment
-
-  @ContributesAndroidInjector
-  abstract fun contributeLoginFragment(): LoginFragment
-
   companion object {
     @Provides
     fun providePocketViewModel(

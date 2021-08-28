@@ -60,8 +60,7 @@ class HomeFragment : DaggerFragment() {
   @Inject
   lateinit var pocketViewModels: PocketViewModel
 
-  @Inject
-  lateinit var sharedPreferences: SharedPref
+  private val sharedPreferences: SharedPref = SharedPref(requireContext())
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,

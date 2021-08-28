@@ -6,8 +6,9 @@ import com.mkamilmistar.gold_market.data.remote.request.RegisterRequest
 import com.mkamilmistar.gold_market.data.remote.response.LoginResponse
 import com.mkamilmistar.gold_market.data.remote.response.RegisterResponse
 import com.mkamilmistar.gold_market.data.remote.api.AuthApi
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
   private val authApi: AuthApi
 ) : AuthRepository {
 

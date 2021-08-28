@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,23 +16,28 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.remote.request.CreatePocketRequest
-import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
-import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentPocketBinding
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.gold_market.utils.ViewModelFactoryBase
 import com.mkamilmistar.gold_market.utils.showOKDialog
 import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
+class PocketFragment : DaggerFragment(), PocketAdapter.OnClickItemListener {
 
   private lateinit var binding: FragmentPocketBinding
   private lateinit var pocketAdapter: PocketAdapter
-  private lateinit var pocketViewModel: PocketViewModel
   private lateinit var activateCustomer: String
   private lateinit var activateProduct: String
+
+  @Inject
+  lateinit var pocketViewModel: PocketViewModel
+
+  @Inject
+  lateinit var sharedPreferences: SharedPref
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -48,13 +52,11 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   private fun initViewModel() {
-    val pocketApi = RetrofitInstance.pocketApi
-    val pocketRepo = PocketRepositoryImpl(pocketApi)
-    pocketViewModel = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(PocketViewModel::class.java)
+    ViewModelProvider(this, ViewModelFactoryBase {
+      pocketViewModel }).get(PocketViewModel::class.java)
   }
 
   private fun initShared() {
-    val sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
     activateProduct = sharedPreferences.retrieved(Utils.PRODUCT_ID).toString()
   }
@@ -141,9 +143,8 @@ class PocketFragment : Fragment(), PocketAdapter.OnClickItemListener {
   }
 
   override fun onClickItem(position: Int) {
-    val sharedPref = SharedPref(requireContext())
     val selectedPocket = pocketViewModel.getPocketById(position)
-    sharedPref.save(Utils.POCKET_ID, selectedPocket.id)
+    sharedPreferences.save(Utils.POCKET_ID, selectedPocket.id)
     navToHome()
     Toast.makeText(context, "${selectedPocket.pocketName} Selected", Toast.LENGTH_SHORT).show()
   }

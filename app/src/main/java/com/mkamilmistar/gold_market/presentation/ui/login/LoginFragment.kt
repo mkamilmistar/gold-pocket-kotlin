@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,23 +16,26 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
 import com.mkamilmistar.gold_market.data.remote.request.LoginRequest
-import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
-import com.mkamilmistar.gold_market.data.repository.AuthRepositoryImpl
-import com.mkamilmistar.gold_market.data.repository.PocketRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentLoginBinding
 import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.auth.AuthViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.gold_market.utils.ViewModelFactoryBase
 import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-class LoginFragment : Fragment(), TextWatcher {
+class LoginFragment : DaggerFragment(), TextWatcher {
 
   private lateinit var binding: FragmentLoginBinding
   private lateinit var authViewModel: AuthViewModel
-  private lateinit var pocketViewModels: PocketViewModel
+
+  @Inject
+  lateinit var pocketViewModels: PocketViewModel
+
+  @Inject
+  lateinit var sharedPreferences: SharedPref
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -50,16 +52,8 @@ class LoginFragment : Fragment(), TextWatcher {
   }
 
   private fun initViewModel() {
-    val authRetrofit = RetrofitInstance.authApi
-    val pocketApi = RetrofitInstance.pocketApi
-    val authRepo = AuthRepositoryImpl(authRetrofit)
-
-    val pocketRepo = PocketRepositoryImpl(pocketApi)
-    authViewModel =
-      ViewModelProvider(this, AuthViewModelFactory(authRepo)).get(AuthViewModel::class.java)
-    pocketViewModels = ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(
-      PocketViewModel::class.java
-    )
+    ViewModelProvider(this, ViewModelFactoryBase {
+      authViewModel }).get(AuthViewModel::class.java)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,7 +102,6 @@ class LoginFragment : Fragment(), TextWatcher {
         ResourceStatus.SUCCESS -> {
           Log.d("AuthApi", "Subscribe : ${it.data}")
           val customer = it.data
-          val sharedPreferences = SharedPref(requireContext())
           if (customer!=null) {
             sharedPreferences.save(Utils.CUSTOMER_ID, customer.userId)
             pocketViewModels.start(customer.userId)
@@ -132,7 +125,6 @@ class LoginFragment : Fragment(), TextWatcher {
         ResourceStatus.SUCCESS -> {
           Log.d("PocketApi", "Subscribe : ${it.data}")
           val customerPockets = it.data
-          val sharedPreferences = SharedPref(requireContext())
           when {
             customerPockets?.isNotEmpty() == true -> {
               sharedPreferences.save(Utils.POCKET_ID, it.data.first().id)

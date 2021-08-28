@@ -4,8 +4,9 @@ import android.util.Log
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.remote.entity.Customer
 import com.mkamilmistar.gold_market.data.remote.api.ProfileApi
+import javax.inject.Inject
 
-class ProfileRepositoryImpl(private val profileApi: ProfileApi): ProfileRepository {
+class ProfileRepositoryImpl @Inject constructor(private val profileApi: ProfileApi): ProfileRepository {
 
   override suspend fun getCustomerById(customerId: String): Customer? {
     return try {

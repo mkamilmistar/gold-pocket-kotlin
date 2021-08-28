@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
@@ -21,39 +20,48 @@ import com.mkamilmistar.gold_market.data.remote.request.PocketRequest
 import com.mkamilmistar.gold_market.data.remote.request.PurchaseDetailRequest
 import com.mkamilmistar.gold_market.data.remote.request.PurchaseRequest
 import com.mkamilmistar.gold_market.data.remote.response.*
-import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
 import com.mkamilmistar.gold_market.data.remote.entity.Customer
 import com.mkamilmistar.gold_market.data.remote.entity.Pocket
 import com.mkamilmistar.gold_market.data.remote.entity.Product
 import com.mkamilmistar.gold_market.data.repository.*
 import com.mkamilmistar.gold_market.databinding.FragmentHomeBinding
 import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.pocket.PocketViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.product.ProductViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.product.ProductViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModelFactory
 import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.purchase.PurchaseViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.gold_market.utils.ViewModelFactoryBase
 import com.mkamilmistar.gold_market.utils.showOKDialog
 import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
+import dagger.android.support.DaggerFragment
 import java.util.*
+import javax.inject.Inject
 
-class HomeFragment : Fragment() {
+class HomeFragment : DaggerFragment() {
 
   private lateinit var binding: FragmentHomeBinding
-  private lateinit var purchaseViewModels: PurchaseViewModel
-  private lateinit var productViewModels: ProductViewModel
-  private lateinit var profileViewModels: ProfileViewModel
-  private lateinit var pocketViewModels: PocketViewModel
   private lateinit var activateCustomer: String
   private var activatePocket: String = "1"
   private lateinit var product: Product
   private lateinit var pocket: Pocket
   private lateinit var customer: Customer
   private lateinit var customerPockets: List<Pocket>
+
+  @Inject
+  lateinit var purchaseViewModels: PurchaseViewModel
+
+  @Inject
+  lateinit var productViewModels: ProductViewModel
+
+  @Inject
+  lateinit var profileViewModels: ProfileViewModel
+
+  @Inject
+  lateinit var pocketViewModels: PocketViewModel
+
+  @Inject
+  lateinit var sharedPreferences: SharedPref
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -72,33 +80,17 @@ class HomeFragment : Fragment() {
   }
 
   private fun initViewModel() {
-    val api = RetrofitInstance
-    val purchaseApi = api.purchaseApi
-    val pocketApi = api.pocketApi
-    val productApi = api.productApi
-    val profileApi = api.profileApi
-    val purchaseRepo = PurchaseRepositoryImpl(purchaseApi)
-    val pocketRepo = PocketRepositoryImpl(pocketApi)
-    val productRepository = ProductRepositoryImpl(productApi)
-    val profileRepo = ProfileRepositoryImpl(profileApi)
-    productViewModels = ViewModelProvider(
-      this,
-      ProductViewModelFactory(productRepository)
-    ).get(ProductViewModel::class.java)
-    purchaseViewModels = ViewModelProvider(
-      this,
-      PurchaseViewModelFactory(purchaseRepo)
-    ).get(PurchaseViewModel::class.java)
-    profileViewModels = ViewModelProvider(
-      this,
-      ProfileViewModelFactory(profileRepo)
-    ).get(ProfileViewModel::class.java)
-    pocketViewModels =
-      ViewModelProvider(this, PocketViewModelFactory(pocketRepo)).get(PocketViewModel::class.java)
+    ViewModelProvider(this, ViewModelFactoryBase {
+      productViewModels }).get(ProductViewModel::class.java)
+    ViewModelProvider(this, ViewModelFactoryBase {
+      profileViewModels }).get(ProfileViewModel::class.java)
+    ViewModelProvider(this, ViewModelFactoryBase {
+      purchaseViewModels }).get(PurchaseViewModel::class.java)
+    ViewModelProvider(this, ViewModelFactoryBase {
+      pocketViewModels }).get(PocketViewModel::class.java)
   }
 
   private fun initShared() {
-    val sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
     activatePocket = sharedPreferences.retrieved(Utils.POCKET_ID).toString()
   }
@@ -174,7 +166,6 @@ class HomeFragment : Fragment() {
               product = it.data.last()
               priceBuyAmount.text = Utils.currencyFormatter(product.productPriceBuy)
               priceSellAmount.text = Utils.currencyFormatter(product.productPriceSell)
-              val sharedPreferences = SharedPref(requireContext())
               sharedPreferences.save(Utils.PRODUCT_ID, product.id)
             } else {
               productViewModels.createProduct()

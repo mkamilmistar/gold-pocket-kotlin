@@ -8,7 +8,7 @@ plugins {
 
 android {
   compileSdkVersion(Versions.COMPILE_SDK_VERSION)
-  buildToolsVersion = Versions.BUILD_TOOL_VERSION
+  buildToolsVersion(Versions.BUILD_TOOL_VERSION)
   val url: String = gradleLocalProperties(rootDir).getProperty("goldMarket_api")
 
   defaultConfig {

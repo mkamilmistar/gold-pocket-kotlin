@@ -5,6 +5,8 @@ import com.mkamilmistar.gold_market.di.data.DaggerDataComponent
 import com.mkamilmistar.gold_market.di.data.DataComponent
 import com.mkamilmistar.gold_market.di.feature.auth.AuthComponent
 import com.mkamilmistar.gold_market.di.feature.auth.DaggerAuthComponent
+import com.mkamilmistar.gold_market.di.feature.history.DaggerHistoryComponent
+import com.mkamilmistar.gold_market.di.feature.history.HistoryComponent
 import com.mkamilmistar.gold_market.di.feature.pocket.DaggerPocketComponent
 import com.mkamilmistar.gold_market.di.feature.pocket.PocketComponent
 import com.mkamilmistar.gold_market.di.feature.product.DaggerProductComponent
@@ -25,6 +27,7 @@ class BaseApplication: DaggerApplication() {
       .productComponent(provideProductComponent())
       .profileComponent(provideProfileComponent())
       .purchaseComponent(providePurchaseComponent())
+      .historyComponent(provideHistoryComponent())
       .build()
   }
 
@@ -50,6 +53,10 @@ class BaseApplication: DaggerApplication() {
 
   private fun providePurchaseComponent(): PurchaseComponent {
     return DaggerPurchaseComponent.builder().dataComponent(provideDataComponent()).build()
+  }
+
+  private fun provideHistoryComponent(): HistoryComponent {
+    return DaggerHistoryComponent.builder().dataComponent(provideDataComponent()).build()
   }
 
 }

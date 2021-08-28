@@ -9,19 +9,6 @@ import com.mkamilmistar.gold_market.data.remote.api.PurchaseApi
 import javax.inject.Inject
 
 class PurchaseRepositoryImpl @Inject constructor(private val purchaseApi: PurchaseApi) : PurchaseRepository {
-  override suspend fun customerPurchases(customerId: String): List<Purchase>? {
-    return try {
-      val response = purchaseApi.customerPurchasesList(customerId)
-      if (response.isSuccessful) {
-        response.body()
-      } else {
-        null
-      }
-    } catch (e: Exception) {
-      Log.e("PocketApi", e.localizedMessage)
-      null
-    }
-  }
 
   override suspend fun addPurchase(customerId: String, purchase: PurchaseRequest): PurchaseResponse? {
     return try {

@@ -29,7 +29,7 @@ class HistoryFragment : DaggerFragment(), HistoryAdapter.OnClickItemListener{
   private lateinit var historyAdapter: HistoryAdapter
   private lateinit var activateCustomer: String
 
-  private val sharedPreferences: SharedPref = SharedPref(requireContext())
+  private lateinit var sharedPreferences: SharedPref
 
   @Inject
   lateinit var historyViewModel: HistoryViewModel
@@ -48,6 +48,7 @@ class HistoryFragment : DaggerFragment(), HistoryAdapter.OnClickItemListener{
   }
 
   private fun initShared() {
+    sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
   }
 

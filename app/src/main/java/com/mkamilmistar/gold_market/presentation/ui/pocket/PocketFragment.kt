@@ -36,7 +36,7 @@ class PocketFragment : DaggerFragment(), PocketAdapter.OnClickItemListener {
   @Inject
   lateinit var pocketViewModel: PocketViewModel
 
-  private val sharedPreferences: SharedPref = SharedPref(requireContext())
+  private lateinit var sharedPreferences: SharedPref
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +56,7 @@ class PocketFragment : DaggerFragment(), PocketAdapter.OnClickItemListener {
   }
 
   private fun initShared() {
+    sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
     activateProduct = sharedPreferences.retrieved(Utils.PRODUCT_ID).toString()
   }

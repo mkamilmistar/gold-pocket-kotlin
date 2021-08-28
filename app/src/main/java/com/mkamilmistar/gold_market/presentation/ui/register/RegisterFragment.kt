@@ -34,13 +34,14 @@ class RegisterFragment : DaggerFragment(), TextWatcher {
   @Inject
   lateinit var pocketViewModels: PocketViewModel
 
-  private val sharedPreferences: SharedPref = SharedPref(requireContext())
+  private lateinit var sharedPreferences: SharedPref
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
     initViewModel()
+    sharedPreferences = SharedPref(requireContext())
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
     return binding.apply {
       lifecycleOwner = this@RegisterFragment

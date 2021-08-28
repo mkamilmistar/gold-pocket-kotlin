@@ -35,14 +35,15 @@ class SettingFragment : DaggerFragment() {
   @Inject
   lateinit var profileViewModel: ProfileViewModel
 
-  private val sharedPreferences: SharedPref = SharedPref(requireContext())
+  private lateinit var sharedPreferences: SharedPref
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    initViewModel()
+    sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
+    initViewModel()
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false)
     return binding.apply {

@@ -29,18 +29,21 @@ import javax.inject.Inject
 class LoginFragment : DaggerFragment(), TextWatcher {
 
   private lateinit var binding: FragmentLoginBinding
-  private lateinit var authViewModel: AuthViewModel
 
   @Inject
   lateinit var pocketViewModels: PocketViewModel
 
-  private val sharedPreferences: SharedPref = SharedPref(requireContext())
+  @Inject
+  lateinit var authViewModel: AuthViewModel
+
+  private lateinit var sharedPreferences: SharedPref
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
     initViewModel()
+    sharedPreferences = SharedPref(requireContext())
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
     return binding.apply {
       lifecycleOwner = this@LoginFragment

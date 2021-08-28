@@ -14,11 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
-import com.mkamilmistar.gold_market.data.repository.ProfileRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
 import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.ViewModelFactoryBase

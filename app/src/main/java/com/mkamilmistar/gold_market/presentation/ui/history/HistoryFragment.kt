@@ -10,12 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
-import com.mkamilmistar.gold_market.data.repository.PurchaseRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHistoryBinding
 import com.mkamilmistar.gold_market.presentation.viewModel.history.HistoryViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.history.HistoryViewModelFactory
-import com.mkamilmistar.gold_market.presentation.viewModel.product.ProductViewModel
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
 import com.mkamilmistar.gold_market.utils.ViewModelFactoryBase

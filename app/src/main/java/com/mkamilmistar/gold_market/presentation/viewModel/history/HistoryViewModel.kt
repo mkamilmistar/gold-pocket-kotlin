@@ -5,12 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mkamilmistar.gold_market.data.remote.entity.Purchase
+import com.mkamilmistar.gold_market.data.repository.HistoryRepository
 import com.mkamilmistar.gold_market.data.repository.PurchaseRepository
 import com.mkamilmistar.mysimpleretrofit.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HistoryViewModel(private val repository: PurchaseRepository) : ViewModel() {
+class HistoryViewModel(private val repository: HistoryRepository) : ViewModel() {
   private var _historyLiveData =
     MutableLiveData<Resource<List<Purchase>>>()
   val historyLiveData: LiveData<Resource<List<Purchase>>>

@@ -2,7 +2,6 @@ package com.mkamilmistar.gold_market.presentation.ui.history
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,21 +10,25 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
-import com.mkamilmistar.gold_market.data.repository.PurchaseRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentHistoryBinding
 import com.mkamilmistar.gold_market.presentation.viewModel.history.HistoryViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.history.HistoryViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.gold_market.utils.ViewModelFactoryBase
 import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
+class HistoryFragment : DaggerFragment(), HistoryAdapter.OnClickItemListener{
 
   private lateinit var binding: FragmentHistoryBinding
   private lateinit var historyAdapter: HistoryAdapter
-  private lateinit var historyViewModel: HistoryViewModel
   private lateinit var activateCustomer: String
+
+  private lateinit var sharedPreferences: SharedPref
+
+  @Inject
+  lateinit var historyViewModel: HistoryViewModel
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -41,15 +44,13 @@ class HistoryFragment : Fragment(), HistoryAdapter.OnClickItemListener{
   }
 
   private fun initShared() {
-    val sharedPreferences = SharedPref(requireContext())
+    sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
   }
 
   private fun initViewModel() {
-    val purchaseApi = RetrofitInstance.purchaseApi
-    val repo = PurchaseRepositoryImpl(purchaseApi)
-    historyViewModel = ViewModelProvider(this, HistoryViewModelFactory(repo)).get(
-      HistoryViewModel::class.java)
+    ViewModelProvider(this, ViewModelFactoryBase {
+      historyViewModel }).get(HistoryViewModel::class.java)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

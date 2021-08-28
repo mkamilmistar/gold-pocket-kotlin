@@ -7,16 +7,16 @@ plugins {
 }
 
 android {
-  compileSdkVersion(AppConfig.compileSdk)
-  buildToolsVersion = AppConfig.buildToolsVersion
+  compileSdkVersion(Versions.COMPILE_SDK_VERSION)
+  buildToolsVersion(Versions.BUILD_TOOL_VERSION)
   val url: String = gradleLocalProperties(rootDir).getProperty("goldMarket_api")
 
   defaultConfig {
     applicationId("com.mkamilmistar.gold_market")
-    minSdkVersion(26)
-    targetSdkVersion(30)
-    versionCode(1)
-    versionName("1.0")
+    minSdkVersion(Versions.MIN_SDK_VERSION)
+    targetSdkVersion(Versions.TARGET_SDK_VERSION)
+    versionCode(Versions.VERSION_CODE)
+    versionName = Versions.VERSION_NAME
     kapt {
       arguments {
         arg("room.schemaLocation", "$projectDir/schemas")
@@ -50,28 +50,21 @@ android {
     targetCompatibility = JavaVersion.VERSION_1_8
   }
   kotlinOptions {
-    jvmTarget = AppConfig.jvmTarget
+    jvmTarget = Versions.JVM_TARGET
   }
 }
 
 dependencies {
-  implementation(AppDependencies.securityCrypto)
-  implementation(AppDependencies.retrofit)
-  implementation(AppDependencies.moshiConverter)
-  implementation(AppDependencies.kotlinStdLib)
-  implementation(AppDependencies.kotlinCore)
-  implementation(AppDependencies.appCompat)
-  implementation(AppDependencies.coroutines)
-  implementation(AppDependencies.lifecycleViewModel)
-  implementation(AppDependencies.lifecycleLiveData)
-  implementation(AppDependencies.room)
-  kapt(AppDependencies.roomCompiler)
-  implementation(AppDependencies.material)
-  implementation(AppDependencies.constraintLayout)
-  implementation(AppDependencies.androidFragment)
-  implementation(AppDependencies.navigationFragment)
-  implementation(AppDependencies.navigationAndroid)
-  testImplementation(AppDependencies.junit)
-  androidTestImplementation(AppDependencies.extJunit)
-  androidTestImplementation(AppDependencies.espressoCore)
+  dagger()
+  daggerAndroid()
+  room()
+  retrofit()
+  coroutine()
+  lifecycle()
+  core()
+  navigation()
+  ui()
+  unitTest()
+  androidUnitTest()
+  security()
 }

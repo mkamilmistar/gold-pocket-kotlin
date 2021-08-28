@@ -7,7 +7,7 @@ import androidx.security.crypto.MasterKeys
 
 class SharedPref(context: Context) {
   private val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-  private val sharedPref: SharedPreferences = EncryptedSharedPreferences.create(
+  private val sharedPref = EncryptedSharedPreferences.create(
     "SharedPref",
     masterKeyAlias,
     context,

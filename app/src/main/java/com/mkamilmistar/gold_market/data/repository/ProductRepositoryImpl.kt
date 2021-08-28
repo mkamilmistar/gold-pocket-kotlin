@@ -4,8 +4,9 @@ import android.util.Log
 import com.mkamilmistar.gold_market.data.db.AppDatabase
 import com.mkamilmistar.gold_market.data.remote.entity.Product
 import com.mkamilmistar.gold_market.data.remote.api.ProductApi
+import javax.inject.Inject
 
-class ProductRepositoryImpl(
+class ProductRepositoryImpl @Inject constructor(
   private val productApi: ProductApi
 ) : ProductRepository {
 

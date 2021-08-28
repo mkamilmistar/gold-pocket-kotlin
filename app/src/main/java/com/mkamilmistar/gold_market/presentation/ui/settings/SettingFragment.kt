@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,29 +14,33 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.mkamilmistar.gold_market.R
-import com.mkamilmistar.gold_market.data.remote.RetrofitInstance
-import com.mkamilmistar.gold_market.data.repository.ProfileRepositoryImpl
 import com.mkamilmistar.gold_market.databinding.FragmentSettingBinding
 import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModel
-import com.mkamilmistar.gold_market.presentation.viewModel.profile.ProfileViewModelFactory
 import com.mkamilmistar.gold_market.utils.SharedPref
 import com.mkamilmistar.gold_market.utils.Utils
+import com.mkamilmistar.gold_market.utils.ViewModelFactoryBase
 import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
+import dagger.android.support.DaggerFragment
 import java.util.*
+import javax.inject.Inject
 
-class SettingFragment : Fragment() {
+class SettingFragment : DaggerFragment() {
 
   private lateinit var binding: FragmentSettingBinding
-  private lateinit var profileViewModel: ProfileViewModel
   private lateinit var activateCustomer: String
+
+  @Inject
+  lateinit var profileViewModel: ProfileViewModel
+
+  private lateinit var sharedPreferences: SharedPref
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    initViewModel()
-    val sharedPreferences = SharedPref(requireContext())
+    sharedPreferences = SharedPref(requireContext())
     activateCustomer = sharedPreferences.retrieved(Utils.CUSTOMER_ID).toString()
+    initViewModel()
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false)
     return binding.apply {
@@ -48,10 +51,8 @@ class SettingFragment : Fragment() {
   }
 
   private fun initViewModel() {
-    val profileApi = RetrofitInstance.profileApi
-    val repo = ProfileRepositoryImpl(profileApi)
-    profileViewModel =
-      ViewModelProvider(this, ProfileViewModelFactory(repo)).get(ProfileViewModel::class.java)
+    ViewModelProvider(this, ViewModelFactoryBase {
+      profileViewModel }).get(ProfileViewModel::class.java)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,8 +108,7 @@ class SettingFragment : Fragment() {
             R.id.loginFragment, null,
             NavOptions.Builder().setPopUpTo(R.id.settingFragment, true).build()
           )
-          val sharedPref = SharedPref(requireContext())
-          sharedPref.clear()
+          sharedPreferences.clear()
         }
         DialogInterface.BUTTON_NEUTRAL -> {
           Log.d("LOLOT", "LOLOT")

@@ -5,6 +5,5 @@ import com.mkamilmistar.gold_market.data.remote.entity.Purchase
 import com.mkamilmistar.gold_market.data.remote.response.PurchaseResponse
 
 interface PurchaseRepository {
-  suspend fun customerPurchases(customerId: String): List<Purchase>?
   suspend fun addPurchase(customerId: String, purchase: PurchaseRequest): PurchaseResponse?
 }

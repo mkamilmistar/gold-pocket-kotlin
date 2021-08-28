@@ -6,8 +6,9 @@ import com.mkamilmistar.gold_market.data.remote.request.UpdatePocketRequest
 import com.mkamilmistar.gold_market.data.remote.response.*
 import com.mkamilmistar.gold_market.data.remote.api.PocketApi
 import com.mkamilmistar.gold_market.data.remote.entity.Pocket
+import javax.inject.Inject
 
-class PocketRepositoryImpl(private val pocketApi: PocketApi): PocketRepository {
+class PocketRepositoryImpl @Inject constructor(private val pocketApi: PocketApi): PocketRepository {
 
   override suspend fun customerPockets(customerId: String): List<Pocket>? {
     return try {

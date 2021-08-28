@@ -29,10 +29,12 @@ import javax.inject.Inject
 class RegisterFragment : DaggerFragment(), TextWatcher {
 
   private lateinit var binding: FragmentRegisterBinding
-  private lateinit var authViewModel: AuthViewModel
 
   @Inject
   lateinit var pocketViewModels: PocketViewModel
+
+  @Inject
+  lateinit var authViewModel: AuthViewModel
 
   private lateinit var sharedPreferences: SharedPref
 

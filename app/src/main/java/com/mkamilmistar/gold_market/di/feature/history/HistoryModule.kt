@@ -14,7 +14,7 @@ abstract class HistoryModule {
 
   companion object {
     @Provides
-    fun provideAuthViewModel(
+    fun provideHistoryViewModel(
       historyRepository: HistoryRepository,
     ): HistoryViewModel {
       return HistoryViewModel(historyRepository)

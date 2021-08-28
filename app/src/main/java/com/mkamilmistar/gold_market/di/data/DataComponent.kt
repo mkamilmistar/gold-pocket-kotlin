@@ -14,7 +14,7 @@ import javax.inject.Singleton
   modules = [
     ApiModule::class,
     DbModule::class,
-    SharedPrefModule::class
+//    SharedPrefModule::class
   ]
 )
 interface DataComponent {

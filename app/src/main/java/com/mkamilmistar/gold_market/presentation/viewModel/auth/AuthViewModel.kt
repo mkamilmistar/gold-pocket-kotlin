@@ -10,7 +10,7 @@ import com.mkamilmistar.gold_market.data.remote.request.RegisterRequest
 import com.mkamilmistar.gold_market.data.remote.response.LoginResponse
 import com.mkamilmistar.gold_market.data.remote.response.RegisterResponse
 import com.mkamilmistar.gold_market.data.repository.AuthRepository
-import com.mkamilmistar.mysimpleretrofit.utils.Resource
+import com.mkamilmistar.gold_market.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

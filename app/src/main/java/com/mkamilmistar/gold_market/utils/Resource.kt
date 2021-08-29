@@ -1,4 +1,6 @@
-package com.mkamilmistar.mysimpleretrofit.utils
+package com.mkamilmistar.gold_market.utils
+
+import com.mkamilmistar.mysimpleretrofit.utils.ResourceStatus
 
 data class Resource<T>(
   val status: ResourceStatus,

@@ -6,8 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mkamilmistar.gold_market.data.remote.entity.Purchase
 import com.mkamilmistar.gold_market.data.repository.HistoryRepository
-import com.mkamilmistar.gold_market.data.repository.PurchaseRepository
-import com.mkamilmistar.mysimpleretrofit.utils.Resource
+import com.mkamilmistar.gold_market.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

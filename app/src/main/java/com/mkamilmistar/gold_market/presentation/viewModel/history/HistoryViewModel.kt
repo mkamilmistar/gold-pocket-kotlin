@@ -27,6 +27,7 @@ class HistoryViewModel(private val repository: HistoryRepository) : ViewModel() 
       _historyLiveData.postValue(Resource.loading())
       val response = repository.customerPurchases(customerId)
       if (response != null) {
+        purchasesCustomer = response
         _historyLiveData.postValue(Resource.success(data = response))
       } else {
         _historyLiveData.postValue(Resource.error(message = response))

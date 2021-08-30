@@ -6,8 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mkamilmistar.gold_market.data.remote.entity.Purchase
 import com.mkamilmistar.gold_market.data.repository.HistoryRepository
-import com.mkamilmistar.gold_market.data.repository.PurchaseRepository
-import com.mkamilmistar.mysimpleretrofit.utils.Resource
+import com.mkamilmistar.gold_market.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -28,6 +27,7 @@ class HistoryViewModel(private val repository: HistoryRepository) : ViewModel() 
       _historyLiveData.postValue(Resource.loading())
       val response = repository.customerPurchases(customerId)
       if (response != null) {
+        purchasesCustomer = response
         _historyLiveData.postValue(Resource.success(data = response))
       } else {
         _historyLiveData.postValue(Resource.error(message = response))

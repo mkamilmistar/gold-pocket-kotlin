@@ -87,7 +87,8 @@ class HistoryFragment : DaggerFragment(), HistoryAdapter.OnClickItemListener{
   }
 
   override fun onClickItem(position: Int) {
-    Toast.makeText(context, historyViewModel.getPurchaseById(position).id, Toast.LENGTH_SHORT).show()
+    val id =  historyViewModel.getPurchaseById(position).id
+    Toast.makeText(requireContext(), "Purchase Id: $id", Toast.LENGTH_SHORT).show()
   }
 
   private fun hideProgressBar() {

@@ -7,9 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.mkamilmistar.gold_market.data.remote.request.CreatePocketRequest
 import com.mkamilmistar.gold_market.data.remote.request.UpdatePocketRequest
 import com.mkamilmistar.gold_market.data.remote.entity.Pocket
-import com.mkamilmistar.gold_market.data.remote.response.DeletePocketResponse
 import com.mkamilmistar.gold_market.data.repository.PocketRepository
-import com.mkamilmistar.mysimpleretrofit.utils.Resource
+import com.mkamilmistar.gold_market.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

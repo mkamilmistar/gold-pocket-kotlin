@@ -247,7 +247,12 @@ class HomeFragment : DaggerFragment() {
       .setMessage("Input Quantity")
       .setView(inputQty)
       .setPositiveButton("Purchase") { _, _ ->
-        val qty: Double = inputQty.text.toString().toDouble()
+        var qty = 0.0
+        inputQty.text.toString().apply {
+          if(this.isNotEmpty()) {
+            qty = this.toDouble()
+          }
+        }
 
         val pocketRequest = PocketRequest(id = activatePocket)
         val purchaseDetailRequest =

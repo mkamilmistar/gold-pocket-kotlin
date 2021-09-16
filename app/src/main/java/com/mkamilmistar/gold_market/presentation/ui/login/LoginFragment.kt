@@ -56,6 +56,8 @@ class LoginFragment : DaggerFragment(), TextWatcher {
   private fun initViewModel() {
     ViewModelProvider(this, ViewModelFactoryBase {
       authViewModel }).get(AuthViewModel::class.java)
+    ViewModelProvider(this, ViewModelFactoryBase {
+      pocketViewModels }).get(AuthViewModel::class.java)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,8 +69,7 @@ class LoginFragment : DaggerFragment(), TextWatcher {
       loginPassword.addTextChangedListener(this@LoginFragment)
 
       btnForget.setOnClickListener {
-        Navigation.findNavController(view)
-          .navigate(R.id.action_loginFragment_to_forgetPasswordFragment)
+        findNavController().navigate(R.id.action_loginFragment_to_forgetPasswordFragment)
       }
     }
   }

@@ -70,8 +70,7 @@ class RegisterFragment : DaggerFragment(), TextWatcher {
       pwdRegisterText.addTextChangedListener(this@RegisterFragment)
 
       termCondition.setOnClickListener {
-        Navigation.findNavController(view)
-          .navigate(R.id.action_registerFragment_to_termAndConditionFragment)
+        findNavController().navigate(R.id.action_registerFragment_to_termAndConditionFragment)
       }
 
       textSignIn.setOnClickListener {
